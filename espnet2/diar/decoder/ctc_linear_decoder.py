@@ -1,5 +1,4 @@
 import torch
-import torch.nn.functional as F
 
 from espnet2.diar.decoder.abs_decoder import AbsDecoder
 
