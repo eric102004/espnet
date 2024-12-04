@@ -20,6 +20,7 @@ from espnet2.layers.abs_normalize import AbsNormalize
 from espnet2.torch_utils.device_funcs import force_gatherable
 from espnet2.train.abs_espnet_model import AbsESPnetModel
 from espnet.nets.pytorch_backend.nets_utils import to_device
+from espnet2.diar.compressor.abs_compressor import AbsCompressor
 
 if V(torch.__version__) >= V("1.6.0"):
     from torch.cuda.amp import autocast
@@ -403,7 +404,7 @@ class ESPnetCompressedDiarizationModel(ESPnetDiarizationModel):
         attractor: Optional[AbsAttractor],
         diar_weight: float = 1.0,
         attractor_weight: float = 1.0,
-        compressor: Optional[object],
+        compressor: Optional[AbsCompressor]=None,
         blank_id: int = 0,
     ):
 
@@ -765,103 +766,3 @@ class ESPnetCompressedDiarizationModel(ESPnetDiarizationModel):
         # convert seq into tensor
         seq = torch.tensor(seq).reshape(batch_size, num_channel, max_length)
         return seq
-        
-        
-        
-class BPECompressionModel:
-    def __init__(self, vocab_file):
-        self.vocab_dict, self.inv_vocab_dict = self.load_vocab(vocab_file)
-        # TODO: craeate string2list mapping
-        
-    def load_vocab(self, vocab_file):
-        """
-        example content of vocab file
-        0 0
-        1 1 
-        00 2
-        11 3
-        """
-        with open(vocab_file, 'r') as f:
-            vocab_dict = {}
-            inverse_vocab_dict = {}
-            for line in f:
-                token, idx = line.strip().split()
-                vocab_dict[token] = int(idx)
-                inverse_vocab_dict[int(idx)] = token
-        return vocab_dict, inverse_vocab_dict
-    
-    def encode(self, seq, *args, **kwargs):
-        # compress the label sequence
-        """
-        seq (list[list[int]]) has the shape (num_seq, [decomp_len])
-        comp_seq (list[list[int]]) has the shape (num_seq, [comp_len])
-        """
-        # TODO: operate on the string level
-        comp_seq = []
-        for s in seq:
-            cs = [self.vocab_dict[c] for c in s]
-            comp_seq.append(cs)
-        return comp_seq
-    
-    def decode(self, comp_seq, *args, **kwargs):
-        # decode the compressed label sequence
-        """
-        comp_seq (list[list[int]]) has the shape (num_seq, [comp_len])
-        seq (list[list[int]]) has the shape (num_seq, [decomp_len])
-        """
-        # TODO: operate on the string level
-        seq = []
-        for cs in comp_seq:
-            s = [self.inv_vocab_dict[c] for c in cs]
-            seq.append(s)
-        return seq
-
-class RLECompressionModel:
-    def __init__(self, max_repeat=30):
-        self.max_repeat = max_repeat
-    
-    def encode(self, label, *args, **kwargs):
-        # compress the label sequence using run-length encoding
-        """
-        Args:
-            label (list[list[int]]) has the shape (num_seq, [decomp_len])
-        Returns:
-            comp_label (list[list[int]]) has the shape (num_seq, [comp_len])
-            comp_label_length (list[int]) has the shape (num_seq)
-        """
-        comp_label = []
-        comp_label_length = []
-        for l in label:
-            cl = []
-            count = 1
-            for i in range(1, len(l)):
-                if l[i] == l[i-1] and count < self.max_repeat:
-                    count += 1
-                else:
-                    cl.append(l[i-1])
-                    cl.append(count)
-                    count = 1
-            cl.append(l[-1])
-            cl.append(count)
-            comp_label.append(cl)
-            comp_label_length.append(len(cl))
-        return comp_label, comp_label_length
-    
-    def decode(self, comp_seq, *args, **kwargs):
-        # decode the compressed label sequence
-        """
-        Args:
-            comp_seq (list[list[int]]) has the shape (num_seq, [comp_len])
-        Returns:
-            seq (list[list[int]]) has the shape (num_seq, [decomp_len])
-            seq_length (list[int]) has the shape (num_seq)
-        """
-        seq = []
-        seq_length = []
-        for cs in comp_seq:
-            s = []
-            for i in range(0, len(cs), 2):
-                s.extend([cs[i] for j in range(cs[i+1])])
-            seq.append(s)
-            seq_length.append(len(s))
-        return seq, seq_length
