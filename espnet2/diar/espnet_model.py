@@ -403,7 +403,7 @@ class ESPnetCompressedDiarizationModel(ESPnetDiarizationModel):
         attractor: Optional[AbsAttractor],
         diar_weight: float = 1.0,
         attractor_weight: float = 1.0,
-        compression_model: Optional[object] = None,
+        compressor: Optional[object],
         blank_id: int = 0,
     ):
 
@@ -420,10 +420,10 @@ class ESPnetCompressedDiarizationModel(ESPnetDiarizationModel):
         )
 
         # add compression model to compress target sequence
-        self.compression_model = compression_model
+        self.compressor = compressor
         self.blank_id = blank_id
         self.ctc_loss = torch.nn.CTCLoss(blank=self.blank_id, reduction='none', zero_infinity=True)
-        # TODO: add beam search
+        # TODO: (optional) add beam search
 
     def forward(
         self,
@@ -612,7 +612,7 @@ class ESPnetCompressedDiarizationModel(ESPnetDiarizationModel):
         label_lengths_list = []
         for i in range(batch_size):
             label_list.append(label[i, permute_list[min_idx[i]], :].data.cpu().numpy())
-            label_lengths_list.append(label_lengths[i, permute_list[min_idx[i]].data.cpu().numpy())
+            label_lengths_list.append(label_lengths[i, permute_list[min_idx[i]]].data.cpu().numpy())
         label_permute = torch.from_numpy(np.array(label_list)).float()
         label_lengths_permute = torch.from_numpy(np.array(label_lengths_list))
         return loss, min_idx, permute_list, label_permute, label_lengths_permute
@@ -631,13 +631,17 @@ class ESPnetCompressedDiarizationModel(ESPnetDiarizationModel):
         n_channel = label.size(1)
         label = label.reshape(-1, label.size(2))
         label_lengths = label_lengths.reshape(-1)
-        comp_label, comp_label_lengths = self.compression_model.encode(label, label_lengths) # TODO
+        # convert label into list[list[int]]
+        label = [l[:label_lengths[i]].tolist() for i, l in enumerate(label)]
+        comp_label, comp_label_lengths = self.compressor.encode(label, label_lengths)
+        # zero pad comp_label and convert it into tensor
+        comp_label = self.align_length_and_to_tensor(comp_label, comp_label_lengths)
         comp_label = comp_label.reshape(bs, n_channel, comp_label.size(1))
-        comp_label_lengths = comp_label_lengths.reshape(bs, -1)
+        comp_label_lengths = torch.tensor(comp_label_lengths).reshape(bs, n_channel)
         return comp_label, comp_label_lengths
     
     @staticmethod
-    def calc_diarization_error(pred, label, length):
+    def calc_diarization_error(self, pred, label, length):
         """
         Args:
             pred has the shape (batch_size, num_channel, max_len, num_vocabulary)
@@ -709,19 +713,18 @@ class ESPnetCompressedDiarizationModel(ESPnetDiarizationModel):
         for token_int_channel in token_int:
             pred_seqs_channel = []
             for tokens in token_int_channel:
-                #pred_seq = self.compression_model.decode(tokens)
                 pred_seq = torch.unique_consecutive(tokens).tolist()
                 pred_seq = [token for token in pred_seq if token != self.blank_id]
                 pred_seqs_channel.append(pred_seq)
             pred_seqs.append(pred_seqs_channel)
         return pred_seqs
 
-    def decompress_pred_seq(self, comp_pred_seq, decompressed_length):
+    def decompress_pred_seq(self, comp_pred_seq, ref_decompressed_length):
         """
         decode the compressed sequence into sequence
         Args:
             comp_pred_seq (list[list[list[int]]]) has the shape (batch_size, num_channel, [comp_len])
-            decompredded_length has the shape (batch_size, )
+            ref_decompredded_length has the shape (batch_size, )
         Returns:
             pred_seq has the shape (batch_size, num_channel, max_len)
         """
@@ -731,32 +734,32 @@ class ESPnetCompressedDiarizationModel(ESPnetDiarizationModel):
         for i in range(len(comp_pred_seq)):
             for j in range(len(comp_pred_seq[i])):
                 new_comp_pred_seq.append(comp_pred_seq[i][j])
-        comp_pred_seq = new_comp_red_seq
+        comp_pred_seq = new_comp_pred_seq
         # step 2 : decompress the comp_pred_seq into pred_seq using compression model
-        pred_seq = self.compression_model.decode(comp_pred_seq)
+        pred_seq, _ = self.compressor.decode(comp_pred_seq)
         # step 3 : zero pad pred_seq and convert it into tensor
-        pred_seq = self.align_length_and_to_tensor(pred_seq, decompressed_length)
+        pred_seq = self.align_length_and_to_tensor(pred_seq, ref_decompressed_length)
         return pred_seq
         
 
-    def align_length_and_to_tensor(self, seq, length):
+    def align_length_and_to_tensor(self, seq, ref_length):
         """
         align the length of seq and length, and convert seq into tensor
         Args:
             seq (list[list[int]]) has the shape (batch_size * num_channel, [each sequence's length])
-            length has the shape (batch_size, )
+            ref_length has the shape (batch_size, )
         Returns:
             seq has the shape (batch_size, num_channel, max(length))
         """
-        batch_size = length.size(0)
-        num_channel = seq.size(0) // batch_size
+        batch_size = ref_length.size(0)
+        num_channel = len(seq) // batch_size
         # truncate the length of seq with length
-        for i in range(seq.size(0)):
+        for i in range(batch_size):
             for j in range(i*num_channel, (i+1)*num_channel):
-                seq[j] = seq[j][:length[i]]
+                seq[j] = seq[j][:ref_length[i]]
         # zero pad seq with length.max()
-        max_length = length.max()
-        for i in range(seq.size(0)):
+        max_length = ref_length.max()
+        for i in range(batch_size):
             for j in range(len(seq[i]), max_length):
                 seq[i].append(0)
         # convert seq into tensor
@@ -820,10 +823,14 @@ class RLECompressionModel:
     def encode(self, label, *args, **kwargs):
         # compress the label sequence using run-length encoding
         """
-        label (list[list[int]]) has the shape (num_seq, [decomp_len])
-        comp_label (list[list[int]]) has the shape (num_seq, [comp_len])
+        Args:
+            label (list[list[int]]) has the shape (num_seq, [decomp_len])
+        Returns:
+            comp_label (list[list[int]]) has the shape (num_seq, [comp_len])
+            comp_label_length (list[int]) has the shape (num_seq)
         """
         comp_label = []
+        comp_label_length = []
         for l in label:
             cl = []
             count = 1
@@ -837,18 +844,24 @@ class RLECompressionModel:
             cl.append(l[-1])
             cl.append(count)
             comp_label.append(cl)
-        return comp_label
+            comp_label_length.append(len(cl))
+        return comp_label, comp_label_length
     
     def decode(self, comp_seq, *args, **kwargs):
         # decode the compressed label sequence
         """
-        comp_seq (list[list[int]]) has the shape (num_seq, [comp_len])
-        seq (list[list[int]]) has the shape (num_seq, [decomp_len])
+        Args:
+            comp_seq (list[list[int]]) has the shape (num_seq, [comp_len])
+        Returns:
+            seq (list[list[int]]) has the shape (num_seq, [decomp_len])
+            seq_length (list[int]) has the shape (num_seq)
         """
         seq = []
+        seq_length = []
         for cs in comp_seq:
             s = []
             for i in range(0, len(cs), 2):
                 s.extend([cs[i] for j in range(cs[i+1])])
             seq.append(s)
-        return seq
+            seq_length.append(len(s))
+        return seq, seq_length
