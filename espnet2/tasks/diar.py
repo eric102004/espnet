@@ -17,8 +17,10 @@ from espnet2.asr.specaug.abs_specaug import AbsSpecAug
 from espnet2.asr.specaug.specaug import SpecAug
 from espnet2.diar.attractor.abs_attractor import AbsAttractor
 from espnet2.diar.attractor.rnn_attractor import RnnAttractor
+from espnet2.diar.attractor.ctc_rnn_attractor import CTCRnnAttractor
 from espnet2.diar.decoder.abs_decoder import AbsDecoder
 from espnet2.diar.decoder.linear_decoder import LinearDecoder
+from espnet2.diar.decoder.ctc_linear_decoder import CTCLinearDecoder
 from espnet2.diar.espnet_model import ESPnetDiarizationModel
 from espnet2.layers.abs_normalize import AbsNormalize
 from espnet2.layers.global_mvn import GlobalMVN
@@ -79,7 +81,9 @@ encoder_choices = ClassChoices(
 )
 decoder_choices = ClassChoices(
     "decoder",
-    classes=dict(linear=LinearDecoder),
+    classes=dict(linear=LinearDecoder, 
+                 ctc_linear=CTCLinearDecoder, 
+    ),
     type_check=AbsDecoder,
     default="linear",
 )
@@ -87,6 +91,7 @@ attractor_choices = ClassChoices(
     "attractor",
     classes=dict(
         rnn=RnnAttractor,
+        ctc_rnn=CTCRnnAttractor,
     ),
     type_check=AbsAttractor,
     default=None,
