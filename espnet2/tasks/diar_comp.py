@@ -21,6 +21,9 @@ from espnet2.diar.attractor.ctc_rnn_attractor import CTCRnnAttractor
 from espnet2.diar.decoder.abs_decoder import AbsDecoder
 from espnet2.diar.decoder.linear_decoder import LinearDecoder
 from espnet2.diar.decoder.ctc_linear_decoder import CTCLinearDecoder
+from espnet2.diar.compressor.abs_compressor import AbsCompressor
+from espnet2.diar.compressor.rle_compressor import RLECompressor
+from espnet2.diar.compressor.bpe_compressor import BPECompressor
 from espnet2.diar.espnet_model import ESPnetDiarizationModel, ESPnetCompressedDiarizationModel
 from espnet2.layers.abs_normalize import AbsNormalize
 from espnet2.layers.global_mvn import GlobalMVN
@@ -98,6 +101,17 @@ attractor_choices = ClassChoices(
     optional=True,
 )
 
+compressor_choices = ClassChoices(
+    "compressor",
+    classes=dict(
+        rle=RLECompressor, 
+        bpe=BPECompressor,
+    ),
+    type_check=AbsCompressor,
+    default="rle",
+    optional=True,
+)
+
 diar_model_choises = ClassChoices(
     "model", 
     classes=dict(
@@ -127,6 +141,8 @@ class DiarizationTask(AbsTask):
         label_aggregator_choices,
         # --attractor and --attractor_conf
         attractor_choices,
+        # --compressor and --compressor_conf
+        compressor_choices,
         # --model and --model_conf
         diar_model_choises,
     ]
@@ -291,7 +307,13 @@ class DiarizationTask(AbsTask):
         else:
             attractor = None
 
-        # 7. Build model
+        # 7. Compressor
+        if args.model == "compressed":
+            compressor_class = compressor_choices.get_class(args.compressor)
+            compressor = compressor_class(**args.compressor_conf)
+            args.model_conf["compressor"] = compressor
+
+        # 8. Build model
         diar_model_class = diar_model_choises.get_class(args.model)
         model = diar_model_class(
             frontend=frontend,
