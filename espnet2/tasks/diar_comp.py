@@ -1,5 +1,5 @@
 import argparse
-from typing import Callable, Collection, Dict, List, Optional, Tuple
+from typing import Callable, Collection, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 import torch
@@ -21,7 +21,7 @@ from espnet2.diar.attractor.ctc_rnn_attractor import CTCRnnAttractor
 from espnet2.diar.decoder.abs_decoder import AbsDecoder
 from espnet2.diar.decoder.linear_decoder import LinearDecoder
 from espnet2.diar.decoder.ctc_linear_decoder import CTCLinearDecoder
-from espnet2.diar.espnet_model import ESPnetDiarizationModel
+from espnet2.diar.espnet_model import ESPnetDiarizationModel, ESPnetCompressedDiarizationModel
 from espnet2.layers.abs_normalize import AbsNormalize
 from espnet2.layers.global_mvn import GlobalMVN
 from espnet2.layers.label_aggregation import LabelAggregate
@@ -98,6 +98,14 @@ attractor_choices = ClassChoices(
     optional=True,
 )
 
+diar_model_choises = ClassChoices(
+    "model", 
+    classes=dict(
+        original=ESPnetDiarizationModel,
+        compressed=ESPnetCompressedDiarizationModel,
+    ),
+    default="original",
+)
 
 class DiarizationTask(AbsTask):
     # If you need more than one optimizer, change this value
@@ -119,6 +127,8 @@ class DiarizationTask(AbsTask):
         label_aggregator_choices,
         # --attractor and --attractor_conf
         attractor_choices,
+        # --model and --model_conf
+        diar_model_choises,
     ]
 
     # If you need to modify train() or eval() procedures, change Trainer class here
@@ -157,12 +167,12 @@ class DiarizationTask(AbsTask):
             help="The number of input dimension of the feature",
         )
 
-        group.add_argument(
-            "--model_conf",
-            action=NestedDictAction,
-            default=get_default_kwargs(ESPnetDiarizationModel),
-            help="The keyword arguments for model class.",
-        )
+        #group.add_argument(
+        #    "--model_conf",
+        #    action=NestedDictAction,
+        #    default=get_default_kwargs(ESPnetDiarizationModel),
+        #    help="The keyword arguments for model class.",
+        #)
 
         group = parser.add_argument_group(description="Preprocess related")
         group.add_argument(
@@ -219,7 +229,7 @@ class DiarizationTask(AbsTask):
 
     @classmethod
     @typechecked
-    def build_model(cls, args: argparse.Namespace) -> ESPnetDiarizationModel:
+    def build_model(cls, args: argparse.Namespace) -> Union[ESPnetDiarizationModel, ESPnetCompressedDiarizationModel]:
 
         # 1. frontend
         if args.input_size is None:
@@ -282,7 +292,8 @@ class DiarizationTask(AbsTask):
             attractor = None
 
         # 7. Build model
-        model = ESPnetDiarizationModel(
+        diar_model_class = diar_model_choises.get_class(args.model)
+        model = diar_model_class(
             frontend=frontend,
             specaug=specaug,
             normalize=normalize,
