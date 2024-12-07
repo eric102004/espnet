@@ -405,7 +405,6 @@ class ESPnetCompressedDiarizationModel(ESPnetDiarizationModel):
         diar_weight: float = 1.0,
         attractor_weight: float = 1.0,
         compressor: Optional[AbsCompressor]=None,
-        blank_id: int = 0,
     ):
 
         super().__init__(
@@ -422,9 +421,8 @@ class ESPnetCompressedDiarizationModel(ESPnetDiarizationModel):
 
         # add compression model to compress target sequence
         self.compressor = compressor
-        self.blank_id = blank_id
+        self.blank_id = self.compressor.blank_id
         self.ctc_loss = torch.nn.CTCLoss(blank=self.blank_id, reduction='none', zero_infinity=True)
-        # TODO: (optional) add beam search
 
     def forward(
         self,

@@ -1,8 +1,9 @@
 from espnet2.diar.compressor.abs_compressor import AbsCompressor
 
 class RLECompressor(AbsCompressor):
-    def __init__(self, max_repeat=30):
+    def __init__(self, blank_id=31, max_repeat=30):
         self.max_repeat = max_repeat
+        assert blank_id == max_repeat + 1, "blank_id should be equal to max_repeat + 1"
     
     def encode(self, label, *args, **kwargs):
         # compress the label sequence using run-length encoding
