@@ -22,7 +22,7 @@ from espnet2.diar.decoder.abs_decoder import AbsDecoder
 from espnet2.diar.decoder.linear_decoder import LinearDecoder
 from espnet2.diar.decoder.ctc_linear_decoder import CTCLinearDecoder
 from espnet2.diar.compressor.abs_compressor import AbsCompressor
-from espnet2.diar.compressor.rle_compressor import RLECompressor
+from espnet2.diar.compressor.rle_compressor import RLECompressor, RLECompressor2
 from espnet2.diar.compressor.bpe_compressor import BPECompressor
 from espnet2.diar.espnet_model import ESPnetDiarizationModel, ESPnetCompressedDiarizationModel
 from espnet2.layers.abs_normalize import AbsNormalize
