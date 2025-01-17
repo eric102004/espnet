@@ -1,9 +1,10 @@
 from espnet2.diar.compressor.abs_compressor import AbsCompressor
 
-class BPECompressionModel(AbsCompressor):
+class BPECompressor(AbsCompressor):
     def __init__(self, vocab_file):
         self.vocab_dict, self.inv_vocab_dict = self.load_vocab(vocab_file)
-        # TODO: craeate string2list mapping
+        self.vocab_size = len(self.vocab_dict)
+        self.blank_id = self.vocab_dict["<b>"]
         
     def load_vocab(self, vocab_file):
         """
@@ -26,25 +27,63 @@ class BPECompressionModel(AbsCompressor):
     def encode(self, seq, *args, **kwargs):
         # compress the label sequence
         """
-        seq (list[list[int]]) has the shape (num_seq, [decomp_len])
-        comp_seq (list[list[int]]) has the shape (num_seq, [comp_len])
+        Args:
+            seq (list[list[int]]) has the shape (num_seq, [decomp_len])
+        Returns:
+            comp_seq (list[list[int]]) has the shape (num_seq, [comp_len])
         """
-        # TODO: operate on the string level
         comp_seq = []
-        for s in seq:
-            cs = [self.vocab_dict[c] for c in s]
-            comp_seq.append(cs)
+        for subseq in seq:
+            compressed = []
+            i = 0
+            while i < len(subseq):
+                longest_match = 1
+                for j in range(2, min(len(subseq) - i + 1, 3)):  # Look for matches up to length 2
+                    token = ''.join(map(str, subseq[i:i+j]))
+                    if token in self.vocab_dict:
+                        longest_match = j
+                
+                if longest_match > 1:
+                    token = ''.join(map(str, subseq[i:i+longest_match]))
+                    compressed.append(self.vocab_dict[token])
+                else:
+                    compressed.append(self.vocab_dict[str(subseq[i])])
+                
+                i += longest_match
+            
+            comp_seq.append(compressed)
+        
         return comp_seq
     
     def decode(self, comp_seq, *args, **kwargs):
         # decode the compressed label sequence
         """
-        comp_seq (list[list[int]]) has the shape (num_seq, [comp_len])
-        seq (list[list[int]]) has the shape (num_seq, [decomp_len])
+        Args:
+            comp_seq (list[list[int]]) has the shape (num_seq, [comp_len])
+        Returns:
+            seq (list[list[int]]) has the shape (num_seq, [decomp_len])
         """
-        # TODO: operate on the string level
         seq = []
-        for cs in comp_seq:
-            s = [self.inv_vocab_dict[c] for c in cs]
-            seq.append(s)
+        for subseq in comp_seq:
+            decompressed = []
+            for token_id in subseq:
+                if token_id == self.blank_id:
+                    continue
+                token = self.inv_vocab_dict[token_id]
+                if token.isdigit():
+                    decompressed.extend(map(int, token))
+                else:
+                    decompressed.append(int(token))
+            
+            seq.append(decompressed)
+        
         return seq
+    
+    def train_bpe(self, data):
+        """
+        Args:
+
+        Returns:
+
+        """
+        self.
