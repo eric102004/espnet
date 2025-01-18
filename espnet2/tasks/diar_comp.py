@@ -24,6 +24,7 @@ from espnet2.diar.decoder.ctc_linear_decoder import CTCLinearDecoder
 from espnet2.diar.compressor.abs_compressor import AbsCompressor
 from espnet2.diar.compressor.rle_compressor import RLECompressor, RLECompressor2
 from espnet2.diar.compressor.bpe_compressor import BPECompressor
+from espnet2.diar.compressor.binary_to_decimal_compressor import BinaryToDecimalCompressor
 from espnet2.diar.espnet_model import ESPnetDiarizationModel, ESPnetCompressedDiarizationModel
 from espnet2.layers.abs_normalize import AbsNormalize
 from espnet2.layers.global_mvn import GlobalMVN
@@ -106,6 +107,7 @@ compressor_choices = ClassChoices(
     classes=dict(
         rle=RLECompressor, 
         bpe=BPECompressor,
+        binary_to_decimal=BinaryToDecimalCompressor,
     ),
     type_check=AbsCompressor,
     default="rle",
