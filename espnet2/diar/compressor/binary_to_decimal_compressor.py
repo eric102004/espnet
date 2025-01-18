@@ -51,7 +51,7 @@ class BinaryToDecimalCompressor(AbsCompressor):
         seq = []
         if ref_seq_length is None:
             seq_length = []
-        for i, cs in enumerate(comp_seq):
+        for k, cs in enumerate(comp_seq):
             s = []
             for i in range(len(cs)):
                 # convert cs[i] in binary
@@ -60,7 +60,7 @@ class BinaryToDecimalCompressor(AbsCompressor):
             if ref_seq_length is None:
                 seq_length.append(len(s))
             else:
-                s = s[:ref_seq_length[i]]
+                s = s[:ref_seq_length[k]]
             seq.append(s)
         if ref_seq_length is None:
             return seq, seq_length
