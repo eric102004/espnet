@@ -14,20 +14,21 @@ import sys
 import argparse
 import torch
 import evaluate
+from tqdm import tqdm
 from transformers import WhisperForConditionalGeneration, WhisperProcessor
 
-sys.path.append(os.environ['rootdir']+'/src')
-from data.whisper_loader import WhisperDataset 
+#sys.path.append(os.environ['rootdir']+'/src')
+from local.whisper_loader import WhisperDataset
 
 
 def main():
     parser = argparse.ArgumentParser(description="loading whisper model to filter the utterance with low quality transcription")
     parser.add_argument("--wav_scp", required=True, type=str)
     parser.add_argument("--trn_scp", required=True, type=str)
-    parser.add_argument("--model", required=True, type=str)
+    parser.add_argument("--model", default="openai/whisper-large-v2", type=str)
     parser.add_argument("--wer_threshold", default=0.5, type=float)
-    parser.add_argument("--remove_n_words", required=True, default=3, type=int)
-    parser.add_argument("--remove_long_dur", required=True, default=30, type=int)
+    parser.add_argument("--remove_n_words", default=3, type=int)
+    parser.add_argument("--remove_long_dur", default=30, type=int)
     parser.add_argument("--saved_utt_list", required=True, type=str)
         
     args = parser.parse_args()
@@ -44,7 +45,7 @@ def main():
     uttlist_writer.flush()
 
     num_utt = 0
-    for testdata in dataset:
+    for testdata in tqdm(dataset):
         num_utt += 1
         audio = testdata["audio"]
 
