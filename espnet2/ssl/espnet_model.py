@@ -167,7 +167,7 @@ class ESPnetSSLModel(AbsESPnetModel):
             encoder_out = encoder_out[1]
         del feats, feats_lengths, pad_masks
 
-        return encoder_out, mask_info, features_pen
+        return encoder_out, out_lens, mask_info, features_pen
 
     def _extract_feats(
         self, speech: torch.Tensor, speech_lengths: torch.Tensor
