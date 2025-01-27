@@ -182,13 +182,13 @@ class MultiHeadedAttention(nn.Module):
                     query_nonpad_mask = key_nonpad_mask
 
                 if key_nonpad_mask.eq(0).any():
-                    q, indices_q, cu_seqlens_q, max_seqlen_q = unpad_input(
+                    q, indices_q, cu_seqlens_q, max_seqlen_q, _ = unpad_input(
                         query, query_nonpad_mask
                     )
-                    k, indices_k, cu_seqlens_k, max_seqlen_k = unpad_input(
+                    k, indices_k, cu_seqlens_k, max_seqlen_k, _ = unpad_input(
                         key, key_nonpad_mask
                     )
-                    v, _, _, _ = unpad_input(value, key_nonpad_mask)
+                    v, _, _, _, _ = unpad_input(value, key_nonpad_mask)
 
                     q = self.linear_q(q).reshape(-1, self.h, self.d_k)
                     k = self.linear_k(k).reshape(-1, self.h, self.d_k)

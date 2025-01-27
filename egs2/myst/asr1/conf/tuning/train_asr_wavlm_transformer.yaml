@@ -19,7 +19,7 @@ encoder_conf:
     output_size: 256
     attention_heads: 4
     linear_units: 1024
-    num_blocks: 18
+    num_blocks: 12
     dropout_rate: 0.1
     positional_dropout_rate: 0.1
     attention_dropout_rate: 0.1
@@ -49,8 +49,8 @@ num_workers: 4
 sort_in_batch: descending
 sort_batch: descending
 batch_type: numel
-batch_bins: 16000000
-accum_grad: 4
+batch_bins: 1000000
+accum_grad: 64
 max_epoch: 20
 patience: none
 init: none
