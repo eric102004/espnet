@@ -1,0 +1,74 @@
+#    This config file is for SA-EEND.
+#    For the details about SA-EEND, refer to the following paper:
+#    SA-EEND: https://arxiv.org/pdf/1909.06247.pdf
+
+# network architecture
+# encoder related
+encoder: transformer
+encoder_conf:
+    input_layer: "linear"
+    num_blocks: 4
+    linear_units: 512
+    dropout_rate: 0.1
+    output_size: 256  # dimension of attention
+    attention_heads: 4
+    attention_dropout_rate: 0.1
+
+# decoder related
+decoder: ctc_linear
+decoder_conf:
+    vocab_size: 11              #  (vocab_size of bpe model - 4) + blank id (blank id is the last)
+
+# compressor related
+compressor: bpe
+compressor_conf:
+    model_file: bpe/bpe14.model       # effective vocab size = 14 - 4 = 10
+
+# diar model related
+model: compressed
+
+# minibatch related
+batch_type: folded
+batch_size: 64
+
+# optimization related
+optim: adam
+accum_grad: 4
+grad_clip: 10
+max_epoch: 200
+optim_conf:
+    lr: 0.0001
+    weight_decay: 0.0001
+scheduler: warmupreducelronplateau
+scheduler_conf:
+    mode: min
+    factor: 0.5
+    patience: 10
+    min_lr: 0.00001
+    warmup_steps: 25000
+
+
+# others:
+best_model_criterion:
+-  - valid
+   - acc
+   - max
+keep_nbest_models: 10
+
+patience: none
+# The initialization method for model parameters
+init: xavier_uniform
+
+specaug: specaug
+specaug_conf:
+    apply_time_warp: false
+    apply_freq_mask: true
+    freq_mask_width_range:
+    - 0
+    - 30
+    num_freq_mask: 2
+    apply_time_mask: true
+    time_mask_width_range:
+    - 0
+    - 40
+    num_time_mask: 2
