@@ -56,8 +56,8 @@ patience: none
 init: none
 best_model_criterion:
 -   - valid
-    - acc
-    - max
+    - cer
+    - min
 keep_nbest_models: 4
 
 use_amp: true
