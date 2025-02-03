@@ -1,0 +1,13 @@
+2025-02-01T21:00:31 (asr.sh:283:main) ./asr.sh --fs 16k --ngpu 1 --token_type char --asr_task asr --max_wav_duration 10000 --asr_config conf/tuning/train_asr_transformer_multispkr.yaml --lm_config conf/tuning/train_lm_transformer.yaml --inference_config conf/decode.yaml --inference_args --multi_asr true --train_set train --valid_set dev --test_sets test --lm_train_text data/train/text_spk1 data/train/text_spk2 data/local/other_text/text --bpe_train_text data/train/text_spk1 data/train/text_spk2 --stage 2 --stop_stage 4
+2025-02-01T21:01:35 (asr.sh:564:main) Skipped stages:  9 14 15 
+2025-02-01T21:01:35 (asr.sh:595:main) Skip stage 2: Speed perturbation
+2025-02-01T21:01:35 (asr.sh:614:main) Stage 3: Format wav.scp: data/ -> dump/raw
+utils/copy_data_dir.sh: copied data from data/train to dump/raw/org/train
+utils/validate_data_dir.sh: Successfully validated data-directory dump/raw/org/train
+2025-02-01T21:01:38 (format_wav_scp.sh:46:main) scripts/audio/format_wav_scp.sh --nj 32 --cmd run.pl --audio-format flac --fs 16k --segments data/train/segments --multi-columns-input false --multi-columns-output false data/train/wav.scp dump/raw/org/train
+2025-02-01T21:01:40 (format_wav_scp.sh:97:main) [info]: using data/train/segments
+2025-02-01T21:05:23 (format_wav_scp.sh:153:main) Successfully finished. [elapsed=224s]
+utils/copy_data_dir.sh: copied data from data/dev to dump/raw/org/dev
+utils/validate_data_dir.sh: Successfully validated data-directory dump/raw/org/dev
+2025-02-01T21:05:25 (format_wav_scp.sh:46:main) scripts/audio/format_wav_scp.sh --nj 32 --cmd run.pl --audio-format flac --fs 16k --segments data/dev/segments --multi-columns-input false --multi-columns-output false data/dev/wav.scp dump/raw/org/dev
+2025-02-01T21:06:24 (format_wav_scp.sh:97:main) [info]: using data/dev/segments
