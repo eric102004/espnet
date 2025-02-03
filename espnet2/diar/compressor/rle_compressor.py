@@ -1,8 +1,13 @@
 from espnet2.diar.compressor.abs_compressor import AbsCompressor
 
 class RLECompressor(AbsCompressor):
-    def __init__(self, blank_id=31, max_repeat=30):
+    def __init__(self, blank_id=-1, max_repeat=-1):
+        """
+        example: blank_id=31, max_repeat=30
+        """
+        self.blank_id = blank_id
         self.max_repeat = max_repeat
+        self.vocab_size = max_repeat + 2
         assert blank_id == max_repeat + 1, "blank_id should be equal to max_repeat + 1"
     
     def encode(self, label, *args, **kwargs):
@@ -43,17 +48,34 @@ class RLECompressor(AbsCompressor):
         """
         seq = []
         seq_length = []
+        cur_digit = 0
+        repeat_stack = [0]
         for cs in comp_seq:
+            # version 1
             s = []
-            for i in range(0, len(cs), 2):
-                s.extend([cs[i] for j in range(cs[i+1])])
+            for i in range(len(cs)):
+                if cs[i] in [0, 1] and len(repeat_stack) > 0:
+                    s.extend([cur_digit for j in range(sum(repeat_stack))])
+                    repeat_stack = []
+                    cur_digit = cs[i]
+                else:
+                    repeat_stack.append(cs[i])
+            if len(repeat_stack):
+                s.extend([cur_digit for j in range(sum(repeat_stack))])
+            # version 2
+            #for i in range(0, len(cs), 2):
+            #    s.extend([cs[i] for j in range(cs[i+1])])
             seq.append(s)
             seq_length.append(len(s))
         return seq, seq_length
     
 
 class RLECompressor2(AbsCompressor):
-    def __init__(self, blank_id=60, max_repeat=30):
+    def __init__(self, blank_id=-1, max_repeat=-1):
+        """
+        example: blank_id=60, max_repeat=30
+        """
+        self.blank_id = blank_id
         self.max_repeat = max_repeat
         self.vocab_size = self.max_repeat*2 + 1
         assert blank_id == max_repeat*2, "blank_id should be equal to max_repeat*2"

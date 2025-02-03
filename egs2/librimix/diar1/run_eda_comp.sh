@@ -14,8 +14,8 @@ train_set="train"
 valid_set="dev"
 test_sets="test"
 
-train_config1="conf/train_diar_eda.yaml"
-train_config2="conf/train_diar_eda_adapt.yaml"
+train_config1="conf/comp/train_diar_eda_rle2.yaml"
+train_config2="conf/comp/train_diar_eda_adapt_rle2.yaml"
 decode_config="conf/decode_diar_eda.yaml"
 
 pretrain_stage=true
@@ -25,6 +25,7 @@ adapt_stage=false                                    # change from true to false
 
 if [[ ${pretrain_stage} == "true" ]]; then
 ./diar.sh \
+    --stage 4 \
     --fs 16k \
     --collar 0.0 \
     --train_set "${train_set}" \
@@ -35,7 +36,7 @@ if [[ ${pretrain_stage} == "true" ]]; then
     --inference_config "${decode_config}" \
     --inference_nj 5 \
     --local_data_opts "--num_spk 2" \
-    --stop_stage 3 \
+    --stop_stage 5 \
     "$@"
 fi
 

@@ -17,13 +17,13 @@ encoder_conf:
 # decoder related
 decoder: ctc_linear
 decoder_conf:
-    vocab_size: 201              #  vocab_size + blank = max_repeat * 2 + 1
+    vocab_size: 61              #  vocab_size + blank = max_repeat * 2 + 1
 
 # compressor related
 compressor: rle2
 compressor_conf:
-    max_repeat: 100
-    blank_id: 200   # index of blank token, should be max_repeat* 2
+    max_repeat: 30
+    blank_id: 60   # index of blank token, should be max_repeat* 2
 
 # diar model related
 model: compressed
@@ -36,10 +36,9 @@ batch_size: 64
 optim: adam
 accum_grad: 2
 grad_clip: 5
-max_epoch: 300
+max_epoch: 100
 optim_conf:
     lr: 0.0002
-    weight_decay: 0.000001
 scheduler: warmuplr
 scheduler_conf:
     warmup_steps: 100000

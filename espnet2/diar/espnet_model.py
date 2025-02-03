@@ -405,6 +405,7 @@ class ESPnetCompressedDiarizationModel(ESPnetDiarizationModel):
         diar_weight: float = 1.0,
         attractor_weight: float = 1.0,
         compressor: Optional[AbsCompressor]=None,
+        save_spk_labels: bool = False,
     ):
 
         super().__init__(
@@ -423,6 +424,7 @@ class ESPnetCompressedDiarizationModel(ESPnetDiarizationModel):
         self.compressor = compressor
         self.blank_id = self.compressor.blank_id
         self.ctc_loss = torch.nn.CTCLoss(blank=self.blank_id, reduction='none', zero_infinity=True)
+        self.save_spk_labels = save_spk_labels
 
     def forward(
         self,
@@ -441,7 +443,7 @@ class ESPnetCompressedDiarizationModel(ESPnetDiarizationModel):
                                      have the speech_lengths returned.
                                      see in
                                      espnet2/iterators/chunk_iter_factory.py
-            spk_labels: (Batch, )
+            spk_labels: (Batch, max_len, num_spk)
             kwargs: "utt_id" is among the input.
         """
         assert speech.shape[0] == spk_labels.shape[0], (speech.shape, spk_labels.shape)
@@ -491,6 +493,23 @@ class ESPnetCompressedDiarizationModel(ESPnetDiarizationModel):
         )
         spk_labels = spk_labels.permute(0, 2, 1)  # (batch_size, num_channel, max_len)
 
+        # save spk labels
+        if self.save_spk_labels:
+            # convert spk_labels into list[list[int]]
+            saved_spk_labels = spk_labels.to(torch.int32).data.cpu().tolist()
+            # remove padded zeros anc convert to list[str]
+            saved_labels = []
+            for s, l in zip(saved_spk_labels, spk_labels_lengths):
+                for s_spk in s:
+                    s_spk = s_spk[:l]
+                    # convert spk_labels into list[str]
+                    s_spk = ''.join(str(i) for i in s_spk)
+                    saved_labels.append(s_spk)
+            # save to file
+            with open("bpe/train_text.txt", "a") as f:
+                for s in saved_labels:
+                    f.write(s + "\n")
+
         # If encoder uses conv* as input_layer (i.e., subsampling),
         # the sequence length of 'pred' might be slighly less than the
         # length of 'spk_labels'. Here we force them to be equal.
@@ -498,6 +517,11 @@ class ESPnetCompressedDiarizationModel(ESPnetDiarizationModel):
         length_diff = spk_labels.shape[2] - pred.shape[2]
         if length_diff > 0 and length_diff <= length_diff_tolerance:
             spk_labels = spk_labels[:, :, 0 : pred.shape[2]]
+
+        # expand shape of spk_labels_lengths from (batch_size) to (batch_size, num_channel)
+        spk_labels_lengths = spk_labels_lengths.unsqueeze(1).expand(-1, spk_labels.size(1))
+        # expand shape of encoder_out_lens from (batch_size) to (batch_size, num_channel)
+        encoder_out_lens = encoder_out_lens.unsqueeze(1).expand(-1, spk_labels.size(1))
 
         # use compression model to compress the target sequence
         comp_spk_labels, comp_spk_labels_lengths = self.compress_target_sequence(spk_labels, spk_labels_lengths)
@@ -574,6 +598,7 @@ class ESPnetCompressedDiarizationModel(ESPnetDiarizationModel):
         # change the shape of pred to (max_len, batch_size * num_channel, num_vocabulary)
         bs = pred.size(0)
         pred = pred.reshape(-1, pred.size(2), pred.size(3))  # (batch_size * num_channel, max_len, num_vocabulary)
+        pred = pred.log_softmax(2).float()                # applying log softmax before calculating ctc loss
         pred = pred.permute(1, 0, 2)  # (max_len, batch_size * num_channel, num_vocabulary)
         # change the shape of label to (batch_size * num_channel, max_label_len)
         label = label.reshape(-1, label.size(2)) 
@@ -581,7 +606,14 @@ class ESPnetCompressedDiarizationModel(ESPnetDiarizationModel):
         length = length.reshape(-1)
         # change the shape of label_length to (batch_size * num_channel)
         label_length = label_length.reshape(-1)
-        loss = self.ctc_loss(pred, label, length, label_length)
+        # change the shape of label from (B,L) to (BxL)
+        reshaped_label = torch.cat([label[i, :l] for i, l in enumerate(label_length)])
+        try:
+            loss = self.ctc_loss(pred, reshaped_label, length, label_length)
+        except:
+            print(pred.size(), label.size(), length.size(), label_length.size())
+            print(length, label_length)
+            raise Exception("Error in ctc loss")
         # change the shape of loss to (batch_size, num_channel)
         loss = loss.reshape(bs, -1)
         # calculate the mean of loss over num_channel
@@ -605,7 +637,7 @@ class ESPnetCompressedDiarizationModel(ESPnetDiarizationModel):
             loss_list.append(loss_perm)
         loss = torch.cat(loss_list, dim=1)
         min_loss, min_idx = torch.min(loss, dim=1)
-        loss = torch.sum(min_loss)
+        loss = torch.mean(min_loss)           # take average over batch 
         batch_size = len(min_idx)
         label_list = []
         label_lengths_list = []
@@ -633,13 +665,14 @@ class ESPnetCompressedDiarizationModel(ESPnetDiarizationModel):
         # convert label into list[list[int]]
         label = [l[:label_lengths[i]].tolist() for i, l in enumerate(label)]
         comp_label, comp_label_lengths = self.compressor.encode(label, label_lengths)
+        # convert comp_label_lengths into tensor
+        comp_label_lengths = torch.tensor(comp_label_lengths).reshape(bs, n_channel)   # (batch_size, num_channel)
         # zero pad comp_label and convert it into tensor
         comp_label = self.align_length_and_to_tensor(comp_label, comp_label_lengths)
-        comp_label = comp_label.reshape(bs, n_channel, comp_label.size(1))
-        comp_label_lengths = torch.tensor(comp_label_lengths).reshape(bs, n_channel)
+        #comp_label = comp_label.reshape(bs, n_channel, comp_label.size(1))
+        #comp_label_lengths = torch.tensor(comp_label_lengths).unsqueeze(1).reshape(bs, n_channel)
         return comp_label, comp_label_lengths
     
-    @staticmethod
     def calc_diarization_error(self, pred, label, length):
         """
         Args:
@@ -661,11 +694,13 @@ class ESPnetCompressedDiarizationModel(ESPnetDiarizationModel):
         # mask the padding part
         mask = np.zeros((batch_size, max_len, num_output))
         for i in range(batch_size):
-            mask[i, : length[i], :] = 1
+            # check all element in length[i] are equal
+            assert torch.all(length[i]==length[i][0]), f"{length[i]}"
+            mask[i, : length[i][0], :] = 1
 
-        # pred and label have the shape (batch_size, max_len, num_output)
+        # pred_seq (decoded-and-decompressed pred) and label have the shape (batch_size, max_len, num_output)
         label_np = label.data.cpu().numpy().astype(int)
-        pred_np = pred.data.cpu().numpy().astype(int)
+        pred_np = pred_seq.data.cpu().numpy().astype(int)
         label_np = label_np * mask
         pred_np = pred_np * mask
         length = length.data.cpu().numpy()
@@ -723,12 +758,12 @@ class ESPnetCompressedDiarizationModel(ESPnetDiarizationModel):
         decode the compressed sequence into sequence
         Args:
             comp_pred_seq (list[list[list[int]]]) has the shape (batch_size, num_channel, [comp_len])
-            ref_decompredded_length has the shape (batch_size, )
+            ref_decompredded_length has the shape (batch_size, num_channel)
         Returns:
             pred_seq has the shape (batch_size, num_channel, max_len)
         """
         # decode the compressed sequence into sequence
-        # step 1 : reshape the comp_pred_seq into (batch_size * num_channel, max_comp_len)
+        # step 1 : reshape the comp_pred_seq into (batch_size * num_channel, [comp_len])
         new_comp_pred_seq = []
         for i in range(len(comp_pred_seq)):
             for j in range(len(comp_pred_seq[i])):
@@ -746,20 +781,21 @@ class ESPnetCompressedDiarizationModel(ESPnetDiarizationModel):
         align the length of seq and length, and convert seq into tensor
         Args:
             seq (list[list[int]]) has the shape (batch_size * num_channel, [each sequence's length])
-            ref_length has the shape (batch_size, )
+            ref_length has the shape (batch_size, num_channel)
         Returns:
             seq has the shape (batch_size, num_channel, max(length))
         """
-        batch_size = ref_length.size(0)
+        batch_size = len(ref_length)
         num_channel = len(seq) // batch_size
         # truncate the length of seq with length
         for i in range(batch_size):
-            for j in range(i*num_channel, (i+1)*num_channel):
-                seq[j] = seq[j][:ref_length[i]]
+            for j in range(num_channel):
+                k = i*num_channel + j
+                seq[k] = seq[k][:ref_length[i][j]]
         # zero pad seq with length.max()
-        max_length = ref_length.max()
-        for i in range(batch_size):
-            for j in range(len(seq[i]), max_length):
+        max_length = torch.max(ref_length)
+        for i in range(batch_size*num_channel):
+            for k in range(len(seq[i]), max_length):
                 seq[i].append(0)
         # convert seq into tensor
         seq = torch.tensor(seq).reshape(batch_size, num_channel, max_length)

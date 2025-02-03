@@ -18,7 +18,8 @@ from espnet2.enh.loss.criterions.time_domain import SISNRLoss
 from espnet2.enh.loss.wrappers.pit_solver import PITSolver
 from espnet2.fileio.npy_scp import NpyScpWriter
 from espnet2.fileio.sound_scp import SoundScpWriter
-from espnet2.tasks.diar import DiarizationTask
+#from espnet2.tasks.diar import DiarizationTask
+from espnet2.tasks.diar_comp import DiarizationTask
 from espnet2.tasks.enh_s2t import EnhS2TTask
 from espnet2.torch_utils.device_funcs import to_device
 from espnet2.torch_utils.set_all_random_seed import set_all_random_seed
@@ -410,11 +411,13 @@ class DiarizeSpeech:
             )
         return encoder_out, encoder_out_lens
 
+    # TODO: modify this part for compressed version (output should be decompressed binary sequence)
     def decode(self, encoder_out, encoder_out_lens):
         # SA-EEND
         if self.diar_model.attractor is None:
             assert self.num_spk is not None, 'Argument "num_spk" must be specified'
             spk_prediction = self.diar_model.decoder(encoder_out, encoder_out_lens)
+            # TODO: decompress here
             num_spk = self.num_spk
         # EEND-EDA
         else:
@@ -432,10 +435,12 @@ class DiarizeSpeech:
                         device=self.device,
                     ),
                 )
+                # TODO: modify this part for compressed version
                 spk_prediction = torch.bmm(
                     encoder_out,
                     attractor[:, : self.num_spk, :].permute(0, 2, 1),
                 )
+                # TODO: add decompression here
                 num_spk = self.num_spk
             # else find the first att_prob[i] < 0
             else:
@@ -456,9 +461,11 @@ class DiarizeSpeech:
                 for num_spk in range(len(att_prob)):
                     if att_prob[num_spk].item() < 0:
                         break
+                # TODO: modify this part for compressed version
                 spk_prediction = torch.bmm(
                     encoder_out, attractor[:, :num_spk, :].permute(0, 2, 1)
                 )
+                # TODO: add decompression here
         return spk_prediction, num_spk
 
 

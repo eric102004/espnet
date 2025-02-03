@@ -18,7 +18,10 @@ train_config="conf/train_diar.yaml"
 decode_config="conf/decode_diar.yaml"
 num_spk=2 # 2, 3
 
+fs=16k
+
 ./diar.sh \
+    --fs $fs \
     --collar 0.0 \
     --train_set "${train_set}" \
     --valid_set "${valid_set}" \

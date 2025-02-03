@@ -12,10 +12,11 @@ set -o pipefail
 
 train_set="train"
 valid_set="dev"
-test_sets="test"
+test_sets="dev test"
 
-train_config="conf/train_diar.yaml"
+train_config="conf/comp/train_diar_bpe14.yaml"
 decode_config="conf/decode_diar.yaml"
+diar_tag="train_diar_bpe14_raw_newctc"
 num_spk=2 # 2, 3
 
 fs=16k
@@ -32,4 +33,5 @@ fs=16k
     --inference_nj 5 \
     --local_data_opts "--num_spk ${num_spk}" \
     --num_spk "${num_spk}"\
+    --diar_tag "${diar_tag}" \
     "$@"

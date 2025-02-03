@@ -38,6 +38,8 @@ class CTCRnnAttractor(AbsAttractor):
 
         self.ctc_lo = torch.nn.Linear(encoder_output_size, vocab_size)
 
+        self.vocab_size = vocab_size
+
     def forward(
         self,
         enc_input: torch.Tensor,

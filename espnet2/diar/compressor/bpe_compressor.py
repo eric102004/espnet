@@ -1,28 +1,22 @@
 from espnet2.diar.compressor.abs_compressor import AbsCompressor
 
+import sentencepiece as spm
+
 class BPECompressor(AbsCompressor):
-    def __init__(self, vocab_file):
-        self.vocab_dict, self.inv_vocab_dict = self.load_vocab(vocab_file)
-        self.vocab_size = len(self.vocab_dict)
-        self.blank_id = self.vocab_dict["<b>"]
+    def __init__(self, model_file=None, data_file=None, bpe_vocab_size=10):
+        if model_file is not None:
+            self.load_model(model_file)
+        else:
+            assert data_file is not None, "Either model_file or data_file must be provided"
+            self.train_bpe(data_file, bpe_vocab_size)
+        self.vocab_size = self.sp.get_piece_size() - 4 + 1 # (bpe_vocab_size - 4) + blank id
+        self.blank_id = self.vocab_size - 1 
         
-    def load_vocab(self, vocab_file):
-        """
-        example content of vocab file
-        <b> 0
-        0 1
-        1 2 
-        00 3
-        11 4
-        """
-        with open(vocab_file, 'r') as f:
-            vocab_dict = {}
-            inverse_vocab_dict = {}
-            for line in f:
-                token, idx = line.strip().split()
-                vocab_dict[token] = int(idx)
-                inverse_vocab_dict[int(idx)] = token
-        return vocab_dict, inverse_vocab_dict
+        
+    def load_model(self, model_file):
+        self.sp = spm.SentencePieceProcessor(
+            model_file=model_file
+        )
     
     def encode(self, seq, *args, **kwargs):
         # compress the label sequence
@@ -31,29 +25,17 @@ class BPECompressor(AbsCompressor):
             seq (list[list[int]]) has the shape (num_seq, [decomp_len])
         Returns:
             comp_seq (list[list[int]]) has the shape (num_seq, [comp_len])
+            comp_seq_length (list[int]) has the shape (num_seq)
         """
-        comp_seq = []
-        for subseq in seq:
-            compressed = []
-            i = 0
-            while i < len(subseq):
-                longest_match = 1
-                for j in range(2, min(len(subseq) - i + 1, 3)):  # Look for matches up to length 2
-                    token = ''.join(map(str, subseq[i:i+j]))
-                    if token in self.vocab_dict:
-                        longest_match = j
-                
-                if longest_match > 1:
-                    token = ''.join(map(str, subseq[i:i+longest_match]))
-                    compressed.append(self.vocab_dict[token])
-                else:
-                    compressed.append(self.vocab_dict[str(subseq[i])])
-                
-                i += longest_match
-            
-            comp_seq.append(compressed)
-        
-        return comp_seq
+        # convert seq in list of str
+        seq = ["".join(str(int(i)) for i in subseq) for subseq in seq]
+        # encode using spm
+        comp_seq = [self.sp.encode(s, out_type=int) for s in seq]
+        # postprocess: map vocab from sentence piece model to espnet model
+        comp_seq = [[i-3 for i in s] for s in comp_seq]
+        # check all the ids are in the vocab
+        comp_seq_length = [len(s) for s in comp_seq]
+        return comp_seq, comp_seq_length
     
     def decode(self, comp_seq, *args, **kwargs):
         # decode the compressed label sequence
@@ -62,28 +44,39 @@ class BPECompressor(AbsCompressor):
             comp_seq (list[list[int]]) has the shape (num_seq, [comp_len])
         Returns:
             seq (list[list[int]]) has the shape (num_seq, [decomp_len])
+            seq_length (list[int]) has the shape (num_seq)
         """
-        seq = []
-        for subseq in comp_seq:
-            decompressed = []
-            for token_id in subseq:
-                if token_id == self.blank_id:
-                    continue
-                token = self.inv_vocab_dict[token_id]
-                if token.isdigit():
-                    decompressed.extend(map(int, token))
-                else:
-                    decompressed.append(int(token))
-            
-            seq.append(decompressed)
-        
-        return seq
+        # preprocess : remove blank id and map them to vocab of sentence piece model
+        comp_seq = [[i+3 for i in s if i!=self.blank_id] for s in comp_seq]
+        # decode using spom
+        seq = [self.sp.decode(s) for s in comp_seq]
+        # convert seq to list of list of int
+        try:
+            seq = [[int(i) for i in s] for s in seq]
+        except:
+            print(seq)
+            raise ValueError("Error decoding sequence")
+        seq_length = [len(s) for s in seq]
+        return seq, seq_length
     
-    def train_bpe(self, data):
+    def train_bpe(self, data_file, vocab_size=10):
         """
         Args:
-
+            data_file (str): path to the data file
+            vocab_size (int): vocabulary size for the BPE model
         Returns:
-
+            None
         """
-        self.
+        # train the BPE model. It will generate the model file bpe<vocab_size>.model
+        spm.SentencePieceTrainer.train(
+            input=data_file,
+            model_prefix=f'bpe{vocab_size}',
+            vocab_size=vocab_size, 
+            character_coverage=1.0,
+            model_type='bpe'
+        )
+
+        # load the trained model
+        self.sp = spm.SentencePieceProcessor(model_file=f'bpe{vocab_size}.model')
+
+        return

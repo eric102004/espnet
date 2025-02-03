@@ -15,6 +15,7 @@ class CTCLinearDecoder(AbsDecoder):
     ):
         super().__init__()
         self._num_spk = num_spk
+        self.vocab_size = vocab_size
         self.ctc_lo = torch.nn.Linear(encoder_output_size, num_spk * vocab_size)
         self.dropout_layer = torch.nn.Dropout(p=dropout_rate)
 

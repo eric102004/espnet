@@ -105,7 +105,8 @@ attractor_choices = ClassChoices(
 compressor_choices = ClassChoices(
     "compressor",
     classes=dict(
-        rle=RLECompressor, 
+        rle=RLECompressor,
+        rle2=RLECompressor2, 
         bpe=BPECompressor,
         binary_to_decimal=BinaryToDecimalCompressor,
     ),
@@ -313,7 +314,18 @@ class DiarizationTask(AbsTask):
         if args.model == "compressed":
             compressor_class = compressor_choices.get_class(args.compressor)
             compressor = compressor_class(**args.compressor_conf)
-            args.model_conf["compressor"] = compressor
+            # args.model_conf["compressor"] = compressor
+
+        # check compressor and decoder/attractor have same vocab_size
+        if args.model == "compressed":
+            if compressor.vocab_size != decoder.vocab_size:
+                raise ValueError(
+                    "Vocab size of compressor and decoder should be the same"
+                )
+            if attractor is not None and compressor.vocab_size != attractor.vocab_size:
+                raise ValueError(
+                    "Vocab size of compressor and attractor should be the same"
+                )
 
         # 8. Build model
         diar_model_class = diar_model_choises.get_class(args.model)
@@ -325,6 +337,7 @@ class DiarizationTask(AbsTask):
             encoder=encoder,
             decoder=decoder,
             attractor=attractor,
+            compressor=compressor,
             **args.model_conf,
         )
 

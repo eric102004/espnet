@@ -12,6 +12,7 @@ class BinaryToDecimalCompressor(AbsCompressor):
         """
         self.compression_rate = compression_rate
         self.vocab_size = 2**compression_rate + 1
+        self.blank_id = blank_id
         assert blank_id == 2**compression_rate, "blank_id should be equal to 2**compression_rate"
     
     def encode(self, label, *args, **kwargs):

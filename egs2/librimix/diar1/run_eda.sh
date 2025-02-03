@@ -19,12 +19,13 @@ train_config2="conf/train_diar_eda_adapt.yaml"
 decode_config="conf/decode_diar_eda.yaml"
 
 pretrain_stage=true
-adapt_stage=true
+adapt_stage=false                                    # change from true to false
 # If you want to run only one of the stages (e.g., the adaptation stage),
 # set "false" to the one you don't want to run (e.g., the pre-training stage)
 
 if [[ ${pretrain_stage} == "true" ]]; then
 ./diar.sh \
+    --fs 16k \
     --collar 0.0 \
     --train_set "${train_set}" \
     --valid_set "${valid_set}" \
@@ -34,7 +35,7 @@ if [[ ${pretrain_stage} == "true" ]]; then
     --inference_config "${decode_config}" \
     --inference_nj 5 \
     --local_data_opts "--num_spk 2" \
-    --stop_stage 5 \
+    --stop_stage 3 \
     "$@"
 fi
 
@@ -42,6 +43,7 @@ fi
 # according to the actual path of your experiment.
 if [[ ${adapt_stage} == "true" ]]; then
 ./diar.sh \
+    --fs 16k \
     --collar 0.0 \
     --train_set "${train_set}" \
     --valid_set "${valid_set}" \

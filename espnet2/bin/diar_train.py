@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-from espnet2.tasks.diar import DiarizationTask
+#from espnet2.tasks.diar import DiarizationTask
+from espnet2.tasks.diar_comp import DiarizationTask
 
 
 def get_parser():
