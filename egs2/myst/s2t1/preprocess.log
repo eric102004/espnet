@@ -1,0 +1,87 @@
+2025-01-26T16:32:46 (s2t.sh:260:main) ./s2t.sh --lang en --gpu_inference true --token_type bpe --nbpe 50000 --max_wav_duration 30 --speed_perturb_factors 0.9 1.0 1.1 --use_lm false --feats_normalize utt_mvn --feats_type raw --s2t_config conf/tuning/owsm_v3.1_lr00005_03.yaml --inference_config conf/decode_asr_beam20_ctc03.yaml --inference_s2t_model latest.pth --train_set train --valid_set dev --test_sets dev test --lm_train_text data/train/text --bpe_train_text data/train/text --local_data_opts --flac2wav true --audio_format wav --min_wav_duration 0.5 --dumpdir dump_filter --stage 5 --stop_stage 10
+2025-01-26T16:32:47 (s2t.sh:298:main) Info: The valid_set 'dev' is included in the test_sets. '--eval_valid_set true' is set and 'dev' is removed from the test_sets
+2025-01-26T16:32:47 (s2t.sh:537:main) Skipped stages:  6 7 8 9 14 15 
+2025-01-26T16:32:47 (s2t.sh:874:main) Stage 5: Generate token_list from data/train/text using BPE
+sentencepiece_trainer.cc(177) LOG(INFO) Running command: --input=data/en_token_list/bpe_unigram50000/train.txt --vocab_size=50000 --model_type=unigram --model_prefix=data/en_token_list/bpe_unigram50000/bpe --character_coverage=1.0 --input_sentence_size=100000000
+sentencepiece_trainer.cc(77) LOG(INFO) Starts training with : 
+trainer_spec {
+  input: data/en_token_list/bpe_unigram50000/train.txt
+  input_format: 
+  model_prefix: data/en_token_list/bpe_unigram50000/bpe
+  model_type: UNIGRAM
+  vocab_size: 50000
+  self_test_sample_size: 0
+  character_coverage: 1
+  input_sentence_size: 100000000
+  shuffle_input_sentence: 1
+  seed_sentencepiece_size: 1000000
+  shrinking_factor: 0.75
+  max_sentence_length: 4192
+  num_threads: 16
+  num_sub_iterations: 2
+  max_sentencepiece_length: 16
+  split_by_unicode_script: 1
+  split_by_number: 1
+  split_by_whitespace: 1
+  split_digits: 0
+  treat_whitespace_as_suffix: 0
+  allow_whitespace_only_pieces: 0
+  required_chars: 
+  byte_fallback: 0
+  vocabulary_output_piece_score: 1
+  train_extremely_large_corpus: 0
+  hard_vocab_limit: 1
+  use_all_vocab: 0
+  unk_id: 0
+  bos_id: 1
+  eos_id: 2
+  pad_id: -1
+  unk_piece: <unk>
+  bos_piece: <s>
+  eos_piece: </s>
+  pad_piece: <pad>
+  unk_surface:  ⁇ 
+  enable_differential_privacy: 0
+  differential_privacy_noise_level: 0
+  differential_privacy_clipping_threshold: 0
+}
+normalizer_spec {
+  name: nmt_nfkc
+  add_dummy_prefix: 1
+  remove_extra_whitespaces: 1
+  escape_whitespaces: 1
+  normalization_rule_tsv: 
+}
+denormalizer_spec {}
+trainer_interface.cc(350) LOG(INFO) SentenceIterator is not specified. Using MultiFileSentenceIterator.
+trainer_interface.cc(181) LOG(INFO) Loading corpus: data/en_token_list/bpe_unigram50000/train.txt
+trainer_interface.cc(406) LOG(INFO) Loaded all 55702 sentences
+trainer_interface.cc(422) LOG(INFO) Adding meta_piece: <unk>
+trainer_interface.cc(422) LOG(INFO) Adding meta_piece: <s>
+trainer_interface.cc(422) LOG(INFO) Adding meta_piece: </s>
+trainer_interface.cc(427) LOG(INFO) Normalizing sentences...
+trainer_interface.cc(536) LOG(INFO) all chars count=4910476
+trainer_interface.cc(557) LOG(INFO) Alphabet size=28
+trainer_interface.cc(558) LOG(INFO) Final character coverage=1
+trainer_interface.cc(590) LOG(INFO) Done! preprocessed 55702 sentences.
+unigram_model_trainer.cc(146) LOG(INFO) Making suffix array...
+unigram_model_trainer.cc(150) LOG(INFO) Extracting frequent sub strings...
+unigram_model_trainer.cc(201) LOG(INFO) Initialized 21867 seed sentencepieces
+trainer_interface.cc(596) LOG(INFO) Tokenizing input sentences with whitespace: 55702
+trainer_interface.cc(607) LOG(INFO) Done! 9076
+unigram_model_trainer.cc(491) LOG(INFO) Using 9076 sentences for EM training
+unigram_model_trainer.cc(507) LOG(INFO) EM sub_iter=0 size=8980 obj=8.18237 num_tokens=14736 num_tokens/piece=1.64098
+unigram_model_trainer.cc(507) LOG(INFO) EM sub_iter=1 size=6488 obj=6.32332 num_tokens=14918 num_tokens/piece=2.29932
+trainer_interface.cc(685) LOG(INFO) Saving model: data/en_token_list/bpe_unigram50000/bpe.model
+Traceback (most recent call last):
+  File "/work/hdd/bbjs/clin10/bootcamp/espnet/tools/sentencepiece_commands/spm_train", line 12, in <module>
+    spm.SentencePieceTrainer.Train(" ".join(sys.argv[1:]))
+  File "/work/hdd/bbjs/clin10/bootcamp/espnet/tools/venv/envs/bootcamp/lib/python3.12/site-packages/sentencepiece/__init__.py", line 989, in Train
+    SentencePieceTrainer._Train(arg=arg, **kwargs)
+  File "/work/hdd/bbjs/clin10/bootcamp/espnet/tools/venv/envs/bootcamp/lib/python3.12/site-packages/sentencepiece/__init__.py", line 945, in _Train
+    return SentencePieceTrainer._TrainFromString(arg)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/work/hdd/bbjs/clin10/bootcamp/espnet/tools/venv/envs/bootcamp/lib/python3.12/site-packages/sentencepiece/__init__.py", line 923, in _TrainFromString
+    return _sentencepiece.SentencePieceTrainer__TrainFromString(arg)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Internal: src/trainer_interface.cc(660) [(trainer_spec_.vocab_size()) == (model_proto->pieces_size())] Vocabulary size too high (50000). Please set it to a value <= 6493.

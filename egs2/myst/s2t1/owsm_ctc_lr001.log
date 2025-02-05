@@ -1,0 +1,1030 @@
+2025-02-02T16:41:52 (s2t_ctc.sh:264:main) ./s2t_ctc.sh --lang en --gpu_inference true --token_type bpe --nbpe 50000 --max_wav_duration 30 --use_lm false --feats_normalize utt_mvn --feats_type raw --s2t_config conf/tuning/owsm_ctc_lr001.yaml --inference_config conf/decode_ctc_beam1.yaml --inference_s2t_model valid.cer_ctc.ave_4best.pth --train_set train --valid_set dev --test_sets dev test --lm_train_text data/train/text --bpe_train_text data/train/text --local_data_opts --flac2wav true --audio_format wav --min_wav_duration 0.5 --dumpdir dump_filter --bpemodel data/en_token_list/bpe_unigram50000/owsm_ctc/bpe.model --bpetoken_list data/en_token_list/bpe_unigram50000/owsm_ctc/tokens.txt --stage 11
+2025-02-02T16:41:53 (s2t_ctc.sh:302:main) Info: The valid_set 'dev' is included in the test_sets. '--eval_valid_set true' is set and 'dev' is removed from the test_sets
+2025-02-02T16:41:53 (s2t_ctc.sh:545:main) Skipped stages:  6 7 8 9 14 15 
+2025-02-02T16:41:53 (s2t_ctc.sh:1294:main) Stage 11: S2T Training: train_set=dump_filter/raw/train, valid_set=dump_filter/raw/dev
+2025-02-02T16:41:53 (s2t_ctc.sh:1393:main) Generate 'exp/s2t_owsm_ctc_lr001_raw_en_bpe50000/run.sh'. You can resume the process from stage 11 using this script
+2025-02-02T16:41:53 (s2t_ctc.sh:1397:main) S2T training started... log: 'exp/s2t_owsm_ctc_lr001_raw_en_bpe50000/train.log'
+2025-02-02 16:41:54,309 (launch:94) INFO: /work/hdd/bbjs/clin10/bootcamp/espnet/tools/venv/envs/bootcamp/bin/python3 /work/hdd/bbjs/clin10/bootcamp/espnet/espnet2/bin/launch.py --cmd 'slurm.pl --name exp/s2t_owsm_ctc_lr001_raw_en_bpe50000/train.log' --log exp/s2t_owsm_ctc_lr001_raw_en_bpe50000/train.log --ngpu 1 --num_nodes 1 --init_file_prefix exp/s2t_owsm_ctc_lr001_raw_en_bpe50000/.dist_init_ --multiprocessing_distributed true -- python3 -m espnet2.bin.s2t_ctc_train --use_preprocessor true --bpemodel data/en_token_list/bpe_unigram50000/owsm_ctc/bpe.model --token_type bpe --token_list data/en_token_list/bpe_unigram50000/owsm_ctc/tokens.txt --non_linguistic_symbols none --cleaner none --g2p none --valid_data_path_and_name_and_type dump_filter/raw/dev/wav.scp,speech,sound --valid_shape_file exp/s2t_stats_raw_en_bpe50000/valid/speech_shape --resume true --fold_length 80000 --output_dir exp/s2t_owsm_ctc_lr001_raw_en_bpe50000 --config conf/tuning/owsm_ctc_lr001.yaml --frontend_conf fs=16k --train_data_path_and_name_and_type dump_filter/raw/train/wav.scp,speech,sound --train_shape_file exp/s2t_stats_raw_en_bpe50000/train/speech_shape --fold_length 150 --train_data_path_and_name_and_type dump_filter/raw/train/text.prev,text_prev,text --train_shape_file exp/s2t_stats_raw_en_bpe50000/train/text_prev_shape.bpe --fold_length 150 --train_data_path_and_name_and_type dump_filter/raw/train/text.ctc,text_ctc,text --train_shape_file exp/s2t_stats_raw_en_bpe50000/train/text_ctc_shape.bpe --fold_length 150 --train_data_path_and_name_and_type dump_filter/raw/train/text,text,text --train_shape_file exp/s2t_stats_raw_en_bpe50000/train/text_shape.bpe --valid_data_path_and_name_and_type dump_filter/raw/dev/text.prev,text_prev,text --valid_shape_file exp/s2t_stats_raw_en_bpe50000/valid/text_prev_shape.bpe --valid_data_path_and_name_and_type dump_filter/raw/dev/text.ctc,text_ctc,text --valid_shape_file exp/s2t_stats_raw_en_bpe50000/valid/text_ctc_shape.bpe --valid_data_path_and_name_and_type dump_filter/raw/dev/text,text,text --valid_shape_file exp/s2t_stats_raw_en_bpe50000/valid/text_shape.bpe
+2025-02-02 16:41:54,567 (launch:348) INFO: log file: exp/s2t_owsm_ctc_lr001_raw_en_bpe50000/train.log
+/work/hdd/bbjs/clin10/bootcamp/espnet/egs2/myst/s2t1/utils/slurm.pl: Error: Job 6653686 seems to no longer exists:
+'squeue -j 6653686' returned error code 1 and said:
+  slurm_load_jobs error: Unexpected message received
+
+Syncfile exp/s2t_owsm_ctc_lr001_raw_en_bpe50000/q/done.1024620 does not exist, meaning that the job did not finish.
+Log is in exp/s2t_owsm_ctc_lr001_raw_en_bpe50000/train.log. Last line '[gpub049] 2025-02-02 21:33:03,703 (trainer:795) INFO: 2epoch:train:20401-20800batch: iter_time=1.011e-04, forward_time=0.124, loss_ctc=88.978, loss_interctc_layer6=154.764, loss_interctc_layer12=113.132, loss_interctc_layer15=104.366, loss_interctc_layer21=92.023, loss=1.729, backward_time=0.174, grad_norm=219.215, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=1.185e-04, train_time=22.186' does not end in 'status 0'.
+Possible reasons:
+  a) Exceeded time limit? -> Use more jobs!
+  b) Shutdown/Frozen machine? -> Run again! squeue:
+       JOBID    PARTITION         NAME           USER ST       TIME  NODES   NODELIST(REASON) FEATURES
+     6653686     gpuA40x4 exp/s2t_owsm         clin10  R    4:51:46      1            gpub049 (null)
+Command '['slurm.pl', '--name', 'exp/s2t_owsm_ctc_lr001_raw_en_bpe50000/train.log', '--gpu', '1', 'exp/s2t_owsm_ctc_lr001_raw_en_bpe50000/train.log', 'python3', '-m', 'espnet2.bin.s2t_ctc_train', '--use_preprocessor', 'true', '--bpemodel', 'data/en_token_list/bpe_unigram50000/owsm_ctc/bpe.model', '--token_type', 'bpe', '--token_list', 'data/en_token_list/bpe_unigram50000/owsm_ctc/tokens.txt', '--non_linguistic_symbols', 'none', '--cleaner', 'none', '--g2p', 'none', '--valid_data_path_and_name_and_type', 'dump_filter/raw/dev/wav.scp,speech,sound', '--valid_shape_file', 'exp/s2t_stats_raw_en_bpe50000/valid/speech_shape', '--resume', 'true', '--fold_length', '80000', '--output_dir', 'exp/s2t_owsm_ctc_lr001_raw_en_bpe50000', '--config', 'conf/tuning/owsm_ctc_lr001.yaml', '--frontend_conf', 'fs=16k', '--train_data_path_and_name_and_type', 'dump_filter/raw/train/wav.scp,speech,sound', '--train_shape_file', 'exp/s2t_stats_raw_en_bpe50000/train/speech_shape', '--fold_length', '150', '--train_data_path_and_name_and_type', 'dump_filter/raw/train/text.prev,text_prev,text', '--train_shape_file', 'exp/s2t_stats_raw_en_bpe50000/train/text_prev_shape.bpe', '--fold_length', '150', '--train_data_path_and_name_and_type', 'dump_filter/raw/train/text.ctc,text_ctc,text', '--train_shape_file', 'exp/s2t_stats_raw_en_bpe50000/train/text_ctc_shape.bpe', '--fold_length', '150', '--train_data_path_and_name_and_type', 'dump_filter/raw/train/text,text,text', '--train_shape_file', 'exp/s2t_stats_raw_en_bpe50000/train/text_shape.bpe', '--valid_data_path_and_name_and_type', 'dump_filter/raw/dev/text.prev,text_prev,text', '--valid_shape_file', 'exp/s2t_stats_raw_en_bpe50000/valid/text_prev_shape.bpe', '--valid_data_path_and_name_and_type', 'dump_filter/raw/dev/text.ctc,text_ctc,text', '--valid_shape_file', 'exp/s2t_stats_raw_en_bpe50000/valid/text_ctc_shape.bpe', '--valid_data_path_and_name_and_type', 'dump_filter/raw/dev/text,text,text', '--valid_shape_file', 'exp/s2t_stats_raw_en_bpe50000/valid/text_shape.bpe', '--ngpu', '1', '--multiprocessing_distributed', 'True']' returned non-zero exit status 1.
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/work/hdd/bbjs/clin10/bootcamp/espnet/espnet2/bin/launch.py", line 384, in <module>
+    main()
+  File "/work/hdd/bbjs/clin10/bootcamp/espnet/espnet2/bin/launch.py", line 375, in main
+    raise RuntimeError(
+RuntimeError: 
+################### The last 1000 lines of exp/s2t_owsm_ctc_lr001_raw_en_bpe50000/train.log ###################
+        (norm_cross_attn): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+        (depthwise_conv_fusion): Conv1d(2048, 2048, kernel_size=(31,), stride=(1,), padding=(15,), groups=2048)
+        (merge_proj): Linear(in_features=2048, out_features=1024, bias=True)
+      )
+      (12): EBranchformerEncoderLayer(
+        (attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (cgmlp): ConvolutionalGatingMLP(
+          (channel_proj1): Sequential(
+            (0): Linear(in_features=1024, out_features=4096, bias=True)
+            (1): GELU(approximate='none')
+          )
+          (csgu): ConvolutionalSpatialGatingUnit(
+            (norm): LayerNorm((2048,), eps=1e-12, elementwise_affine=True)
+            (conv): Conv1d(2048, 2048, kernel_size=(31,), stride=(1,), padding=(15,), groups=2048)
+            (act): Identity()
+            (dropout): Dropout(p=0.1, inplace=False)
+          )
+          (channel_proj2): Linear(in_features=2048, out_features=1024, bias=True)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_mlp): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+        (depthwise_conv_fusion): Conv1d(2048, 2048, kernel_size=(31,), stride=(1,), padding=(15,), groups=2048)
+        (merge_proj): Linear(in_features=2048, out_features=1024, bias=True)
+      )
+      (13): EBranchformerEncoderLayer(
+        (attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (cgmlp): ConvolutionalGatingMLP(
+          (channel_proj1): Sequential(
+            (0): Linear(in_features=1024, out_features=4096, bias=True)
+            (1): GELU(approximate='none')
+          )
+          (csgu): ConvolutionalSpatialGatingUnit(
+            (norm): LayerNorm((2048,), eps=1e-12, elementwise_affine=True)
+            (conv): Conv1d(2048, 2048, kernel_size=(31,), stride=(1,), padding=(15,), groups=2048)
+            (act): Identity()
+            (dropout): Dropout(p=0.1, inplace=False)
+          )
+          (channel_proj2): Linear(in_features=2048, out_features=1024, bias=True)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_mlp): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+        (depthwise_conv_fusion): Conv1d(2048, 2048, kernel_size=(31,), stride=(1,), padding=(15,), groups=2048)
+        (merge_proj): Linear(in_features=2048, out_features=1024, bias=True)
+      )
+      (14): EBranchformerEncoderLayer(
+        (attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (cgmlp): ConvolutionalGatingMLP(
+          (channel_proj1): Sequential(
+            (0): Linear(in_features=1024, out_features=4096, bias=True)
+            (1): GELU(approximate='none')
+          )
+          (csgu): ConvolutionalSpatialGatingUnit(
+            (norm): LayerNorm((2048,), eps=1e-12, elementwise_affine=True)
+            (conv): Conv1d(2048, 2048, kernel_size=(31,), stride=(1,), padding=(15,), groups=2048)
+            (act): Identity()
+            (dropout): Dropout(p=0.1, inplace=False)
+          )
+          (channel_proj2): Linear(in_features=2048, out_features=1024, bias=True)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_mlp): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (cross_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (norm_cross_attn): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+        (depthwise_conv_fusion): Conv1d(2048, 2048, kernel_size=(31,), stride=(1,), padding=(15,), groups=2048)
+        (merge_proj): Linear(in_features=2048, out_features=1024, bias=True)
+      )
+      (15): EBranchformerEncoderLayer(
+        (attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (cgmlp): ConvolutionalGatingMLP(
+          (channel_proj1): Sequential(
+            (0): Linear(in_features=1024, out_features=4096, bias=True)
+            (1): GELU(approximate='none')
+          )
+          (csgu): ConvolutionalSpatialGatingUnit(
+            (norm): LayerNorm((2048,), eps=1e-12, elementwise_affine=True)
+            (conv): Conv1d(2048, 2048, kernel_size=(31,), stride=(1,), padding=(15,), groups=2048)
+            (act): Identity()
+            (dropout): Dropout(p=0.1, inplace=False)
+          )
+          (channel_proj2): Linear(in_features=2048, out_features=1024, bias=True)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_mlp): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+        (depthwise_conv_fusion): Conv1d(2048, 2048, kernel_size=(31,), stride=(1,), padding=(15,), groups=2048)
+        (merge_proj): Linear(in_features=2048, out_features=1024, bias=True)
+      )
+      (16): EBranchformerEncoderLayer(
+        (attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (cgmlp): ConvolutionalGatingMLP(
+          (channel_proj1): Sequential(
+            (0): Linear(in_features=1024, out_features=4096, bias=True)
+            (1): GELU(approximate='none')
+          )
+          (csgu): ConvolutionalSpatialGatingUnit(
+            (norm): LayerNorm((2048,), eps=1e-12, elementwise_affine=True)
+            (conv): Conv1d(2048, 2048, kernel_size=(31,), stride=(1,), padding=(15,), groups=2048)
+            (act): Identity()
+            (dropout): Dropout(p=0.1, inplace=False)
+          )
+          (channel_proj2): Linear(in_features=2048, out_features=1024, bias=True)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_mlp): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+        (depthwise_conv_fusion): Conv1d(2048, 2048, kernel_size=(31,), stride=(1,), padding=(15,), groups=2048)
+        (merge_proj): Linear(in_features=2048, out_features=1024, bias=True)
+      )
+      (17): EBranchformerEncoderLayer(
+        (attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (cgmlp): ConvolutionalGatingMLP(
+          (channel_proj1): Sequential(
+            (0): Linear(in_features=1024, out_features=4096, bias=True)
+            (1): GELU(approximate='none')
+          )
+          (csgu): ConvolutionalSpatialGatingUnit(
+            (norm): LayerNorm((2048,), eps=1e-12, elementwise_affine=True)
+            (conv): Conv1d(2048, 2048, kernel_size=(31,), stride=(1,), padding=(15,), groups=2048)
+            (act): Identity()
+            (dropout): Dropout(p=0.1, inplace=False)
+          )
+          (channel_proj2): Linear(in_features=2048, out_features=1024, bias=True)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_mlp): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (cross_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (norm_cross_attn): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+        (depthwise_conv_fusion): Conv1d(2048, 2048, kernel_size=(31,), stride=(1,), padding=(15,), groups=2048)
+        (merge_proj): Linear(in_features=2048, out_features=1024, bias=True)
+      )
+      (18): EBranchformerEncoderLayer(
+        (attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (cgmlp): ConvolutionalGatingMLP(
+          (channel_proj1): Sequential(
+            (0): Linear(in_features=1024, out_features=4096, bias=True)
+            (1): GELU(approximate='none')
+          )
+          (csgu): ConvolutionalSpatialGatingUnit(
+            (norm): LayerNorm((2048,), eps=1e-12, elementwise_affine=True)
+            (conv): Conv1d(2048, 2048, kernel_size=(31,), stride=(1,), padding=(15,), groups=2048)
+            (act): Identity()
+            (dropout): Dropout(p=0.1, inplace=False)
+          )
+          (channel_proj2): Linear(in_features=2048, out_features=1024, bias=True)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_mlp): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+        (depthwise_conv_fusion): Conv1d(2048, 2048, kernel_size=(31,), stride=(1,), padding=(15,), groups=2048)
+        (merge_proj): Linear(in_features=2048, out_features=1024, bias=True)
+      )
+      (19): EBranchformerEncoderLayer(
+        (attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (cgmlp): ConvolutionalGatingMLP(
+          (channel_proj1): Sequential(
+            (0): Linear(in_features=1024, out_features=4096, bias=True)
+            (1): GELU(approximate='none')
+          )
+          (csgu): ConvolutionalSpatialGatingUnit(
+            (norm): LayerNorm((2048,), eps=1e-12, elementwise_affine=True)
+            (conv): Conv1d(2048, 2048, kernel_size=(31,), stride=(1,), padding=(15,), groups=2048)
+            (act): Identity()
+            (dropout): Dropout(p=0.1, inplace=False)
+          )
+          (channel_proj2): Linear(in_features=2048, out_features=1024, bias=True)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_mlp): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+        (depthwise_conv_fusion): Conv1d(2048, 2048, kernel_size=(31,), stride=(1,), padding=(15,), groups=2048)
+        (merge_proj): Linear(in_features=2048, out_features=1024, bias=True)
+      )
+      (20): EBranchformerEncoderLayer(
+        (attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (cgmlp): ConvolutionalGatingMLP(
+          (channel_proj1): Sequential(
+            (0): Linear(in_features=1024, out_features=4096, bias=True)
+            (1): GELU(approximate='none')
+          )
+          (csgu): ConvolutionalSpatialGatingUnit(
+            (norm): LayerNorm((2048,), eps=1e-12, elementwise_affine=True)
+            (conv): Conv1d(2048, 2048, kernel_size=(31,), stride=(1,), padding=(15,), groups=2048)
+            (act): Identity()
+            (dropout): Dropout(p=0.1, inplace=False)
+          )
+          (channel_proj2): Linear(in_features=2048, out_features=1024, bias=True)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_mlp): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (cross_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (norm_cross_attn): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+        (depthwise_conv_fusion): Conv1d(2048, 2048, kernel_size=(31,), stride=(1,), padding=(15,), groups=2048)
+        (merge_proj): Linear(in_features=2048, out_features=1024, bias=True)
+      )
+      (21): EBranchformerEncoderLayer(
+        (attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (cgmlp): ConvolutionalGatingMLP(
+          (channel_proj1): Sequential(
+            (0): Linear(in_features=1024, out_features=4096, bias=True)
+            (1): GELU(approximate='none')
+          )
+          (csgu): ConvolutionalSpatialGatingUnit(
+            (norm): LayerNorm((2048,), eps=1e-12, elementwise_affine=True)
+            (conv): Conv1d(2048, 2048, kernel_size=(31,), stride=(1,), padding=(15,), groups=2048)
+            (act): Identity()
+            (dropout): Dropout(p=0.1, inplace=False)
+          )
+          (channel_proj2): Linear(in_features=2048, out_features=1024, bias=True)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_mlp): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+        (depthwise_conv_fusion): Conv1d(2048, 2048, kernel_size=(31,), stride=(1,), padding=(15,), groups=2048)
+        (merge_proj): Linear(in_features=2048, out_features=1024, bias=True)
+      )
+      (22): EBranchformerEncoderLayer(
+        (attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (cgmlp): ConvolutionalGatingMLP(
+          (channel_proj1): Sequential(
+            (0): Linear(in_features=1024, out_features=4096, bias=True)
+            (1): GELU(approximate='none')
+          )
+          (csgu): ConvolutionalSpatialGatingUnit(
+            (norm): LayerNorm((2048,), eps=1e-12, elementwise_affine=True)
+            (conv): Conv1d(2048, 2048, kernel_size=(31,), stride=(1,), padding=(15,), groups=2048)
+            (act): Identity()
+            (dropout): Dropout(p=0.1, inplace=False)
+          )
+          (channel_proj2): Linear(in_features=2048, out_features=1024, bias=True)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_mlp): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+        (depthwise_conv_fusion): Conv1d(2048, 2048, kernel_size=(31,), stride=(1,), padding=(15,), groups=2048)
+        (merge_proj): Linear(in_features=2048, out_features=1024, bias=True)
+      )
+      (23): EBranchformerEncoderLayer(
+        (attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (cgmlp): ConvolutionalGatingMLP(
+          (channel_proj1): Sequential(
+            (0): Linear(in_features=1024, out_features=4096, bias=True)
+            (1): GELU(approximate='none')
+          )
+          (csgu): ConvolutionalSpatialGatingUnit(
+            (norm): LayerNorm((2048,), eps=1e-12, elementwise_affine=True)
+            (conv): Conv1d(2048, 2048, kernel_size=(31,), stride=(1,), padding=(15,), groups=2048)
+            (act): Identity()
+            (dropout): Dropout(p=0.1, inplace=False)
+          )
+          (channel_proj2): Linear(in_features=2048, out_features=1024, bias=True)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_mlp): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (cross_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (norm_cross_attn): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+        (depthwise_conv_fusion): Conv1d(2048, 2048, kernel_size=(31,), stride=(1,), padding=(15,), groups=2048)
+        (merge_proj): Linear(in_features=2048, out_features=1024, bias=True)
+      )
+      (24): EBranchformerEncoderLayer(
+        (attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (cgmlp): ConvolutionalGatingMLP(
+          (channel_proj1): Sequential(
+            (0): Linear(in_features=1024, out_features=4096, bias=True)
+            (1): GELU(approximate='none')
+          )
+          (csgu): ConvolutionalSpatialGatingUnit(
+            (norm): LayerNorm((2048,), eps=1e-12, elementwise_affine=True)
+            (conv): Conv1d(2048, 2048, kernel_size=(31,), stride=(1,), padding=(15,), groups=2048)
+            (act): Identity()
+            (dropout): Dropout(p=0.1, inplace=False)
+          )
+          (channel_proj2): Linear(in_features=2048, out_features=1024, bias=True)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_mlp): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+        (depthwise_conv_fusion): Conv1d(2048, 2048, kernel_size=(31,), stride=(1,), padding=(15,), groups=2048)
+        (merge_proj): Linear(in_features=2048, out_features=1024, bias=True)
+      )
+      (25): EBranchformerEncoderLayer(
+        (attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (cgmlp): ConvolutionalGatingMLP(
+          (channel_proj1): Sequential(
+            (0): Linear(in_features=1024, out_features=4096, bias=True)
+            (1): GELU(approximate='none')
+          )
+          (csgu): ConvolutionalSpatialGatingUnit(
+            (norm): LayerNorm((2048,), eps=1e-12, elementwise_affine=True)
+            (conv): Conv1d(2048, 2048, kernel_size=(31,), stride=(1,), padding=(15,), groups=2048)
+            (act): Identity()
+            (dropout): Dropout(p=0.1, inplace=False)
+          )
+          (channel_proj2): Linear(in_features=2048, out_features=1024, bias=True)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_mlp): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+        (depthwise_conv_fusion): Conv1d(2048, 2048, kernel_size=(31,), stride=(1,), padding=(15,), groups=2048)
+        (merge_proj): Linear(in_features=2048, out_features=1024, bias=True)
+      )
+      (26): EBranchformerEncoderLayer(
+        (attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (cgmlp): ConvolutionalGatingMLP(
+          (channel_proj1): Sequential(
+            (0): Linear(in_features=1024, out_features=4096, bias=True)
+            (1): GELU(approximate='none')
+          )
+          (csgu): ConvolutionalSpatialGatingUnit(
+            (norm): LayerNorm((2048,), eps=1e-12, elementwise_affine=True)
+            (conv): Conv1d(2048, 2048, kernel_size=(31,), stride=(1,), padding=(15,), groups=2048)
+            (act): Identity()
+            (dropout): Dropout(p=0.1, inplace=False)
+          )
+          (channel_proj2): Linear(in_features=2048, out_features=1024, bias=True)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (feed_forward_macaron): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): Swish()
+        )
+        (norm_ff): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_ff_macaron): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_mha): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_mlp): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm_final): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (cross_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (norm_cross_attn): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+        (depthwise_conv_fusion): Conv1d(2048, 2048, kernel_size=(31,), stride=(1,), padding=(15,), groups=2048)
+        (merge_proj): Linear(in_features=2048, out_features=1024, bias=True)
+      )
+    )
+    (after_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+    (conditioning_layer): Linear(in_features=50002, out_features=1024, bias=True)
+  )
+  (prompt_encoder): TransformerEncoder(
+    (encoders): MultiSequential(
+      (0): EncoderLayer(
+        (self_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm2): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (1): EncoderLayer(
+        (self_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm2): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (2): EncoderLayer(
+        (self_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm2): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (3): EncoderLayer(
+        (self_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm2): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+    )
+    (after_norm): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+  )
+  (embed): Embedding(50002, 512)
+  (pos_enc): PositionalEncoding(
+    (dropout): Dropout(p=0.0, inplace=False)
+  )
+  (embed_proj): Linear(in_features=512, out_features=1024, bias=True)
+  (prompt_proj): Linear(in_features=512, out_features=1024, bias=True)
+  (ctc): CTC(
+    (ctc_lo): Linear(in_features=1024, out_features=50002, bias=True)
+    (ctc_loss): CTCLoss()
+  )
+)
+
+Model summary:
+    Class Name: ESPnetS2TCTCModel
+    Total Number of model parameters: 1.01 B
+    Number of trainable parameters: 1.01 B (100.0%)
+    Size: 4.02 GB
+    Type: torch.float32
+[gpub049] 2025-02-02 16:42:41,487 (abs_task:1427) INFO: Optimizer:
+AdamW (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    initial_lr: 0.001
+    lr: 1.6666666666666668e-07
+    maximize: False
+    weight_decay: 1e-06
+)
+[gpub049] 2025-02-02 16:42:41,487 (abs_task:1428) INFO: Scheduler: WarmupLR(warmup_steps=6000)
+[gpub049] 2025-02-02 16:42:41,489 (abs_task:1437) INFO: Saving the configuration in exp/s2t_owsm_ctc_lr001_raw_en_bpe50000/config.yaml
+[gpub049] 2025-02-02 16:42:41,946 (abs_task:1502) INFO: Loading pretrained params from /work/hdd/bbjs/clin10/bootcamp/espnet/owsm_ctc/valid.total_count.ave_5best.till45epoch.pth
+/work/hdd/bbjs/clin10/bootcamp/espnet/espnet2/torch_utils/load_pretrained_model.py:99: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  src_state = torch.load(path, map_location=map_location)
+[gpub049] 2025-02-02 16:42:46,285 (s2t_ctc:402) INFO: Optional Data Names: ('text_prev', 'text_ctc', 'text_spk2', 'text_spk3', 'text_spk4')
+[gpub049] 2025-02-02 16:42:46,837 (abs_task:1850) INFO: [train] dataset:
+ESPnetDataset(
+  speech: {"path": "dump_filter/raw/train/wav.scp", "type": "sound"}
+  text_prev: {"path": "dump_filter/raw/train/text.prev", "type": "text"}
+  text_ctc: {"path": "dump_filter/raw/train/text.ctc", "type": "text"}
+  text: {"path": "dump_filter/raw/train/text", "type": "text"}
+  preprocess: <espnet2.train.preprocessor.S2TCTCPreprocessor object at 0x7fd50b6f9cd0>)
+[gpub049] 2025-02-02 16:42:46,838 (abs_task:1851) INFO: [train] Batch sampler: NumElementsBatchSampler(N-batch=24846, batch_bins=10000000, sort_in_batch=descending, sort_batch=descending)
+[gpub049] 2025-02-02 16:42:46,842 (abs_task:1852) INFO: [train] mini-batch sizes summary: N-batch=24846, mean=2.2, min=1, max=7
+[gpub049] 2025-02-02 16:42:46,877 (s2t_ctc:402) INFO: Optional Data Names: ('text_prev', 'text_ctc', 'text_spk2', 'text_spk3', 'text_spk4')
+[gpub049] 2025-02-02 16:42:46,940 (abs_task:1850) INFO: [valid] dataset:
+ESPnetDataset(
+  speech: {"path": "dump_filter/raw/dev/wav.scp", "type": "sound"}
+  text_prev: {"path": "dump_filter/raw/dev/text.prev", "type": "text"}
+  text_ctc: {"path": "dump_filter/raw/dev/text.ctc", "type": "text"}
+  text: {"path": "dump_filter/raw/dev/text", "type": "text"}
+  preprocess: <espnet2.train.preprocessor.S2TCTCPreprocessor object at 0x7fd50b3f01a0>)
+[gpub049] 2025-02-02 16:42:46,940 (abs_task:1851) INFO: [valid] Batch sampler: NumElementsBatchSampler(N-batch=4000, batch_bins=10000000, sort_in_batch=descending, sort_batch=descending)
+[gpub049] 2025-02-02 16:42:46,941 (abs_task:1852) INFO: [valid] mini-batch sizes summary: N-batch=4000, mean=2.3, min=1, max=7
+[gpub049] 2025-02-02 16:42:46,965 (s2t_ctc:402) INFO: Optional Data Names: ('text_prev', 'text_ctc', 'text_spk2', 'text_spk3', 'text_spk4')
+[gpub049] 2025-02-02 16:42:46,972 (abs_task:1850) INFO: [plot_att] dataset:
+ESPnetDataset(
+  speech: {"path": "dump_filter/raw/dev/wav.scp", "type": "sound"}
+  text_prev: {"path": "dump_filter/raw/dev/text.prev", "type": "text"}
+  text_ctc: {"path": "dump_filter/raw/dev/text.ctc", "type": "text"}
+  text: {"path": "dump_filter/raw/dev/text", "type": "text"}
+  preprocess: <espnet2.train.preprocessor.S2TCTCPreprocessor object at 0x7fd50a78c800>)
+[gpub049] 2025-02-02 16:42:46,973 (abs_task:1851) INFO: [plot_att] Batch sampler: UnsortedBatchSampler(N-batch=9035, batch_size=1, key_file=exp/s2t_stats_raw_en_bpe50000/valid/speech_shape, 
+[gpub049] 2025-02-02 16:42:46,973 (abs_task:1852) INFO: [plot_att] mini-batch sizes summary: N-batch=3, mean=1.0, min=1, max=1
+/work/hdd/bbjs/clin10/bootcamp/espnet/espnet2/train/trainer.py:228: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler()
+[gpub049] 2025-02-02 16:42:46,980 (trainer:330) INFO: 1/20epoch started
+/work/hdd/bbjs/clin10/bootcamp/espnet/espnet2/train/trainer.py:630: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast(
+/work/hdd/bbjs/clin10/bootcamp/espnet/espnet2/s2t/espnet_ctc_model.py:128: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast(False):
+[gpub049] 2025-02-02 16:45:11,279 (trainer:795) INFO: 1epoch:train:1-400batch: iter_time=6.983e-04, forward_time=0.131, loss_ctc=783.523, loss_interctc_layer6=766.038, loss_interctc_layer12=817.637, loss_interctc_layer15=831.573, loss_interctc_layer21=773.231, loss=12.413, backward_time=0.181, grad_norm=2.607e+03, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.035, optim0_lr0=7.500e-07, train_time=23.101
+[gpub049] 2025-02-02 16:47:32,869 (trainer:795) INFO: 1epoch:train:401-800batch: iter_time=1.002e-04, forward_time=0.127, loss_ctc=747.469, loss_interctc_layer6=751.206, loss_interctc_layer12=793.524, loss_interctc_layer15=805.390, loss_interctc_layer21=740.767, loss=11.995, backward_time=0.181, grad_norm=2.609e+03, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.750e-06, train_time=22.583
+[gpub049] 2025-02-02 16:49:56,957 (trainer:795) INFO: 1epoch:train:801-1200batch: iter_time=1.007e-04, forward_time=0.129, loss_ctc=687.534, loss_interctc_layer6=722.505, loss_interctc_layer12=748.108, loss_interctc_layer15=751.579, loss_interctc_layer21=684.368, loss=11.232, backward_time=0.184, grad_norm=2.463e+03, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=2.750e-06, train_time=23.280
+[gpub049] 2025-02-02 16:52:17,581 (trainer:795) INFO: 1epoch:train:1201-1600batch: iter_time=9.959e-05, forward_time=0.127, loss_ctc=613.282, loss_interctc_layer6=698.761, loss_interctc_layer12=696.730, loss_interctc_layer15=688.207, loss_interctc_layer21=615.456, loss=10.351, backward_time=0.179, grad_norm=2.509e+03, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=3.833e-06, train_time=22.364
+[gpub049] 2025-02-02 16:54:38,250 (trainer:795) INFO: 1epoch:train:1601-2000batch: iter_time=9.957e-05, forward_time=0.126, loss_ctc=513.321, loss_interctc_layer6=651.398, loss_interctc_layer12=612.719, loss_interctc_layer15=593.438, loss_interctc_layer21=519.614, loss=9.033, backward_time=0.179, grad_norm=2.235e+03, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=4.917e-06, train_time=22.561
+[gpub049] 2025-02-02 16:56:59,733 (trainer:795) INFO: 1epoch:train:2001-2400batch: iter_time=9.989e-05, forward_time=0.127, loss_ctc=418.501, loss_interctc_layer6=597.915, loss_interctc_layer12=519.775, loss_interctc_layer15=493.995, loss_interctc_layer21=425.713, loss=7.675, backward_time=0.180, grad_norm=1.575e+03, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=5.917e-06, train_time=22.475
+[gpub049] 2025-02-02 16:59:21,468 (trainer:795) INFO: 1epoch:train:2401-2800batch: iter_time=9.592e-05, forward_time=0.128, loss_ctc=335.901, loss_interctc_layer6=513.982, loss_interctc_layer12=427.390, loss_interctc_layer15=418.966, loss_interctc_layer21=352.963, loss=6.404, backward_time=0.180, grad_norm=1.337e+03, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=6.917e-06, train_time=22.802
+[gpub049] 2025-02-02 17:01:45,111 (trainer:795) INFO: 1epoch:train:2801-3200batch: iter_time=9.695e-05, forward_time=0.129, loss_ctc=300.995, loss_interctc_layer6=457.793, loss_interctc_layer12=400.312, loss_interctc_layer15=389.057, loss_interctc_layer21=304.671, loss=5.790, backward_time=0.183, grad_norm=2.320e+03, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=8.000e-06, train_time=22.928
+[gpub049] 2025-02-02 17:04:09,551 (trainer:795) INFO: 1epoch:train:3201-3600batch: iter_time=9.800e-05, forward_time=0.130, loss_ctc=253.414, loss_interctc_layer6=413.928, loss_interctc_layer12=342.011, loss_interctc_layer15=298.233, loss_interctc_layer21=261.058, loss=4.902, backward_time=0.184, grad_norm=1.099e+03, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=9.083e-06, train_time=23.199
+[gpub049] 2025-02-02 17:06:27,197 (trainer:795) INFO: 1epoch:train:3601-4000batch: iter_time=9.767e-05, forward_time=0.124, loss_ctc=248.098, loss_interctc_layer6=406.410, loss_interctc_layer12=321.358, loss_interctc_layer15=289.152, loss_interctc_layer21=257.480, loss=4.758, backward_time=0.175, grad_norm=524.021, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.008e-05, train_time=21.883
+[gpub049] 2025-02-02 17:08:47,850 (trainer:795) INFO: 1epoch:train:4001-4400batch: iter_time=9.561e-05, forward_time=0.127, loss_ctc=218.357, loss_interctc_layer6=348.189, loss_interctc_layer12=284.788, loss_interctc_layer15=258.085, loss_interctc_layer21=226.924, loss=4.176, backward_time=0.179, grad_norm=508.196, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.108e-05, train_time=22.654
+[gpub049] 2025-02-02 17:11:09,016 (trainer:795) INFO: 1epoch:train:4401-4800batch: iter_time=1.007e-04, forward_time=0.127, loss_ctc=208.186, loss_interctc_layer6=315.261, loss_interctc_layer12=266.942, loss_interctc_layer15=246.348, loss_interctc_layer21=216.653, loss=3.917, backward_time=0.180, grad_norm=239.387, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.217e-05, train_time=22.498
+[gpub049] 2025-02-02 17:13:27,309 (trainer:795) INFO: 1epoch:train:4801-5200batch: iter_time=9.931e-05, forward_time=0.125, loss_ctc=205.998, loss_interctc_layer6=305.643, loss_interctc_layer12=267.643, loss_interctc_layer15=248.673, loss_interctc_layer21=217.417, loss=3.892, backward_time=0.176, grad_norm=250.812, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.325e-05, train_time=21.982
+[gpub049] 2025-02-02 17:15:46,909 (trainer:795) INFO: 1epoch:train:5201-5600batch: iter_time=9.972e-05, forward_time=0.126, loss_ctc=185.969, loss_interctc_layer6=278.103, loss_interctc_layer12=245.648, loss_interctc_layer15=229.834, loss_interctc_layer21=197.902, loss=3.555, backward_time=0.177, grad_norm=247.546, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.425e-05, train_time=22.593
+[gpub049] 2025-02-02 17:18:04,741 (trainer:795) INFO: 1epoch:train:5601-6000batch: iter_time=9.548e-05, forward_time=0.124, loss_ctc=173.628, loss_interctc_layer6=263.573, loss_interctc_layer12=232.253, loss_interctc_layer15=218.102, loss_interctc_layer21=185.344, loss=3.353, backward_time=0.175, grad_norm=188.863, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.525e-05, train_time=21.892
+[gpub049] 2025-02-02 17:20:29,023 (trainer:795) INFO: 1epoch:train:6001-6400batch: iter_time=9.798e-05, forward_time=0.129, loss_ctc=161.967, loss_interctc_layer6=247.122, loss_interctc_layer12=218.686, loss_interctc_layer15=205.546, loss_interctc_layer21=173.367, loss=3.146, backward_time=0.184, grad_norm=192.362, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.633e-05, train_time=23.029
+[gpub049] 2025-02-02 17:22:46,930 (trainer:795) INFO: 1epoch:train:6401-6800batch: iter_time=9.714e-05, forward_time=0.124, loss_ctc=171.694, loss_interctc_layer6=260.277, loss_interctc_layer12=231.547, loss_interctc_layer15=217.564, loss_interctc_layer21=183.900, loss=3.328, backward_time=0.175, grad_norm=179.239, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.742e-05, train_time=22.058
+[gpub049] 2025-02-02 17:25:13,004 (trainer:795) INFO: 1epoch:train:6801-7200batch: iter_time=9.831e-05, forward_time=0.131, loss_ctc=149.924, loss_interctc_layer6=231.402, loss_interctc_layer12=203.576, loss_interctc_layer15=189.624, loss_interctc_layer21=159.688, loss=2.919, backward_time=0.186, grad_norm=155.306, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.842e-05, train_time=23.416
+[gpub049] 2025-02-02 17:27:36,632 (trainer:795) INFO: 1epoch:train:7201-7600batch: iter_time=1.000e-04, forward_time=0.129, loss_ctc=143.677, loss_interctc_layer6=230.401, loss_interctc_layer12=199.339, loss_interctc_layer15=184.205, loss_interctc_layer21=153.624, loss=2.848, backward_time=0.183, grad_norm=132.559, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.942e-05, train_time=23.037
+[gpub049] 2025-02-02 17:29:56,950 (trainer:795) INFO: 1epoch:train:7601-8000batch: iter_time=9.671e-05, forward_time=0.126, loss_ctc=143.662, loss_interctc_layer6=235.217, loss_interctc_layer12=200.054, loss_interctc_layer15=184.175, loss_interctc_layer21=153.666, loss=2.865, backward_time=0.179, grad_norm=160.332, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=2.050e-05, train_time=22.409
+[gpub049] 2025-02-02 17:32:12,888 (trainer:795) INFO: 1epoch:train:8001-8400batch: iter_time=9.841e-05, forward_time=0.123, loss_ctc=140.975, loss_interctc_layer6=234.960, loss_interctc_layer12=197.405, loss_interctc_layer15=181.053, loss_interctc_layer21=150.660, loss=2.828, backward_time=0.173, grad_norm=141.675, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=2.158e-05, train_time=21.630
+[gpub049] 2025-02-02 17:34:35,328 (trainer:795) INFO: 1epoch:train:8401-8800batch: iter_time=9.430e-05, forward_time=0.128, loss_ctc=131.635, loss_interctc_layer6=222.231, loss_interctc_layer12=185.260, loss_interctc_layer15=170.216, loss_interctc_layer21=141.059, loss=2.658, backward_time=0.182, grad_norm=130.041, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=2.258e-05, train_time=22.894
+[gpub049] 2025-02-02 17:36:56,790 (trainer:795) INFO: 1epoch:train:8801-9200batch: iter_time=9.455e-05, forward_time=0.127, loss_ctc=133.493, loss_interctc_layer6=227.150, loss_interctc_layer12=187.877, loss_interctc_layer15=172.770, loss_interctc_layer21=142.968, loss=2.701, backward_time=0.180, grad_norm=152.219, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=2.358e-05, train_time=22.410
+[gpub049] 2025-02-02 17:39:18,414 (trainer:795) INFO: 1epoch:train:9201-9600batch: iter_time=9.535e-05, forward_time=0.127, loss_ctc=121.159, loss_interctc_layer6=216.628, loss_interctc_layer12=175.347, loss_interctc_layer15=160.482, loss_interctc_layer21=130.671, loss=2.513, backward_time=0.180, grad_norm=157.231, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=2.467e-05, train_time=22.836
+[gpub049] 2025-02-02 17:41:37,719 (trainer:795) INFO: 1epoch:train:9601-10000batch: iter_time=9.589e-05, forward_time=0.125, loss_ctc=123.733, loss_interctc_layer6=213.797, loss_interctc_layer12=173.781, loss_interctc_layer15=160.307, loss_interctc_layer21=132.016, loss=2.511, backward_time=0.177, grad_norm=125.155, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=2.575e-05, train_time=22.357
+[gpub049] 2025-02-02 17:43:57,784 (trainer:795) INFO: 1epoch:train:10001-10400batch: iter_time=9.367e-05, forward_time=0.126, loss_ctc=119.799, loss_interctc_layer6=211.003, loss_interctc_layer12=169.238, loss_interctc_layer15=155.975, loss_interctc_layer21=128.169, loss=2.451, backward_time=0.178, grad_norm=133.641, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=2.675e-05, train_time=22.302
+[gpub049] 2025-02-02 17:46:17,243 (trainer:795) INFO: 1epoch:train:10401-10800batch: iter_time=9.465e-05, forward_time=0.125, loss_ctc=117.170, loss_interctc_layer6=210.118, loss_interctc_layer12=168.566, loss_interctc_layer15=155.067, loss_interctc_layer21=125.886, loss=2.428, backward_time=0.178, grad_norm=150.942, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=2.775e-05, train_time=22.358
+[gpub049] 2025-02-02 17:48:36,273 (trainer:795) INFO: 1epoch:train:10801-11200batch: iter_time=1.022e-04, forward_time=0.125, loss_ctc=120.697, loss_interctc_layer6=215.467, loss_interctc_layer12=170.421, loss_interctc_layer15=156.227, loss_interctc_layer21=129.080, loss=2.475, backward_time=0.177, grad_norm=136.979, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=2.883e-05, train_time=22.249
+[gpub049] 2025-02-02 17:50:55,617 (trainer:795) INFO: 1epoch:train:11201-11600batch: iter_time=9.480e-05, forward_time=0.125, loss_ctc=113.496, loss_interctc_layer6=207.908, loss_interctc_layer12=162.436, loss_interctc_layer15=149.077, loss_interctc_layer21=121.697, loss=2.358, backward_time=0.178, grad_norm=129.090, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=2.992e-05, train_time=22.367
+[gpub049] 2025-02-02 17:53:09,732 (trainer:795) INFO: 1epoch:train:11601-12000batch: iter_time=9.419e-05, forward_time=0.121, loss_ctc=120.425, loss_interctc_layer6=211.885, loss_interctc_layer12=167.651, loss_interctc_layer15=154.958, loss_interctc_layer21=128.123, loss=2.447, backward_time=0.170, grad_norm=163.999, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=3.092e-05, train_time=21.303
+[gpub049] 2025-02-02 17:55:29,352 (trainer:795) INFO: 1epoch:train:12001-12400batch: iter_time=9.411e-05, forward_time=0.125, loss_ctc=114.479, loss_interctc_layer6=202.640, loss_interctc_layer12=159.268, loss_interctc_layer15=146.914, loss_interctc_layer21=121.639, loss=2.328, backward_time=0.178, grad_norm=170.608, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=3.192e-05, train_time=22.405
+[gpub049] 2025-02-02 17:57:56,900 (trainer:795) INFO: 1epoch:train:12401-12800batch: iter_time=9.683e-05, forward_time=0.131, loss_ctc=96.590, loss_interctc_layer6=177.877, loss_interctc_layer12=137.690, loss_interctc_layer15=126.726, loss_interctc_layer21=102.776, loss=2.005, backward_time=0.189, grad_norm=133.577, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=3.300e-05, train_time=23.455
+[gpub049] 2025-02-02 18:00:14,191 (trainer:795) INFO: 1epoch:train:12801-13200batch: iter_time=9.527e-05, forward_time=0.123, loss_ctc=108.853, loss_interctc_layer6=198.465, loss_interctc_layer12=154.258, loss_interctc_layer15=141.634, loss_interctc_layer21=116.174, loss=2.248, backward_time=0.175, grad_norm=130.503, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=3.408e-05, train_time=21.989
+[gpub049] 2025-02-02 18:02:34,452 (trainer:795) INFO: 1epoch:train:13201-13600batch: iter_time=9.386e-05, forward_time=0.126, loss_ctc=107.127, loss_interctc_layer6=194.247, loss_interctc_layer12=150.776, loss_interctc_layer15=139.013, loss_interctc_layer21=114.100, loss=2.204, backward_time=0.179, grad_norm=160.067, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=3.508e-05, train_time=22.479
+[gpub049] 2025-02-02 18:04:49,424 (trainer:795) INFO: 1epoch:train:13601-14000batch: iter_time=9.540e-05, forward_time=0.122, loss_ctc=115.486, loss_interctc_layer6=207.513, loss_interctc_layer12=161.040, loss_interctc_layer15=148.969, loss_interctc_layer21=122.699, loss=2.362, backward_time=0.171, grad_norm=161.624, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=3.608e-05, train_time=21.618
+[gpub049] 2025-02-02 18:07:11,128 (trainer:795) INFO: 1epoch:train:14001-14400batch: iter_time=9.449e-05, forward_time=0.127, loss_ctc=104.413, loss_interctc_layer6=187.743, loss_interctc_layer12=144.940, loss_interctc_layer15=133.646, loss_interctc_layer21=110.137, loss=2.128, backward_time=0.181, grad_norm=148.620, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=3.717e-05, train_time=22.530
+[gpub049] 2025-02-02 18:09:33,782 (trainer:795) INFO: 1epoch:train:14401-14800batch: iter_time=1.035e-04, forward_time=0.128, loss_ctc=100.432, loss_interctc_layer6=185.686, loss_interctc_layer12=141.747, loss_interctc_layer15=130.273, loss_interctc_layer21=106.588, loss=2.077, backward_time=0.182, grad_norm=117.774, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=3.825e-05, train_time=22.769
+[gpub049] 2025-02-02 18:11:53,269 (trainer:795) INFO: 1epoch:train:14801-15200batch: iter_time=9.892e-05, forward_time=0.126, loss_ctc=106.079, loss_interctc_layer6=197.132, loss_interctc_layer12=149.324, loss_interctc_layer15=137.110, loss_interctc_layer21=112.674, loss=2.195, backward_time=0.178, grad_norm=149.046, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=3.925e-05, train_time=22.431
+[gpub049] 2025-02-02 18:14:12,657 (trainer:795) INFO: 1epoch:train:15201-15600batch: iter_time=9.401e-05, forward_time=0.125, loss_ctc=106.966, loss_interctc_layer6=191.547, loss_interctc_layer12=147.076, loss_interctc_layer15=135.864, loss_interctc_layer21=112.814, loss=2.170, backward_time=0.177, grad_norm=143.695, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=4.025e-05, train_time=22.318
+[gpub049] 2025-02-02 18:16:35,066 (trainer:795) INFO: 1epoch:train:15601-16000batch: iter_time=9.280e-05, forward_time=0.127, loss_ctc=103.271, loss_interctc_layer6=189.149, loss_interctc_layer12=142.850, loss_interctc_layer15=131.667, loss_interctc_layer21=109.051, loss=2.112, backward_time=0.182, grad_norm=150.314, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=4.133e-05, train_time=22.689
+[gpub049] 2025-02-02 18:18:53,715 (trainer:795) INFO: 1epoch:train:16001-16400batch: iter_time=9.524e-05, forward_time=0.125, loss_ctc=107.621, loss_interctc_layer6=192.144, loss_interctc_layer12=147.456, loss_interctc_layer15=135.799, loss_interctc_layer21=113.248, loss=2.176, backward_time=0.176, grad_norm=158.160, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=4.242e-05, train_time=22.062
+[gpub049] 2025-02-02 18:21:11,925 (trainer:795) INFO: 1epoch:train:16401-16800batch: iter_time=9.443e-05, forward_time=0.124, loss_ctc=106.506, loss_interctc_layer6=193.319, loss_interctc_layer12=147.116, loss_interctc_layer15=136.292, loss_interctc_layer21=113.249, loss=2.177, backward_time=0.176, grad_norm=180.128, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=4.342e-05, train_time=22.293
+[gpub049] 2025-02-02 18:23:27,474 (trainer:795) INFO: 1epoch:train:16801-17200batch: iter_time=9.441e-05, forward_time=0.122, loss_ctc=105.230, loss_interctc_layer6=195.189, loss_interctc_layer12=145.545, loss_interctc_layer15=133.908, loss_interctc_layer21=111.305, loss=2.160, backward_time=0.172, grad_norm=125.484, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=4.442e-05, train_time=21.546
+[gpub049] 2025-02-02 18:25:43,968 (trainer:795) INFO: 1epoch:train:17201-17600batch: iter_time=9.271e-05, forward_time=0.123, loss_ctc=101.872, loss_interctc_layer6=189.088, loss_interctc_layer12=140.899, loss_interctc_layer15=129.568, loss_interctc_layer21=108.016, loss=2.092, backward_time=0.173, grad_norm=135.300, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=4.550e-05, train_time=21.928
+[gpub049] 2025-02-02 18:28:06,793 (trainer:795) INFO: 1epoch:train:17601-18000batch: iter_time=9.507e-05, forward_time=0.128, loss_ctc=93.956, loss_interctc_layer6=173.821, loss_interctc_layer12=130.052, loss_interctc_layer15=120.097, loss_interctc_layer21=99.539, loss=1.930, backward_time=0.182, grad_norm=115.620, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=4.658e-05, train_time=22.928
+[gpub049] 2025-02-02 18:30:26,738 (trainer:795) INFO: 1epoch:train:18001-18400batch: iter_time=9.492e-05, forward_time=0.126, loss_ctc=93.999, loss_interctc_layer6=177.514, loss_interctc_layer12=130.290, loss_interctc_layer15=120.054, loss_interctc_layer21=99.665, loss=1.942, backward_time=0.178, grad_norm=156.256, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=4.758e-05, train_time=22.207
+[gpub049] 2025-02-02 18:32:47,157 (trainer:795) INFO: 1epoch:train:18401-18800batch: iter_time=9.251e-05, forward_time=0.126, loss_ctc=97.331, loss_interctc_layer6=179.954, loss_interctc_layer12=133.906, loss_interctc_layer15=123.528, loss_interctc_layer21=102.735, loss=1.992, backward_time=0.179, grad_norm=137.994, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=4.858e-05, train_time=22.767
+[gpub049] 2025-02-02 18:35:07,931 (trainer:795) INFO: 1epoch:train:18801-19200batch: iter_time=9.323e-05, forward_time=0.126, loss_ctc=92.531, loss_interctc_layer6=171.898, loss_interctc_layer12=127.891, loss_interctc_layer15=117.887, loss_interctc_layer21=97.694, loss=1.900, backward_time=0.179, grad_norm=124.523, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=4.967e-05, train_time=22.364
+[gpub049] 2025-02-02 18:37:30,484 (trainer:795) INFO: 1epoch:train:19201-19600batch: iter_time=9.208e-05, forward_time=0.128, loss_ctc=93.913, loss_interctc_layer6=174.202, loss_interctc_layer12=128.528, loss_interctc_layer15=118.579, loss_interctc_layer21=98.796, loss=1.919, backward_time=0.182, grad_norm=178.957, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=5.075e-05, train_time=22.768
+[gpub049] 2025-02-02 18:39:48,495 (trainer:795) INFO: 1epoch:train:19601-20000batch: iter_time=9.512e-05, forward_time=0.124, loss_ctc=95.706, loss_interctc_layer6=174.720, loss_interctc_layer12=129.732, loss_interctc_layer15=119.856, loss_interctc_layer21=100.519, loss=1.939, backward_time=0.176, grad_norm=221.035, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=5.175e-05, train_time=22.155
+[gpub049] 2025-02-02 18:42:08,249 (trainer:795) INFO: 1epoch:train:20001-20400batch: iter_time=9.425e-05, forward_time=0.126, loss_ctc=98.311, loss_interctc_layer6=180.144, loss_interctc_layer12=133.392, loss_interctc_layer15=123.265, loss_interctc_layer21=103.678, loss=1.996, backward_time=0.178, grad_norm=232.297, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=5.275e-05, train_time=22.432
+[gpub049] 2025-02-02 18:44:31,337 (trainer:795) INFO: 1epoch:train:20401-20800batch: iter_time=9.325e-05, forward_time=0.128, loss_ctc=90.916, loss_interctc_layer6=170.111, loss_interctc_layer12=125.269, loss_interctc_layer15=115.151, loss_interctc_layer21=96.167, loss=1.868, backward_time=0.182, grad_norm=137.055, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=5.383e-05, train_time=22.754
+[gpub049] 2025-02-02 18:46:50,506 (trainer:795) INFO: 1epoch:train:20801-21200batch: iter_time=9.329e-05, forward_time=0.125, loss_ctc=92.491, loss_interctc_layer6=170.344, loss_interctc_layer12=125.554, loss_interctc_layer15=116.092, loss_interctc_layer21=97.418, loss=1.881, backward_time=0.177, grad_norm=173.691, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=5.492e-05, train_time=22.149
+[gpub049] 2025-02-02 18:49:13,011 (trainer:795) INFO: 1epoch:train:21201-21600batch: iter_time=9.411e-05, forward_time=0.128, loss_ctc=94.378, loss_interctc_layer6=174.973, loss_interctc_layer12=128.719, loss_interctc_layer15=118.778, loss_interctc_layer21=99.604, loss=1.926, backward_time=0.181, grad_norm=117.679, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=5.592e-05, train_time=22.909
+[gpub049] 2025-02-02 18:51:31,578 (trainer:795) INFO: 1epoch:train:21601-22000batch: iter_time=9.360e-05, forward_time=0.125, loss_ctc=92.974, loss_interctc_layer6=173.625, loss_interctc_layer12=127.397, loss_interctc_layer15=117.658, loss_interctc_layer21=97.687, loss=1.904, backward_time=0.177, grad_norm=144.028, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=5.692e-05, train_time=22.310
+[gpub049] 2025-02-02 18:53:50,465 (trainer:795) INFO: 1epoch:train:22001-22400batch: iter_time=9.486e-05, forward_time=0.125, loss_ctc=90.276, loss_interctc_layer6=169.164, loss_interctc_layer12=123.159, loss_interctc_layer15=113.427, loss_interctc_layer21=95.098, loss=1.847, backward_time=0.177, grad_norm=129.969, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=5.800e-05, train_time=22.130
+[gpub049] 2025-02-02 18:56:11,130 (trainer:795) INFO: 1epoch:train:22401-22800batch: iter_time=9.286e-05, forward_time=0.126, loss_ctc=92.912, loss_interctc_layer6=172.007, loss_interctc_layer12=126.108, loss_interctc_layer15=116.690, loss_interctc_layer21=97.982, loss=1.893, backward_time=0.179, grad_norm=152.455, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=5.908e-05, train_time=22.566
+[gpub049] 2025-02-02 18:58:33,424 (trainer:795) INFO: 1epoch:train:22801-23200batch: iter_time=9.298e-05, forward_time=0.128, loss_ctc=87.411, loss_interctc_layer6=163.414, loss_interctc_layer12=119.912, loss_interctc_layer15=110.110, loss_interctc_layer21=92.129, loss=1.791, backward_time=0.182, grad_norm=140.726, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=6.008e-05, train_time=22.922
+[gpub049] 2025-02-02 19:00:52,773 (trainer:795) INFO: 1epoch:train:23201-23600batch: iter_time=9.319e-05, forward_time=0.126, loss_ctc=96.158, loss_interctc_layer6=175.305, loss_interctc_layer12=129.712, loss_interctc_layer15=119.549, loss_interctc_layer21=101.318, loss=1.944, backward_time=0.177, grad_norm=141.101, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=6.108e-05, train_time=21.964
+[gpub049] 2025-02-02 19:03:08,933 (trainer:795) INFO: 1epoch:train:23601-24000batch: iter_time=9.656e-05, forward_time=0.123, loss_ctc=93.932, loss_interctc_layer6=172.867, loss_interctc_layer12=126.953, loss_interctc_layer15=117.290, loss_interctc_layer21=98.820, loss=1.906, backward_time=0.173, grad_norm=150.055, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=6.217e-05, train_time=21.964
+[gpub049] 2025-02-02 19:05:29,507 (trainer:795) INFO: 1epoch:train:24001-24400batch: iter_time=9.725e-05, forward_time=0.126, loss_ctc=87.918, loss_interctc_layer6=167.254, loss_interctc_layer12=120.275, loss_interctc_layer15=110.223, loss_interctc_layer21=92.506, loss=1.807, backward_time=0.179, grad_norm=124.844, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=6.325e-05, train_time=22.618
+[gpub049] 2025-02-02 19:07:49,008 (trainer:795) INFO: 1epoch:train:24401-24800batch: iter_time=9.604e-05, forward_time=0.125, loss_ctc=90.022, loss_interctc_layer6=166.634, loss_interctc_layer12=121.694, loss_interctc_layer15=112.228, loss_interctc_layer21=94.432, loss=1.828, backward_time=0.178, grad_norm=142.859, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=6.425e-05, train_time=22.272
+/work/hdd/bbjs/clin10/bootcamp/espnet/espnet2/s2t/espnet_ctc_model.py:128: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast(False):
+[gpub049] 2025-02-02 19:30:35,391 (trainer:388) INFO: 1epoch results: [train] iter_time=1.057e-04, forward_time=0.126, loss_ctc=179.323, loss_interctc_layer6=269.720, loss_interctc_layer12=229.020, loss_interctc_layer15=216.609, loss_interctc_layer21=185.857, loss=3.377, backward_time=0.179, grad_norm=446.934, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=3.258e-05, train_time=22.456, time=2 hours, 25 minutes and 18.78 seconds, total_count=24846, gpu_max_cached_mem_GB=37.922, gpu_max_alloc_mem_GB=34.709, [valid] loss_ctc=41.783, cer_ctc=0.097, loss_interctc_layer6=127.142, cer_interctc_layer6=0.334, loss_interctc_layer12=76.013, cer_interctc_layer12=0.186, loss_interctc_layer15=69.575, cer_interctc_layer15=0.157, loss_interctc_layer21=44.294, cer_interctc_layer21=0.111, loss=71.762, time=19 minutes and 33.26 seconds, total_count=4000, gpu_max_cached_mem_GB=37.922, gpu_max_alloc_mem_GB=34.709, [att_plot] time=2 minutes and 55.46 seconds, total_count=0, gpu_max_cached_mem_GB=37.922, gpu_max_alloc_mem_GB=34.709
+[gpub049] 2025-02-02 19:31:03,507 (trainer:456) INFO: The best model has been updated: valid.cer_ctc
+[gpub049] 2025-02-02 19:31:03,508 (trainer:318) INFO: 2/20epoch started. Estimated time to finish: 2 days, 5 hours and 17 minutes
+/work/hdd/bbjs/clin10/bootcamp/espnet/espnet2/train/trainer.py:630: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast(
+[gpub049] 2025-02-02 19:33:20,423 (trainer:795) INFO: 2epoch:train:1-400batch: iter_time=3.819e-04, forward_time=0.123, loss_ctc=91.885, loss_interctc_layer6=171.800, loss_interctc_layer12=124.613, loss_interctc_layer15=114.925, loss_interctc_layer21=96.327, loss=1.874, backward_time=0.173, grad_norm=258.431, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=6.542e-05, train_time=21.769
+[gpub049] 2025-02-02 19:35:40,224 (trainer:795) INFO: 2epoch:train:401-800batch: iter_time=9.910e-05, forward_time=0.126, loss_ctc=92.746, loss_interctc_layer6=169.945, loss_interctc_layer12=124.871, loss_interctc_layer15=115.356, loss_interctc_layer21=97.387, loss=1.876, backward_time=0.178, grad_norm=170.895, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=6.642e-05, train_time=22.319
+[gpub049] 2025-02-02 19:38:00,198 (trainer:795) INFO: 2epoch:train:801-1200batch: iter_time=9.841e-05, forward_time=0.126, loss_ctc=90.921, loss_interctc_layer6=170.741, loss_interctc_layer12=123.600, loss_interctc_layer15=113.562, loss_interctc_layer21=95.367, loss=1.857, backward_time=0.178, grad_norm=119.887, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=6.742e-05, train_time=22.785
+[gpub049] 2025-02-02 19:40:27,365 (trainer:795) INFO: 2epoch:train:1201-1600batch: iter_time=9.783e-05, forward_time=0.132, loss_ctc=82.645, loss_interctc_layer6=155.264, loss_interctc_layer12=112.018, loss_interctc_layer15=102.898, loss_interctc_layer21=86.683, loss=1.686, backward_time=0.187, grad_norm=176.133, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=6.850e-05, train_time=23.182
+[gpub049] 2025-02-02 19:42:49,717 (trainer:795) INFO: 2epoch:train:1601-2000batch: iter_time=9.964e-05, forward_time=0.128, loss_ctc=90.514, loss_interctc_layer6=166.764, loss_interctc_layer12=122.071, loss_interctc_layer15=112.710, loss_interctc_layer21=95.306, loss=1.836, backward_time=0.181, grad_norm=198.185, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=6.958e-05, train_time=22.878
+[gpub049] 2025-02-02 19:45:09,178 (trainer:795) INFO: 2epoch:train:2001-2400batch: iter_time=1.003e-04, forward_time=0.126, loss_ctc=95.538, loss_interctc_layer6=174.728, loss_interctc_layer12=126.893, loss_interctc_layer15=117.298, loss_interctc_layer21=99.963, loss=1.920, backward_time=0.177, grad_norm=242.826, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=7.058e-05, train_time=22.145
+[gpub049] 2025-02-02 19:47:29,189 (trainer:795) INFO: 2epoch:train:2401-2800batch: iter_time=9.873e-05, forward_time=0.126, loss_ctc=85.899, loss_interctc_layer6=161.460, loss_interctc_layer12=115.176, loss_interctc_layer15=105.984, loss_interctc_layer21=89.655, loss=1.744, backward_time=0.178, grad_norm=120.317, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=7.158e-05, train_time=22.585
+[gpub049] 2025-02-02 19:49:54,676 (trainer:795) INFO: 2epoch:train:2801-3200batch: iter_time=9.867e-05, forward_time=0.131, loss_ctc=80.758, loss_interctc_layer6=153.481, loss_interctc_layer12=109.521, loss_interctc_layer15=100.869, loss_interctc_layer21=84.819, loss=1.655, backward_time=0.185, grad_norm=153.003, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=7.267e-05, train_time=23.094
+[gpub049] 2025-02-02 19:52:16,383 (trainer:795) INFO: 2epoch:train:3201-3600batch: iter_time=9.889e-05, forward_time=0.128, loss_ctc=87.893, loss_interctc_layer6=162.510, loss_interctc_layer12=116.945, loss_interctc_layer15=107.679, loss_interctc_layer21=91.949, loss=1.772, backward_time=0.180, grad_norm=157.079, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=7.375e-05, train_time=22.690
+[gpub049] 2025-02-02 19:54:35,621 (trainer:795) INFO: 2epoch:train:3601-4000batch: iter_time=9.725e-05, forward_time=0.126, loss_ctc=89.546, loss_interctc_layer6=166.896, loss_interctc_layer12=120.113, loss_interctc_layer15=110.587, loss_interctc_layer21=93.738, loss=1.815, backward_time=0.177, grad_norm=128.261, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=7.475e-05, train_time=22.342
+[gpub049] 2025-02-02 19:56:57,892 (trainer:795) INFO: 2epoch:train:4001-4400batch: iter_time=1.022e-04, forward_time=0.128, loss_ctc=87.579, loss_interctc_layer6=158.650, loss_interctc_layer12=114.770, loss_interctc_layer15=105.866, loss_interctc_layer21=91.468, loss=1.745, backward_time=0.181, grad_norm=175.912, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=7.575e-05, train_time=22.754
+[gpub049] 2025-02-02 19:59:18,226 (trainer:795) INFO: 2epoch:train:4401-4800batch: iter_time=9.600e-05, forward_time=0.127, loss_ctc=97.224, loss_interctc_layer6=171.995, loss_interctc_layer12=127.340, loss_interctc_layer15=117.862, loss_interctc_layer21=101.754, loss=1.926, backward_time=0.178, grad_norm=268.336, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=7.683e-05, train_time=22.404
+[gpub049] 2025-02-02 20:01:36,482 (trainer:795) INFO: 2epoch:train:4801-5200batch: iter_time=9.556e-05, forward_time=0.125, loss_ctc=89.104, loss_interctc_layer6=164.025, loss_interctc_layer12=119.145, loss_interctc_layer15=109.224, loss_interctc_layer21=93.301, loss=1.796, backward_time=0.175, grad_norm=222.715, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=7.792e-05, train_time=21.989
+[gpub049] 2025-02-02 20:03:58,881 (trainer:795) INFO: 2epoch:train:5201-5600batch: iter_time=9.888e-05, forward_time=0.128, loss_ctc=89.186, loss_interctc_layer6=160.455, loss_interctc_layer12=118.688, loss_interctc_layer15=109.590, loss_interctc_layer21=93.108, loss=1.784, backward_time=0.181, grad_norm=151.606, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=7.892e-05, train_time=22.925
+[gpub049] 2025-02-02 20:06:20,879 (trainer:795) INFO: 2epoch:train:5601-6000batch: iter_time=1.005e-04, forward_time=0.128, loss_ctc=83.446, loss_interctc_layer6=156.462, loss_interctc_layer12=112.966, loss_interctc_layer15=104.024, loss_interctc_layer21=87.592, loss=1.702, backward_time=0.181, grad_norm=124.960, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=7.992e-05, train_time=22.667
+[gpub049] 2025-02-02 20:08:43,471 (trainer:795) INFO: 2epoch:train:6001-6400batch: iter_time=9.923e-05, forward_time=0.129, loss_ctc=91.698, loss_interctc_layer6=166.424, loss_interctc_layer12=121.363, loss_interctc_layer15=111.860, loss_interctc_layer21=95.900, loss=1.835, backward_time=0.181, grad_norm=152.843, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=8.100e-05, train_time=22.822
+[gpub049] 2025-02-02 20:11:07,703 (trainer:795) INFO: 2epoch:train:6401-6800batch: iter_time=9.958e-05, forward_time=0.130, loss_ctc=81.479, loss_interctc_layer6=151.220, loss_interctc_layer12=108.700, loss_interctc_layer15=100.247, loss_interctc_layer21=85.844, loss=1.648, backward_time=0.184, grad_norm=151.694, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=8.208e-05, train_time=23.008
+[gpub049] 2025-02-02 20:13:33,301 (trainer:795) INFO: 2epoch:train:6801-7200batch: iter_time=9.849e-05, forward_time=0.131, loss_ctc=78.043, loss_interctc_layer6=148.105, loss_interctc_layer12=105.412, loss_interctc_layer15=96.396, loss_interctc_layer21=81.962, loss=1.593, backward_time=0.186, grad_norm=154.006, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=8.308e-05, train_time=23.307
+[gpub049] 2025-02-02 20:15:54,669 (trainer:795) INFO: 2epoch:train:7201-7600batch: iter_time=1.020e-04, forward_time=0.128, loss_ctc=82.084, loss_interctc_layer6=155.507, loss_interctc_layer12=109.958, loss_interctc_layer15=100.696, loss_interctc_layer21=85.679, loss=1.669, backward_time=0.180, grad_norm=156.350, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=8.408e-05, train_time=22.706
+[gpub049] 2025-02-02 20:18:17,929 (trainer:795) INFO: 2epoch:train:7601-8000batch: iter_time=1.007e-04, forward_time=0.129, loss_ctc=82.277, loss_interctc_layer6=150.649, loss_interctc_layer12=109.178, loss_interctc_layer15=100.621, loss_interctc_layer21=86.345, loss=1.653, backward_time=0.182, grad_norm=176.443, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=8.517e-05, train_time=22.904
+[gpub049] 2025-02-02 20:20:42,335 (trainer:795) INFO: 2epoch:train:8001-8400batch: iter_time=9.580e-05, forward_time=0.130, loss_ctc=79.370, loss_interctc_layer6=144.449, loss_interctc_layer12=105.136, loss_interctc_layer15=96.235, loss_interctc_layer21=83.074, loss=1.588, backward_time=0.184, grad_norm=200.494, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=8.625e-05, train_time=23.140
+[gpub049] 2025-02-02 20:23:01,628 (trainer:795) INFO: 2epoch:train:8401-8800batch: iter_time=9.760e-05, forward_time=0.126, loss_ctc=84.899, loss_interctc_layer6=159.220, loss_interctc_layer12=113.894, loss_interctc_layer15=104.336, loss_interctc_layer21=88.966, loss=1.723, backward_time=0.177, grad_norm=144.033, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=8.725e-05, train_time=22.431
+[gpub049] 2025-02-02 20:25:21,661 (trainer:795) INFO: 2epoch:train:8801-9200batch: iter_time=1.015e-04, forward_time=0.127, loss_ctc=82.951, loss_interctc_layer6=153.743, loss_interctc_layer12=109.619, loss_interctc_layer15=100.527, loss_interctc_layer21=86.479, loss=1.667, backward_time=0.178, grad_norm=121.477, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=8.825e-05, train_time=22.305
+[gpub049] 2025-02-02 20:27:44,438 (trainer:795) INFO: 2epoch:train:9201-9600batch: iter_time=1.004e-04, forward_time=0.129, loss_ctc=84.139, loss_interctc_layer6=153.790, loss_interctc_layer12=111.460, loss_interctc_layer15=102.867, loss_interctc_layer21=88.013, loss=1.688, backward_time=0.181, grad_norm=122.391, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=8.933e-05, train_time=22.751
+[gpub049] 2025-02-02 20:30:03,825 (trainer:795) INFO: 2epoch:train:9601-10000batch: iter_time=9.926e-05, forward_time=0.126, loss_ctc=88.728, loss_interctc_layer6=160.350, loss_interctc_layer12=116.176, loss_interctc_layer15=107.757, loss_interctc_layer21=92.017, loss=1.766, backward_time=0.177, grad_norm=170.989, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=9.042e-05, train_time=22.215
+[gpub049] 2025-02-02 20:32:21,740 (trainer:795) INFO: 2epoch:train:10001-10400batch: iter_time=9.876e-05, forward_time=0.125, loss_ctc=88.177, loss_interctc_layer6=162.123, loss_interctc_layer12=116.628, loss_interctc_layer15=107.550, loss_interctc_layer21=91.727, loss=1.769, backward_time=0.175, grad_norm=132.528, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=9.142e-05, train_time=22.277
+[gpub049] 2025-02-02 20:34:40,154 (trainer:795) INFO: 2epoch:train:10401-10800batch: iter_time=1.004e-04, forward_time=0.125, loss_ctc=85.002, loss_interctc_layer6=157.834, loss_interctc_layer12=112.800, loss_interctc_layer15=103.644, loss_interctc_layer21=88.528, loss=1.712, backward_time=0.176, grad_norm=131.354, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=9.242e-05, train_time=22.087
+[gpub049] 2025-02-02 20:36:58,220 (trainer:795) INFO: 2epoch:train:10801-11200batch: iter_time=1.042e-04, forward_time=0.125, loss_ctc=83.963, loss_interctc_layer6=151.268, loss_interctc_layer12=109.707, loss_interctc_layer15=101.113, loss_interctc_layer21=87.298, loss=1.667, backward_time=0.175, grad_norm=125.376, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=9.350e-05, train_time=22.043
+[gpub049] 2025-02-02 20:39:20,640 (trainer:795) INFO: 2epoch:train:11201-11600batch: iter_time=1.006e-04, forward_time=0.129, loss_ctc=85.700, loss_interctc_layer6=156.769, loss_interctc_layer12=113.313, loss_interctc_layer15=104.183, loss_interctc_layer21=89.492, loss=1.717, backward_time=0.181, grad_norm=126.073, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=9.458e-05, train_time=22.738
+[gpub049] 2025-02-02 20:41:42,735 (trainer:795) INFO: 2epoch:train:11601-12000batch: iter_time=9.771e-05, forward_time=0.128, loss_ctc=78.820, loss_interctc_layer6=144.347, loss_interctc_layer12=103.823, loss_interctc_layer15=96.117, loss_interctc_layer21=82.254, loss=1.579, backward_time=0.181, grad_norm=173.720, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=9.558e-05, train_time=22.841
+[gpub049] 2025-02-02 20:44:02,262 (trainer:795) INFO: 2epoch:train:12001-12400batch: iter_time=1.013e-04, forward_time=0.126, loss_ctc=84.072, loss_interctc_layer6=151.724, loss_interctc_layer12=109.214, loss_interctc_layer15=100.872, loss_interctc_layer21=87.552, loss=1.667, backward_time=0.177, grad_norm=163.436, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=9.658e-05, train_time=22.368
+[gpub049] 2025-02-02 20:46:22,679 (trainer:795) INFO: 2epoch:train:12401-12800batch: iter_time=1.010e-04, forward_time=0.127, loss_ctc=79.914, loss_interctc_layer6=148.445, loss_interctc_layer12=106.387, loss_interctc_layer15=97.436, loss_interctc_layer21=83.003, loss=1.610, backward_time=0.178, grad_norm=160.545, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=9.767e-05, train_time=22.396
+[gpub049] 2025-02-02 20:48:40,776 (trainer:795) INFO: 2epoch:train:12801-13200batch: iter_time=9.716e-05, forward_time=0.125, loss_ctc=84.781, loss_interctc_layer6=150.870, loss_interctc_layer12=109.489, loss_interctc_layer15=101.434, loss_interctc_layer21=88.198, loss=1.671, backward_time=0.175, grad_norm=119.916, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=9.875e-05, train_time=21.975
+[gpub049] 2025-02-02 20:51:00,157 (trainer:795) INFO: 2epoch:train:13201-13600batch: iter_time=9.343e-05, forward_time=0.126, loss_ctc=85.566, loss_interctc_layer6=156.327, loss_interctc_layer12=113.152, loss_interctc_layer15=104.504, loss_interctc_layer21=89.271, loss=1.715, backward_time=0.177, grad_norm=149.981, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=9.975e-05, train_time=22.432
+[gpub049] 2025-02-02 20:53:22,566 (trainer:795) INFO: 2epoch:train:13601-14000batch: iter_time=9.629e-05, forward_time=0.128, loss_ctc=80.539, loss_interctc_layer6=148.941, loss_interctc_layer12=106.571, loss_interctc_layer15=98.211, loss_interctc_layer21=83.728, loss=1.619, backward_time=0.181, grad_norm=156.118, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=1.007e-04, train_time=22.791
+[gpub049] 2025-02-02 20:55:44,808 (trainer:795) INFO: 2epoch:train:14001-14400batch: iter_time=9.648e-05, forward_time=0.128, loss_ctc=77.296, loss_interctc_layer6=142.738, loss_interctc_layer12=101.650, loss_interctc_layer15=93.022, loss_interctc_layer21=80.521, loss=1.548, backward_time=0.181, grad_norm=159.655, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=1.018e-04, train_time=22.705
+[gpub049] 2025-02-02 20:58:01,734 (trainer:795) INFO: 2epoch:train:14401-14800batch: iter_time=9.636e-05, forward_time=0.124, loss_ctc=88.080, loss_interctc_layer6=160.576, loss_interctc_layer12=114.791, loss_interctc_layer15=105.769, loss_interctc_layer21=91.069, loss=1.751, backward_time=0.174, grad_norm=212.339, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.029e-04, train_time=21.929
+[gpub049] 2025-02-02 21:00:20,495 (trainer:795) INFO: 2epoch:train:14801-15200batch: iter_time=9.585e-05, forward_time=0.126, loss_ctc=89.982, loss_interctc_layer6=160.337, loss_interctc_layer12=117.137, loss_interctc_layer15=108.303, loss_interctc_layer21=93.880, loss=1.780, backward_time=0.176, grad_norm=151.683, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=1.039e-04, train_time=22.105
+[gpub049] 2025-02-02 21:02:41,794 (trainer:795) INFO: 2epoch:train:15201-15600batch: iter_time=9.376e-05, forward_time=0.127, loss_ctc=82.946, loss_interctc_layer6=149.917, loss_interctc_layer12=107.052, loss_interctc_layer15=98.854, loss_interctc_layer21=86.254, loss=1.641, backward_time=0.180, grad_norm=121.997, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=1.049e-04, train_time=22.599
+[gpub049] 2025-02-02 21:05:02,148 (trainer:795) INFO: 2epoch:train:15601-16000batch: iter_time=9.537e-05, forward_time=0.126, loss_ctc=85.755, loss_interctc_layer6=154.516, loss_interctc_layer12=111.335, loss_interctc_layer15=102.725, loss_interctc_layer21=89.313, loss=1.699, backward_time=0.178, grad_norm=132.574, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.060e-04, train_time=22.505
+[gpub049] 2025-02-02 21:07:21,355 (trainer:795) INFO: 2epoch:train:16001-16400batch: iter_time=9.649e-05, forward_time=0.126, loss_ctc=80.899, loss_interctc_layer6=146.866, loss_interctc_layer12=106.033, loss_interctc_layer15=97.577, loss_interctc_layer21=83.944, loss=1.610, backward_time=0.177, grad_norm=133.432, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=1.071e-04, train_time=22.239
+[gpub049] 2025-02-02 21:09:38,812 (trainer:795) INFO: 2epoch:train:16401-16800batch: iter_time=9.692e-05, forward_time=0.124, loss_ctc=86.094, loss_interctc_layer6=154.745, loss_interctc_layer12=111.191, loss_interctc_layer15=102.642, loss_interctc_layer21=89.531, loss=1.701, backward_time=0.175, grad_norm=149.555, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.081e-04, train_time=22.157
+[gpub049] 2025-02-02 21:11:57,710 (trainer:795) INFO: 2epoch:train:16801-17200batch: iter_time=9.487e-05, forward_time=0.125, loss_ctc=79.527, loss_interctc_layer6=146.441, loss_interctc_layer12=104.766, loss_interctc_layer15=96.267, loss_interctc_layer21=82.816, loss=1.593, backward_time=0.176, grad_norm=121.154, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=1.091e-04, train_time=22.086
+[gpub049] 2025-02-02 21:14:18,941 (trainer:795) INFO: 2epoch:train:17201-17600batch: iter_time=9.335e-05, forward_time=0.128, loss_ctc=77.895, loss_interctc_layer6=144.931, loss_interctc_layer12=101.861, loss_interctc_layer15=93.805, loss_interctc_layer21=80.917, loss=1.561, backward_time=0.179, grad_norm=183.265, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=1.102e-04, train_time=22.556
+[gpub049] 2025-02-02 21:16:40,631 (trainer:795) INFO: 2epoch:train:17601-18000batch: iter_time=9.588e-05, forward_time=0.128, loss_ctc=82.922, loss_interctc_layer6=150.049, loss_interctc_layer12=107.478, loss_interctc_layer15=98.769, loss_interctc_layer21=86.261, loss=1.642, backward_time=0.180, grad_norm=158.208, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=1.113e-04, train_time=22.685
+[gpub049] 2025-02-02 21:19:03,657 (trainer:795) INFO: 2epoch:train:18001-18400batch: iter_time=9.662e-05, forward_time=0.128, loss_ctc=75.986, loss_interctc_layer6=137.516, loss_interctc_layer12=98.597, loss_interctc_layer15=90.828, loss_interctc_layer21=79.072, loss=1.506, backward_time=0.182, grad_norm=115.158, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.123e-04, train_time=22.840
+[gpub049] 2025-02-02 21:21:29,410 (trainer:795) INFO: 2epoch:train:18401-18800batch: iter_time=1.006e-04, forward_time=0.131, loss_ctc=76.790, loss_interctc_layer6=137.983, loss_interctc_layer12=100.159, loss_interctc_layer15=92.217, loss_interctc_layer21=80.087, loss=1.523, backward_time=0.186, grad_norm=115.019, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=1.133e-04, train_time=23.339
+[gpub049] 2025-02-02 21:23:50,745 (trainer:795) INFO: 2epoch:train:18801-19200batch: iter_time=9.477e-05, forward_time=0.127, loss_ctc=84.118, loss_interctc_layer6=148.993, loss_interctc_layer12=108.252, loss_interctc_layer15=100.270, loss_interctc_layer21=87.108, loss=1.652, backward_time=0.180, grad_norm=120.957, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=1.143e-04, train_time=22.660
+[gpub049] 2025-02-02 21:26:10,409 (trainer:795) INFO: 2epoch:train:19201-19600batch: iter_time=9.682e-05, forward_time=0.127, loss_ctc=85.372, loss_interctc_layer6=148.954, loss_interctc_layer12=108.967, loss_interctc_layer15=101.210, loss_interctc_layer21=88.781, loss=1.667, backward_time=0.177, grad_norm=125.330, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=1.154e-04, train_time=22.226
+[gpub049] 2025-02-02 21:28:27,192 (trainer:795) INFO: 2epoch:train:19601-20000batch: iter_time=9.896e-05, forward_time=0.124, loss_ctc=84.803, loss_interctc_layer6=148.361, loss_interctc_layer12=106.892, loss_interctc_layer15=99.023, loss_interctc_layer21=87.426, loss=1.645, backward_time=0.174, grad_norm=128.561, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=1.164e-04, train_time=21.937
+[gpub049] 2025-02-02 21:30:46,293 (trainer:795) INFO: 2epoch:train:20001-20400batch: iter_time=9.851e-05, forward_time=0.126, loss_ctc=82.033, loss_interctc_layer6=145.088, loss_interctc_layer12=104.728, loss_interctc_layer15=96.754, loss_interctc_layer21=84.866, loss=1.605, backward_time=0.177, grad_norm=115.105, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=1.174e-04, train_time=22.112
+[gpub049] 2025-02-02 21:33:03,703 (trainer:795) INFO: 2epoch:train:20401-20800batch: iter_time=1.011e-04, forward_time=0.124, loss_ctc=88.978, loss_interctc_layer6=154.764, loss_interctc_layer12=113.132, loss_interctc_layer15=104.366, loss_interctc_layer21=92.023, loss=1.729, backward_time=0.174, grad_norm=219.215, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=1.185e-04, train_time=22.186
+

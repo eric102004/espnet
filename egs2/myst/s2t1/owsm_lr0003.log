@@ -1,0 +1,1030 @@
+2025-02-01T15:08:39 (s2t.sh:264:main) ./s2t.sh --lang en --gpu_inference true --token_type bpe --nbpe 50000 --max_wav_duration 30 --use_lm false --feats_normalize utt_mvn --feats_type raw --s2t_config conf/tuning/owsm_v3.1_lr0003_03.yaml --inference_config conf/decode_asr_beam1_ctc03.yaml --inference_s2t_model valid.cer.ave_4best.pth --train_set train --valid_set dev --test_sets dev test --lm_train_text data/train/text --bpe_train_text data/train/text --local_data_opts --flac2wav true --audio_format wav --min_wav_duration 0.5 --dumpdir dump_filter --bpemodel data/en_token_list/bpe_unigram50000/owsm_v3.1/bpe.model --bpetoken_list data/en_token_list/bpe_unigram50000/owsm_v3.1/tokens.txt --stage 11
+2025-02-01T15:08:39 (s2t.sh:302:main) Info: The valid_set 'dev' is included in the test_sets. '--eval_valid_set true' is set and 'dev' is removed from the test_sets
+2025-02-01T15:08:39 (s2t.sh:547:main) Skipped stages:  6 7 8 9 14 15 
+2025-02-01T15:08:39 (s2t.sh:1296:main) Stage 11: S2T Training: train_set=dump_filter/raw/train, valid_set=dump_filter/raw/dev
+2025-02-01T15:08:39 (s2t.sh:1395:main) Generate 'exp/s2t_owsm_v3.1_lr0003_03_raw_en_bpe50000/run.sh'. You can resume the process from stage 11 using this script
+2025-02-01T15:08:39 (s2t.sh:1399:main) S2T training started... log: 'exp/s2t_owsm_v3.1_lr0003_03_raw_en_bpe50000/train.log'
+2025-02-01 15:08:40,491 (launch:94) INFO: /work/hdd/bbjs/clin10/bootcamp/espnet/tools/venv/envs/bootcamp/bin/python3 /work/hdd/bbjs/clin10/bootcamp/espnet/espnet2/bin/launch.py --cmd 'slurm.pl --name exp/s2t_owsm_v3.1_lr0003_03_raw_en_bpe50000/train.log' --log exp/s2t_owsm_v3.1_lr0003_03_raw_en_bpe50000/train.log --ngpu 1 --num_nodes 1 --init_file_prefix exp/s2t_owsm_v3.1_lr0003_03_raw_en_bpe50000/.dist_init_ --multiprocessing_distributed true -- python3 -m espnet2.bin.s2t_train --use_preprocessor true --bpemodel data/en_token_list/bpe_unigram50000/owsm_v3.1/bpe.model --token_type bpe --token_list data/en_token_list/bpe_unigram50000/owsm_v3.1/tokens.txt --non_linguistic_symbols none --cleaner none --g2p none --valid_data_path_and_name_and_type dump_filter/raw/dev/wav.scp,speech,sound --valid_shape_file exp/s2t_stats_raw_en_bpe50000/valid/speech_shape --resume true --fold_length 80000 --output_dir exp/s2t_owsm_v3.1_lr0003_03_raw_en_bpe50000 --config conf/tuning/owsm_v3.1_lr0003_03.yaml --frontend_conf fs=16k --train_data_path_and_name_and_type dump_filter/raw/train/wav.scp,speech,sound --train_shape_file exp/s2t_stats_raw_en_bpe50000/train/speech_shape --fold_length 150 --train_data_path_and_name_and_type dump_filter/raw/train/text.prev,text_prev,text --train_shape_file exp/s2t_stats_raw_en_bpe50000/train/text_prev_shape.bpe --fold_length 150 --train_data_path_and_name_and_type dump_filter/raw/train/text.ctc,text_ctc,text --train_shape_file exp/s2t_stats_raw_en_bpe50000/train/text_ctc_shape.bpe --fold_length 150 --train_data_path_and_name_and_type dump_filter/raw/train/text,text,text --train_shape_file exp/s2t_stats_raw_en_bpe50000/train/text_shape.bpe --valid_data_path_and_name_and_type dump_filter/raw/dev/text.prev,text_prev,text --valid_shape_file exp/s2t_stats_raw_en_bpe50000/valid/text_prev_shape.bpe --valid_data_path_and_name_and_type dump_filter/raw/dev/text.ctc,text_ctc,text --valid_shape_file exp/s2t_stats_raw_en_bpe50000/valid/text_ctc_shape.bpe --valid_data_path_and_name_and_type dump_filter/raw/dev/text,text,text --valid_shape_file exp/s2t_stats_raw_en_bpe50000/valid/text_shape.bpe
+2025-02-01 15:08:40,693 (launch:348) INFO: log file: exp/s2t_owsm_v3.1_lr0003_03_raw_en_bpe50000/train.log
+/work/hdd/bbjs/clin10/bootcamp/espnet/egs2/myst/s2t1/utils/slurm.pl: Error: Job 6623807 seems to no longer exists:
+'squeue -j 6623807' returned error code 1 and said:
+  slurm_load_jobs error: Unexpected message received
+
+Syncfile exp/s2t_owsm_v3.1_lr0003_03_raw_en_bpe50000/q/done.922992 does not exist, meaning that the job did not finish.
+Log is in exp/s2t_owsm_v3.1_lr0003_03_raw_en_bpe50000/train.log. Last line '[gpub071] 2025-02-02 21:32:57,015 (trainer:795) INFO: 8epoch:train:10001-10400batch: iter_time=1.236e-04, forward_time=0.132, loss_ctc=40.799, loss_att=14.293, acc=0.920, loss=0.348, backward_time=0.154, grad_norm=69.755, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.438e-04, train_time=22.340' does not end in 'status 0'.
+Possible reasons:
+  a) Exceeded time limit? -> Use more jobs!
+  b) Shutdown/Frozen machine? -> Run again! squeue:
+       JOBID    PARTITION         NAME           USER ST       TIME  NODES   NODELIST(REASON) FEATURES
+     6623807     gpuA40x4 exp/s2t_owsm         clin10  R   20:49:45      1            gpub071 (null)
+Command '['slurm.pl', '--name', 'exp/s2t_owsm_v3.1_lr0003_03_raw_en_bpe50000/train.log', '--gpu', '1', 'exp/s2t_owsm_v3.1_lr0003_03_raw_en_bpe50000/train.log', 'python3', '-m', 'espnet2.bin.s2t_train', '--use_preprocessor', 'true', '--bpemodel', 'data/en_token_list/bpe_unigram50000/owsm_v3.1/bpe.model', '--token_type', 'bpe', '--token_list', 'data/en_token_list/bpe_unigram50000/owsm_v3.1/tokens.txt', '--non_linguistic_symbols', 'none', '--cleaner', 'none', '--g2p', 'none', '--valid_data_path_and_name_and_type', 'dump_filter/raw/dev/wav.scp,speech,sound', '--valid_shape_file', 'exp/s2t_stats_raw_en_bpe50000/valid/speech_shape', '--resume', 'true', '--fold_length', '80000', '--output_dir', 'exp/s2t_owsm_v3.1_lr0003_03_raw_en_bpe50000', '--config', 'conf/tuning/owsm_v3.1_lr0003_03.yaml', '--frontend_conf', 'fs=16k', '--train_data_path_and_name_and_type', 'dump_filter/raw/train/wav.scp,speech,sound', '--train_shape_file', 'exp/s2t_stats_raw_en_bpe50000/train/speech_shape', '--fold_length', '150', '--train_data_path_and_name_and_type', 'dump_filter/raw/train/text.prev,text_prev,text', '--train_shape_file', 'exp/s2t_stats_raw_en_bpe50000/train/text_prev_shape.bpe', '--fold_length', '150', '--train_data_path_and_name_and_type', 'dump_filter/raw/train/text.ctc,text_ctc,text', '--train_shape_file', 'exp/s2t_stats_raw_en_bpe50000/train/text_ctc_shape.bpe', '--fold_length', '150', '--train_data_path_and_name_and_type', 'dump_filter/raw/train/text,text,text', '--train_shape_file', 'exp/s2t_stats_raw_en_bpe50000/train/text_shape.bpe', '--valid_data_path_and_name_and_type', 'dump_filter/raw/dev/text.prev,text_prev,text', '--valid_shape_file', 'exp/s2t_stats_raw_en_bpe50000/valid/text_prev_shape.bpe', '--valid_data_path_and_name_and_type', 'dump_filter/raw/dev/text.ctc,text_ctc,text', '--valid_shape_file', 'exp/s2t_stats_raw_en_bpe50000/valid/text_ctc_shape.bpe', '--valid_data_path_and_name_and_type', 'dump_filter/raw/dev/text,text,text', '--valid_shape_file', 'exp/s2t_stats_raw_en_bpe50000/valid/text_shape.bpe', '--ngpu', '1', '--multiprocessing_distributed', 'True']' returned non-zero exit status 1.
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/work/hdd/bbjs/clin10/bootcamp/espnet/espnet2/bin/launch.py", line 384, in <module>
+    main()
+  File "/work/hdd/bbjs/clin10/bootcamp/espnet/espnet2/bin/launch.py", line 375, in main
+    raise RuntimeError(
+RuntimeError: 
+################### The last 1000 lines of exp/s2t_owsm_v3.1_lr0003_03_raw_en_bpe50000/train.log ###################
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm2): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm3): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (4): DecoderLayer(
+        (self_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (src_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm2): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm3): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (5): DecoderLayer(
+        (self_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (src_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm2): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm3): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (6): DecoderLayer(
+        (self_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (src_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm2): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm3): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (7): DecoderLayer(
+        (self_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (src_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm2): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm3): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (8): DecoderLayer(
+        (self_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (src_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm2): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm3): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (9): DecoderLayer(
+        (self_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (src_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm2): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm3): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (10): DecoderLayer(
+        (self_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (src_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm2): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm3): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (11): DecoderLayer(
+        (self_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (src_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm2): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm3): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (12): DecoderLayer(
+        (self_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (src_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm2): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm3): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (13): DecoderLayer(
+        (self_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (src_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm2): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm3): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (14): DecoderLayer(
+        (self_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (src_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm2): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm3): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (15): DecoderLayer(
+        (self_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (src_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm2): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm3): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (16): DecoderLayer(
+        (self_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (src_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm2): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm3): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+      (17): DecoderLayer(
+        (self_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (src_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Identity()
+          (q_norm): Identity()
+          (k_norm): Identity()
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=4096, bias=True)
+          (w_2): Linear(in_features=4096, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm2): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm3): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+    )
+  )
+  (criterion_att): LabelSmoothingLoss(
+    (criterion): KLDivLoss()
+  )
+  (ctc): CTC(
+    (ctc_lo): Linear(in_features=1024, out_features=50002, bias=True)
+    (ctc_loss): CTCLoss()
+  )
+)
+
+Model summary:
+    Class Name: ESPnetS2TModel
+    Total Number of model parameters: 1.02 B
+    Number of trainable parameters: 1.02 B (100.0%)
+    Size: 4.07 GB
+    Type: torch.float32
+[gpub071] 2025-02-02 00:44:25,872 (abs_task:1427) INFO: Optimizer:
+AdamW (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    initial_lr: 0.0003
+    lr: 5e-08
+    maximize: False
+    weight_decay: 1e-06
+)
+[gpub071] 2025-02-02 00:44:25,872 (abs_task:1428) INFO: Scheduler: WarmupLR(warmup_steps=6000)
+[gpub071] 2025-02-02 00:44:25,873 (abs_task:1437) INFO: Saving the configuration in exp/s2t_owsm_v3.1_lr0003_03_raw_en_bpe50000/config.yaml
+[gpub071] 2025-02-02 00:44:26,507 (abs_task:1502) INFO: Loading pretrained params from /work/hdd/bbjs/clin10/bootcamp/espnet/owsm_v3.1/valid.total_count.ave_5best.till45epoch.pth
+/work/hdd/bbjs/clin10/bootcamp/espnet/espnet2/torch_utils/load_pretrained_model.py:99: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  src_state = torch.load(path, map_location=map_location)
+[gpub071] 2025-02-02 00:44:28,018 (s2t:444) INFO: Optional Data Names: ('text_prev', 'text_ctc', 'text_spk2', 'text_spk3', 'text_spk4')
+[gpub071] 2025-02-02 00:44:28,548 (abs_task:1850) INFO: [train] dataset:
+ESPnetDataset(
+  speech: {"path": "dump_filter/raw/train/wav.scp", "type": "sound"}
+  text_prev: {"path": "dump_filter/raw/train/text.prev", "type": "text"}
+  text_ctc: {"path": "dump_filter/raw/train/text.ctc", "type": "text"}
+  text: {"path": "dump_filter/raw/train/text", "type": "text"}
+  preprocess: <espnet2.train.preprocessor.S2TPreprocessor object at 0x7fedddadc8c0>)
+[gpub071] 2025-02-02 00:44:28,549 (abs_task:1851) INFO: [train] Batch sampler: NumElementsBatchSampler(N-batch=24846, batch_bins=10000000, sort_in_batch=descending, sort_batch=descending)
+[gpub071] 2025-02-02 00:44:28,552 (abs_task:1852) INFO: [train] mini-batch sizes summary: N-batch=24846, mean=2.2, min=1, max=7
+[gpub071] 2025-02-02 00:44:28,576 (s2t:444) INFO: Optional Data Names: ('text_prev', 'text_ctc', 'text_spk2', 'text_spk3', 'text_spk4')
+[gpub071] 2025-02-02 00:44:28,632 (abs_task:1850) INFO: [valid] dataset:
+ESPnetDataset(
+  speech: {"path": "dump_filter/raw/dev/wav.scp", "type": "sound"}
+  text_prev: {"path": "dump_filter/raw/dev/text.prev", "type": "text"}
+  text_ctc: {"path": "dump_filter/raw/dev/text.ctc", "type": "text"}
+  text: {"path": "dump_filter/raw/dev/text", "type": "text"}
+  preprocess: <espnet2.train.preprocessor.S2TPreprocessor object at 0x7feddd15bd70>)
+[gpub071] 2025-02-02 00:44:28,632 (abs_task:1851) INFO: [valid] Batch sampler: NumElementsBatchSampler(N-batch=4000, batch_bins=10000000, sort_in_batch=descending, sort_batch=descending)
+[gpub071] 2025-02-02 00:44:28,633 (abs_task:1852) INFO: [valid] mini-batch sizes summary: N-batch=4000, mean=2.3, min=1, max=7
+[gpub071] 2025-02-02 00:44:28,657 (s2t:444) INFO: Optional Data Names: ('text_prev', 'text_ctc', 'text_spk2', 'text_spk3', 'text_spk4')
+[gpub071] 2025-02-02 00:44:28,664 (abs_task:1850) INFO: [plot_att] dataset:
+ESPnetDataset(
+  speech: {"path": "dump_filter/raw/dev/wav.scp", "type": "sound"}
+  text_prev: {"path": "dump_filter/raw/dev/text.prev", "type": "text"}
+  text_ctc: {"path": "dump_filter/raw/dev/text.ctc", "type": "text"}
+  text: {"path": "dump_filter/raw/dev/text", "type": "text"}
+  preprocess: <espnet2.train.preprocessor.S2TPreprocessor object at 0x7feddd1ffe60>)
+[gpub071] 2025-02-02 00:44:28,665 (abs_task:1851) INFO: [plot_att] Batch sampler: UnsortedBatchSampler(N-batch=9035, batch_size=1, key_file=exp/s2t_stats_raw_en_bpe50000/valid/speech_shape, 
+[gpub071] 2025-02-02 00:44:28,665 (abs_task:1852) INFO: [plot_att] mini-batch sizes summary: N-batch=3, mean=1.0, min=1, max=1
+/work/hdd/bbjs/clin10/bootcamp/espnet/espnet2/train/trainer.py:228: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler()
+[gpub071] 2025-02-02 00:44:28,671 (trainer:330) INFO: 1/20epoch started
+/work/hdd/bbjs/clin10/bootcamp/espnet/espnet2/train/trainer.py:630: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast(
+/work/hdd/bbjs/clin10/bootcamp/espnet/espnet2/s2t/espnet_model.py:279: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast(False):
+[gpub071] 2025-02-02 00:46:51,484 (trainer:795) INFO: 1epoch:train:1-400batch: iter_time=6.332e-04, forward_time=0.134, loss_ctc=827.552, loss_att=227.455, acc=0.221, loss=6.367, backward_time=0.156, grad_norm=1.095e+03, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.032, optim0_lr0=2.250e-07, train_time=22.852
+[gpub071] 2025-02-02 00:49:13,484 (trainer:795) INFO: 1epoch:train:401-800batch: iter_time=1.036e-04, forward_time=0.134, loss_ctc=822.682, loss_att=227.113, acc=0.222, loss=6.340, backward_time=0.155, grad_norm=1.071e+03, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=5.250e-07, train_time=22.641
+[gpub071] 2025-02-02 00:51:37,763 (trainer:795) INFO: 1epoch:train:801-1200batch: iter_time=9.948e-05, forward_time=0.135, loss_ctc=807.047, loss_att=220.080, acc=0.232, loss=6.190, backward_time=0.158, grad_norm=996.124, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=8.250e-07, train_time=23.303
+[gpub071] 2025-02-02 00:53:58,744 (trainer:795) INFO: 1epoch:train:1201-1600batch: iter_time=9.717e-05, forward_time=0.132, loss_ctc=804.908, loss_att=219.634, acc=0.240, loss=6.175, backward_time=0.155, grad_norm=1.062e+03, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.150e-06, train_time=22.432
+[gpub071] 2025-02-02 00:56:19,633 (trainer:795) INFO: 1epoch:train:1601-2000batch: iter_time=9.753e-05, forward_time=0.132, loss_ctc=786.361, loss_att=214.466, acc=0.250, loss=6.032, backward_time=0.155, grad_norm=1.044e+03, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.475e-06, train_time=22.595
+[gpub071] 2025-02-02 00:58:41,916 (trainer:795) INFO: 1epoch:train:2001-2400batch: iter_time=9.927e-05, forward_time=0.134, loss_ctc=771.804, loss_att=209.663, acc=0.267, loss=5.911, backward_time=0.156, grad_norm=1.006e+03, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.775e-06, train_time=22.597
+[gpub071] 2025-02-02 01:01:04,126 (trainer:795) INFO: 1epoch:train:2401-2800batch: iter_time=1.025e-04, forward_time=0.134, loss_ctc=705.687, loss_att=198.145, acc=0.283, loss=5.475, backward_time=0.156, grad_norm=936.620, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=2.075e-06, train_time=22.896
+[gpub071] 2025-02-02 01:03:28,311 (trainer:795) INFO: 1epoch:train:2801-3200batch: iter_time=1.000e-04, forward_time=0.136, loss_ctc=639.561, loss_att=186.144, acc=0.304, loss=5.034, backward_time=0.158, grad_norm=922.610, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=2.400e-06, train_time=23.004
+[gpub071] 2025-02-02 01:05:52,621 (trainer:795) INFO: 1epoch:train:3201-3600batch: iter_time=9.929e-05, forward_time=0.135, loss_ctc=561.402, loss_att=170.084, acc=0.332, loss=4.492, backward_time=0.158, grad_norm=798.019, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=2.725e-06, train_time=23.179
+[gpub071] 2025-02-02 01:08:11,263 (trainer:795) INFO: 1epoch:train:3601-4000batch: iter_time=9.752e-05, forward_time=0.131, loss_ctc=538.937, loss_att=172.714, acc=0.355, loss=4.415, backward_time=0.152, grad_norm=695.779, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.045, optim0_lr0=3.025e-06, train_time=22.043
+[gpub071] 2025-02-02 01:10:32,030 (trainer:795) INFO: 1epoch:train:4001-4400batch: iter_time=9.960e-05, forward_time=0.132, loss_ctc=457.379, loss_att=155.441, acc=0.381, loss=3.844, backward_time=0.155, grad_norm=539.170, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=3.325e-06, train_time=22.681
+[gpub071] 2025-02-02 01:12:53,735 (trainer:795) INFO: 1epoch:train:4401-4800batch: iter_time=9.989e-05, forward_time=0.134, loss_ctc=408.422, loss_att=148.259, acc=0.398, loss=3.536, backward_time=0.155, grad_norm=579.304, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=3.650e-06, train_time=22.572
+[gpub071] 2025-02-02 01:15:12,544 (trainer:795) INFO: 1epoch:train:4801-5200batch: iter_time=1.002e-04, forward_time=0.131, loss_ctc=384.107, loss_att=144.062, acc=0.435, loss=3.376, backward_time=0.152, grad_norm=711.621, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=3.975e-06, train_time=22.068
+[gpub071] 2025-02-02 01:17:31,918 (trainer:795) INFO: 1epoch:train:5201-5600batch: iter_time=1.001e-04, forward_time=0.131, loss_ctc=334.877, loss_att=132.023, acc=0.450, loss=3.014, backward_time=0.153, grad_norm=674.834, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=4.275e-06, train_time=22.558
+[gpub071] 2025-02-02 01:19:50,373 (trainer:795) INFO: 1epoch:train:5601-6000batch: iter_time=1.037e-04, forward_time=0.130, loss_ctc=300.265, loss_att=126.601, acc=0.466, loss=2.792, backward_time=0.152, grad_norm=431.739, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.047, optim0_lr0=4.575e-06, train_time=21.972
+[gpub071] 2025-02-02 01:22:14,539 (trainer:795) INFO: 1epoch:train:6001-6400batch: iter_time=9.998e-05, forward_time=0.135, loss_ctc=259.887, loss_att=116.657, acc=0.475, loss=2.494, backward_time=0.158, grad_norm=327.562, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=4.900e-06, train_time=23.029
+[gpub071] 2025-02-02 01:24:32,909 (trainer:795) INFO: 1epoch:train:6401-6800batch: iter_time=9.779e-05, forward_time=0.131, loss_ctc=256.637, loss_att=117.775, acc=0.509, loss=2.491, backward_time=0.152, grad_norm=314.080, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=5.225e-06, train_time=22.144
+[gpub071] 2025-02-02 01:26:58,547 (trainer:795) INFO: 1epoch:train:6801-7200batch: iter_time=1.011e-04, forward_time=0.137, loss_ctc=216.869, loss_att=103.938, acc=0.518, loss=2.153, backward_time=0.160, grad_norm=258.660, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=5.525e-06, train_time=23.334
+[gpub071] 2025-02-02 01:29:22,327 (trainer:795) INFO: 1epoch:train:7201-7600batch: iter_time=9.695e-05, forward_time=0.135, loss_ctc=203.750, loss_att=96.082, acc=0.554, loss=2.006, backward_time=0.157, grad_norm=226.615, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=5.825e-06, train_time=23.082
+[gpub071] 2025-02-02 01:31:43,523 (trainer:795) INFO: 1epoch:train:7601-8000batch: iter_time=1.055e-04, forward_time=0.133, loss_ctc=201.172, loss_att=94.041, acc=0.589, loss=1.972, backward_time=0.155, grad_norm=204.807, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=6.150e-06, train_time=22.517
+[gpub071] 2025-02-02 01:34:00,542 (trainer:795) INFO: 1epoch:train:8001-8400batch: iter_time=1.013e-04, forward_time=0.129, loss_ctc=194.446, loss_att=89.738, acc=0.601, loss=1.893, backward_time=0.150, grad_norm=205.207, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=6.475e-06, train_time=21.782
+[gpub071] 2025-02-02 01:36:23,137 (trainer:795) INFO: 1epoch:train:8401-8800batch: iter_time=1.018e-04, forward_time=0.134, loss_ctc=180.749, loss_att=83.223, acc=0.617, loss=1.758, backward_time=0.157, grad_norm=175.157, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=6.775e-06, train_time=22.946
+[gpub071] 2025-02-02 01:38:45,448 (trainer:795) INFO: 1epoch:train:8801-9200batch: iter_time=1.003e-04, forward_time=0.134, loss_ctc=175.626, loss_att=80.401, acc=0.646, loss=1.703, backward_time=0.156, grad_norm=168.197, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=7.075e-06, train_time=22.559
+[gpub071] 2025-02-02 01:41:07,721 (trainer:795) INFO: 1epoch:train:9201-9600batch: iter_time=9.721e-05, forward_time=0.134, loss_ctc=163.094, loss_att=74.470, acc=0.664, loss=1.579, backward_time=0.155, grad_norm=158.059, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=7.400e-06, train_time=22.925
+[gpub071] 2025-02-02 01:43:28,119 (trainer:795) INFO: 1epoch:train:9601-10000batch: iter_time=9.825e-05, forward_time=0.132, loss_ctc=155.993, loss_att=71.878, acc=0.674, loss=1.517, backward_time=0.154, grad_norm=151.583, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=7.725e-06, train_time=22.535
+[gpub071] 2025-02-02 01:45:48,986 (trainer:795) INFO: 1epoch:train:10001-10400batch: iter_time=9.699e-05, forward_time=0.133, loss_ctc=150.129, loss_att=68.243, acc=0.687, loss=1.450, backward_time=0.154, grad_norm=143.077, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=8.025e-06, train_time=22.420
+[gpub071] 2025-02-02 01:48:08,878 (trainer:795) INFO: 1epoch:train:10401-10800batch: iter_time=9.882e-05, forward_time=0.132, loss_ctc=146.361, loss_att=66.803, acc=0.696, loss=1.417, backward_time=0.153, grad_norm=141.261, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=8.325e-06, train_time=22.457
+[gpub071] 2025-02-02 01:50:28,193 (trainer:795) INFO: 1epoch:train:10801-11200batch: iter_time=9.951e-05, forward_time=0.131, loss_ctc=146.121, loss_att=66.460, acc=0.710, loss=1.412, backward_time=0.153, grad_norm=139.817, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=8.650e-06, train_time=22.285
+[gpub071] 2025-02-02 01:52:48,555 (trainer:795) INFO: 1epoch:train:11201-11600batch: iter_time=9.747e-05, forward_time=0.133, loss_ctc=141.185, loss_att=63.786, acc=0.722, loss=1.359, backward_time=0.154, grad_norm=127.276, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=8.975e-06, train_time=22.524
+[gpub071] 2025-02-02 01:55:03,278 (trainer:795) INFO: 1epoch:train:11601-12000batch: iter_time=1.013e-04, forward_time=0.127, loss_ctc=139.776, loss_att=63.479, acc=0.718, loss=1.349, backward_time=0.148, grad_norm=136.296, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=9.275e-06, train_time=21.412
+[gpub071] 2025-02-02 01:57:23,575 (trainer:795) INFO: 1epoch:train:12001-12400batch: iter_time=1.005e-04, forward_time=0.132, loss_ctc=129.944, loss_att=59.307, acc=0.726, loss=1.258, backward_time=0.154, grad_norm=126.941, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=9.575e-06, train_time=22.511
+[gpub071] 2025-02-02 01:59:51,252 (trainer:795) INFO: 1epoch:train:12401-12800batch: iter_time=9.936e-05, forward_time=0.138, loss_ctc=112.297, loss_att=51.607, acc=0.738, loss=1.091, backward_time=0.161, grad_norm=189.216, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=9.900e-06, train_time=23.482
+[gpub071] 2025-02-02 02:02:09,250 (trainer:795) INFO: 1epoch:train:12801-13200batch: iter_time=9.492e-05, forward_time=0.130, loss_ctc=123.403, loss_att=56.407, acc=0.747, loss=1.195, backward_time=0.151, grad_norm=129.159, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.022e-05, train_time=22.103
+[gpub071] 2025-02-02 02:04:29,868 (trainer:795) INFO: 1epoch:train:13201-13600batch: iter_time=9.399e-05, forward_time=0.132, loss_ctc=118.609, loss_att=52.599, acc=0.755, loss=1.131, backward_time=0.154, grad_norm=121.009, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.052e-05, train_time=22.521
+[gpub071] 2025-02-02 02:06:45,516 (trainer:795) INFO: 1epoch:train:13601-14000batch: iter_time=9.499e-05, forward_time=0.128, loss_ctc=125.762, loss_att=56.710, acc=0.755, loss=1.210, backward_time=0.149, grad_norm=121.583, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.082e-05, train_time=21.726
+[gpub071] 2025-02-02 02:09:07,601 (trainer:795) INFO: 1epoch:train:14001-14400batch: iter_time=9.383e-05, forward_time=0.134, loss_ctc=113.982, loss_att=51.942, acc=0.754, loss=1.102, backward_time=0.155, grad_norm=117.323, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.115e-05, train_time=22.606
+[gpub071] 2025-02-02 02:11:29,660 (trainer:795) INFO: 1epoch:train:14401-14800batch: iter_time=9.514e-05, forward_time=0.133, loss_ctc=108.564, loss_att=48.927, acc=0.762, loss=1.044, backward_time=0.156, grad_norm=112.194, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.147e-05, train_time=22.680
+[gpub071] 2025-02-02 02:13:49,500 (trainer:795) INFO: 1epoch:train:14801-15200batch: iter_time=9.575e-05, forward_time=0.132, loss_ctc=115.291, loss_att=51.633, acc=0.771, loss=1.105, backward_time=0.153, grad_norm=117.203, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.177e-05, train_time=22.441
+[gpub071] 2025-02-02 02:16:09,457 (trainer:795) INFO: 1epoch:train:15201-15600batch: iter_time=9.516e-05, forward_time=0.132, loss_ctc=111.702, loss_att=51.026, acc=0.769, loss=1.082, backward_time=0.153, grad_norm=113.020, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.208e-05, train_time=22.424
+[gpub071] 2025-02-02 02:18:32,230 (trainer:795) INFO: 1epoch:train:15601-16000batch: iter_time=9.623e-05, forward_time=0.134, loss_ctc=106.244, loss_att=47.803, acc=0.777, loss=1.021, backward_time=0.156, grad_norm=111.681, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.240e-05, train_time=22.765
+[gpub071] 2025-02-02 02:20:51,982 (trainer:795) INFO: 1epoch:train:16001-16400batch: iter_time=9.595e-05, forward_time=0.133, loss_ctc=107.329, loss_att=48.677, acc=0.779, loss=1.036, backward_time=0.152, grad_norm=112.009, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.272e-05, train_time=22.246
+[gpub071] 2025-02-02 02:23:10,510 (trainer:795) INFO: 1epoch:train:16401-16800batch: iter_time=9.672e-05, forward_time=0.131, loss_ctc=105.680, loss_att=47.556, acc=0.785, loss=1.016, backward_time=0.152, grad_norm=108.864, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.302e-05, train_time=22.337
+[gpub071] 2025-02-02 02:25:26,472 (trainer:795) INFO: 1epoch:train:16801-17200batch: iter_time=9.681e-05, forward_time=0.128, loss_ctc=106.120, loss_att=47.916, acc=0.789, loss=1.022, backward_time=0.149, grad_norm=120.232, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.332e-05, train_time=21.625
+[gpub071] 2025-02-02 02:27:43,199 (trainer:795) INFO: 1epoch:train:17201-17600batch: iter_time=9.432e-05, forward_time=0.129, loss_ctc=104.385, loss_att=46.446, acc=0.796, loss=0.997, backward_time=0.150, grad_norm=107.322, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.365e-05, train_time=21.959
+[gpub071] 2025-02-02 02:30:06,300 (trainer:795) INFO: 1epoch:train:17601-18000batch: iter_time=9.672e-05, forward_time=0.135, loss_ctc=93.181, loss_att=42.402, acc=0.792, loss=0.901, backward_time=0.156, grad_norm=99.860, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.397e-05, train_time=22.962
+[gpub071] 2025-02-02 02:32:26,662 (trainer:795) INFO: 1epoch:train:18001-18400batch: iter_time=9.636e-05, forward_time=0.132, loss_ctc=97.105, loss_att=43.493, acc=0.801, loss=0.931, backward_time=0.154, grad_norm=105.817, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.427e-05, train_time=22.257
+[gpub071] 2025-02-02 02:34:47,428 (trainer:795) INFO: 1epoch:train:18401-18800batch: iter_time=9.595e-05, forward_time=0.133, loss_ctc=95.281, loss_att=43.206, acc=0.799, loss=0.919, backward_time=0.154, grad_norm=94.061, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.458e-05, train_time=22.848
+[gpub071] 2025-02-02 02:37:08,595 (trainer:795) INFO: 1epoch:train:18801-19200batch: iter_time=9.595e-05, forward_time=0.133, loss_ctc=90.108, loss_att=40.903, acc=0.801, loss=0.870, backward_time=0.154, grad_norm=107.069, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.490e-05, train_time=22.426
+[gpub071] 2025-02-02 02:39:31,430 (trainer:795) INFO: 1epoch:train:19201-19600batch: iter_time=9.681e-05, forward_time=0.135, loss_ctc=90.754, loss_att=41.060, acc=0.808, loss=0.875, backward_time=0.156, grad_norm=106.773, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.522e-05, train_time=22.822
+[gpub071] 2025-02-02 02:41:49,867 (trainer:795) INFO: 1epoch:train:19601-20000batch: iter_time=9.619e-05, forward_time=0.131, loss_ctc=92.065, loss_att=41.896, acc=0.807, loss=0.890, backward_time=0.152, grad_norm=112.794, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.552e-05, train_time=22.225
+[gpub071] 2025-02-02 02:44:09,819 (trainer:795) INFO: 1epoch:train:20001-20400batch: iter_time=9.598e-05, forward_time=0.132, loss_ctc=92.996, loss_att=41.887, acc=0.807, loss=0.894, backward_time=0.153, grad_norm=100.143, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.582e-05, train_time=22.450
+[gpub071] 2025-02-02 02:46:33,110 (trainer:795) INFO: 1epoch:train:20401-20800batch: iter_time=9.652e-05, forward_time=0.135, loss_ctc=87.043, loss_att=38.656, acc=0.811, loss=0.831, backward_time=0.156, grad_norm=100.034, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.615e-05, train_time=22.790
+[gpub071] 2025-02-02 02:48:52,940 (trainer:795) INFO: 1epoch:train:20801-21200batch: iter_time=1.050e-04, forward_time=0.132, loss_ctc=87.708, loss_att=40.070, acc=0.810, loss=0.849, backward_time=0.153, grad_norm=98.002, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.647e-05, train_time=22.259
+[gpub071] 2025-02-02 02:51:15,564 (trainer:795) INFO: 1epoch:train:21201-21600batch: iter_time=9.616e-05, forward_time=0.134, loss_ctc=87.443, loss_att=39.440, acc=0.817, loss=0.841, backward_time=0.156, grad_norm=96.309, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=1.677e-05, train_time=22.908
+[gpub071] 2025-02-02 02:53:35,256 (trainer:795) INFO: 1epoch:train:21601-22000batch: iter_time=9.415e-05, forward_time=0.132, loss_ctc=86.249, loss_att=38.565, acc=0.824, loss=0.826, backward_time=0.153, grad_norm=101.077, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.707e-05, train_time=22.512
+[gpub071] 2025-02-02 02:55:54,783 (trainer:795) INFO: 1epoch:train:22001-22400batch: iter_time=9.768e-05, forward_time=0.132, loss_ctc=84.176, loss_att=37.373, acc=0.821, loss=0.803, backward_time=0.153, grad_norm=97.655, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.740e-05, train_time=22.228
+[gpub071] 2025-02-02 02:58:15,834 (trainer:795) INFO: 1epoch:train:22401-22800batch: iter_time=9.710e-05, forward_time=0.133, loss_ctc=84.689, loss_att=37.112, acc=0.832, loss=0.803, backward_time=0.154, grad_norm=94.978, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.772e-05, train_time=22.621
+[gpub071] 2025-02-02 03:00:38,668 (trainer:795) INFO: 1epoch:train:22801-23200batch: iter_time=9.606e-05, forward_time=0.135, loss_ctc=79.886, loss_att=35.720, acc=0.826, loss=0.765, backward_time=0.156, grad_norm=86.047, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.803e-05, train_time=23.011
+[gpub071] 2025-02-02 03:02:58,258 (trainer:795) INFO: 1epoch:train:23201-23600batch: iter_time=9.556e-05, forward_time=0.132, loss_ctc=84.149, loss_att=36.942, acc=0.830, loss=0.798, backward_time=0.153, grad_norm=101.236, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.832e-05, train_time=22.022
+[gpub071] 2025-02-02 03:05:14,955 (trainer:795) INFO: 1epoch:train:23601-24000batch: iter_time=9.756e-05, forward_time=0.129, loss_ctc=82.454, loss_att=35.883, acc=0.836, loss=0.779, backward_time=0.150, grad_norm=97.570, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.865e-05, train_time=22.036
+[gpub071] 2025-02-02 03:07:36,437 (trainer:795) INFO: 1epoch:train:24001-24400batch: iter_time=9.574e-05, forward_time=0.134, loss_ctc=79.268, loss_att=35.170, acc=0.836, loss=0.756, backward_time=0.154, grad_norm=91.228, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.897e-05, train_time=22.761
+[gpub071] 2025-02-02 03:09:56,164 (trainer:795) INFO: 1epoch:train:24401-24800batch: iter_time=9.980e-05, forward_time=0.132, loss_ctc=80.748, loss_att=35.859, acc=0.833, loss=0.771, backward_time=0.153, grad_norm=98.446, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=1.927e-05, train_time=22.300
+/work/hdd/bbjs/clin10/bootcamp/espnet/espnet2/s2t/espnet_model.py:279: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast(False):
+[gpub071] 2025-02-02 03:33:34,614 (trainer:388) INFO: 1epoch results: [train] iter_time=1.067e-04, forward_time=0.133, loss_ctc=243.906, loss_att=87.909, acc=0.638, loss=2.105, backward_time=0.154, grad_norm=304.234, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=9.775e-06, train_time=22.522, time=2 hours, 25 minutes and 44.1 seconds, total_count=24846, gpu_max_cached_mem_GB=36.404, gpu_max_alloc_mem_GB=34.393, [valid] loss_ctc=42.157, cer_ctc=0.143, loss_att=16.123, acc=0.929, cer=0.104, wer=0.846, loss=23.933, time=19 minutes and 15 seconds, total_count=4000, gpu_max_cached_mem_GB=36.404, gpu_max_alloc_mem_GB=34.393, [att_plot] time=4 minutes and 6.05 seconds, total_count=0, gpu_max_cached_mem_GB=36.404, gpu_max_alloc_mem_GB=34.393
+[gpub071] 2025-02-02 03:34:02,487 (trainer:456) INFO: The best model has been updated: valid.cer
+[gpub071] 2025-02-02 03:34:02,488 (trainer:318) INFO: 2/20epoch started. Estimated time to finish: 2 days, 5 hours and 41 minutes
+/work/hdd/bbjs/clin10/bootcamp/espnet/espnet2/train/trainer.py:630: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast(
+[gpub071] 2025-02-02 03:36:19,085 (trainer:795) INFO: 2epoch:train:1-400batch: iter_time=3.774e-04, forward_time=0.128, loss_ctc=83.129, loss_att=36.350, acc=0.838, loss=0.787, backward_time=0.150, grad_norm=96.510, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=1.962e-05, train_time=21.723
+[gpub071] 2025-02-02 03:38:39,101 (trainer:795) INFO: 2epoch:train:401-800batch: iter_time=9.743e-05, forward_time=0.132, loss_ctc=79.590, loss_att=34.717, acc=0.839, loss=0.753, backward_time=0.154, grad_norm=90.604, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=1.992e-05, train_time=22.362
+[gpub071] 2025-02-02 03:40:59,080 (trainer:795) INFO: 2epoch:train:801-1200batch: iter_time=9.669e-05, forward_time=0.132, loss_ctc=80.369, loss_att=34.940, acc=0.837, loss=0.759, backward_time=0.153, grad_norm=88.791, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=2.022e-05, train_time=22.787
+[gpub071] 2025-02-02 03:43:24,917 (trainer:795) INFO: 2epoch:train:1201-1600batch: iter_time=9.871e-05, forward_time=0.136, loss_ctc=71.144, loss_att=30.964, acc=0.845, loss=0.672, backward_time=0.160, grad_norm=92.179, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=2.055e-05, train_time=22.980
+[gpub071] 2025-02-02 03:45:47,263 (trainer:795) INFO: 2epoch:train:1601-2000batch: iter_time=9.615e-05, forward_time=0.134, loss_ctc=76.726, loss_att=33.443, acc=0.840, loss=0.725, backward_time=0.156, grad_norm=78.386, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=2.087e-05, train_time=22.880
+[gpub071] 2025-02-02 03:48:07,063 (trainer:795) INFO: 2epoch:train:2001-2400batch: iter_time=9.751e-05, forward_time=0.132, loss_ctc=80.506, loss_att=35.137, acc=0.837, loss=0.762, backward_time=0.154, grad_norm=88.823, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=2.117e-05, train_time=22.197
+[gpub071] 2025-02-02 03:50:27,258 (trainer:795) INFO: 2epoch:train:2401-2800batch: iter_time=9.624e-05, forward_time=0.132, loss_ctc=70.661, loss_att=30.746, acc=0.853, loss=0.668, backward_time=0.154, grad_norm=86.356, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=2.147e-05, train_time=22.604
+[gpub071] 2025-02-02 03:52:52,448 (trainer:795) INFO: 2epoch:train:2801-3200batch: iter_time=9.762e-05, forward_time=0.136, loss_ctc=68.313, loss_att=30.216, acc=0.851, loss=0.651, backward_time=0.159, grad_norm=87.391, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=2.180e-05, train_time=23.063
+[gpub071] 2025-02-02 03:55:14,163 (trainer:795) INFO: 2epoch:train:3201-3600batch: iter_time=9.712e-05, forward_time=0.134, loss_ctc=71.575, loss_att=30.688, acc=0.857, loss=0.671, backward_time=0.155, grad_norm=85.228, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=2.212e-05, train_time=22.686
+[gpub071] 2025-02-02 03:57:34,001 (trainer:795) INFO: 2epoch:train:3601-4000batch: iter_time=9.712e-05, forward_time=0.131, loss_ctc=73.982, loss_att=31.425, acc=0.855, loss=0.690, backward_time=0.154, grad_norm=102.073, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=2.242e-05, train_time=22.432
+[gpub071] 2025-02-02 03:59:56,213 (trainer:795) INFO: 2epoch:train:4001-4400batch: iter_time=9.682e-05, forward_time=0.133, loss_ctc=72.090, loss_att=31.417, acc=0.848, loss=0.682, backward_time=0.156, grad_norm=85.227, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=2.272e-05, train_time=22.747
+[gpub071] 2025-02-02 04:02:16,931 (trainer:795) INFO: 2epoch:train:4401-4800batch: iter_time=9.513e-05, forward_time=0.133, loss_ctc=78.344, loss_att=33.076, acc=0.850, loss=0.729, backward_time=0.154, grad_norm=88.406, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=2.305e-05, train_time=22.469
+[gpub071] 2025-02-02 04:04:35,208 (trainer:795) INFO: 2epoch:train:4801-5200batch: iter_time=9.734e-05, forward_time=0.130, loss_ctc=73.444, loss_att=32.047, acc=0.853, loss=0.695, backward_time=0.152, grad_norm=87.452, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=2.337e-05, train_time=21.997
+[gpub071] 2025-02-02 04:06:57,852 (trainer:795) INFO: 2epoch:train:5201-5600batch: iter_time=9.521e-05, forward_time=0.134, loss_ctc=72.178, loss_att=31.363, acc=0.848, loss=0.681, backward_time=0.156, grad_norm=90.795, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=2.367e-05, train_time=22.968
+[gpub071] 2025-02-02 04:09:19,828 (trainer:795) INFO: 2epoch:train:5601-6000batch: iter_time=9.662e-05, forward_time=0.134, loss_ctc=67.929, loss_att=29.419, acc=0.857, loss=0.640, backward_time=0.156, grad_norm=84.755, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=2.398e-05, train_time=22.662
+[gpub071] 2025-02-02 04:11:43,047 (trainer:795) INFO: 2epoch:train:6001-6400batch: iter_time=9.416e-05, forward_time=0.135, loss_ctc=73.523, loss_att=31.776, acc=0.850, loss=0.692, backward_time=0.157, grad_norm=93.315, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=2.430e-05, train_time=22.907
+[gpub071] 2025-02-02 04:14:07,459 (trainer:795) INFO: 2epoch:train:6401-6800batch: iter_time=9.564e-05, forward_time=0.135, loss_ctc=68.141, loss_att=29.939, acc=0.851, loss=0.647, backward_time=0.158, grad_norm=94.688, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=2.462e-05, train_time=23.043
+[gpub071] 2025-02-02 04:16:33,156 (trainer:795) INFO: 2epoch:train:6801-7200batch: iter_time=9.581e-05, forward_time=0.137, loss_ctc=64.333, loss_att=27.896, acc=0.861, loss=0.607, backward_time=0.160, grad_norm=91.331, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=2.492e-05, train_time=23.319
+[gpub071] 2025-02-02 04:18:54,850 (trainer:795) INFO: 2epoch:train:7201-7600batch: iter_time=9.515e-05, forward_time=0.134, loss_ctc=70.510, loss_att=30.348, acc=0.854, loss=0.662, backward_time=0.155, grad_norm=94.151, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=2.522e-05, train_time=22.758
+[gpub071] 2025-02-02 04:21:17,926 (trainer:795) INFO: 2epoch:train:7601-8000batch: iter_time=9.660e-05, forward_time=0.135, loss_ctc=62.901, loss_att=26.680, acc=0.867, loss=0.587, backward_time=0.157, grad_norm=81.218, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=2.555e-05, train_time=22.880
+[gpub071] 2025-02-02 04:23:42,246 (trainer:795) INFO: 2epoch:train:8001-8400batch: iter_time=9.552e-05, forward_time=0.136, loss_ctc=62.547, loss_att=27.240, acc=0.857, loss=0.591, backward_time=0.158, grad_norm=80.242, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=2.587e-05, train_time=23.128
+[gpub071] 2025-02-02 04:26:02,098 (trainer:795) INFO: 2epoch:train:8401-8800batch: iter_time=9.630e-05, forward_time=0.132, loss_ctc=69.673, loss_att=29.402, acc=0.860, loss=0.648, backward_time=0.153, grad_norm=81.513, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=2.617e-05, train_time=22.517
+[gpub071] 2025-02-02 04:28:22,295 (trainer:795) INFO: 2epoch:train:8801-9200batch: iter_time=9.548e-05, forward_time=0.132, loss_ctc=66.835, loss_att=28.293, acc=0.868, loss=0.623, backward_time=0.154, grad_norm=79.848, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=2.647e-05, train_time=22.341
+[gpub071] 2025-02-02 04:30:45,032 (trainer:795) INFO: 2epoch:train:9201-9600batch: iter_time=9.552e-05, forward_time=0.134, loss_ctc=65.879, loss_att=26.880, acc=0.869, loss=0.603, backward_time=0.156, grad_norm=83.971, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=2.680e-05, train_time=22.741
+[gpub071] 2025-02-02 04:33:04,457 (trainer:795) INFO: 2epoch:train:9601-10000batch: iter_time=9.556e-05, forward_time=0.132, loss_ctc=69.606, loss_att=29.005, acc=0.867, loss=0.644, backward_time=0.153, grad_norm=83.637, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=2.712e-05, train_time=22.222
+[gpub071] 2025-02-02 04:35:22,557 (trainer:795) INFO: 2epoch:train:10001-10400batch: iter_time=9.446e-05, forward_time=0.131, loss_ctc=69.450, loss_att=29.463, acc=0.867, loss=0.648, backward_time=0.151, grad_norm=86.330, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=2.742e-05, train_time=22.302
+[gpub071] 2025-02-02 04:37:40,870 (trainer:795) INFO: 2epoch:train:10401-10800batch: iter_time=9.680e-05, forward_time=0.130, loss_ctc=65.765, loss_att=27.744, acc=0.873, loss=0.612, backward_time=0.152, grad_norm=100.418, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=2.772e-05, train_time=22.060
+[gpub071] 2025-02-02 04:39:59,211 (trainer:795) INFO: 2epoch:train:10801-11200batch: iter_time=9.651e-05, forward_time=0.131, loss_ctc=64.527, loss_att=26.609, acc=0.874, loss=0.594, backward_time=0.152, grad_norm=76.415, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=2.805e-05, train_time=22.095
+[gpub071] 2025-02-02 04:42:21,192 (trainer:795) INFO: 2epoch:train:11201-11600batch: iter_time=9.391e-05, forward_time=0.134, loss_ctc=68.099, loss_att=28.432, acc=0.863, loss=0.630, backward_time=0.155, grad_norm=85.387, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=2.837e-05, train_time=22.676
+[gpub071] 2025-02-02 04:44:42,771 (trainer:795) INFO: 2epoch:train:11601-12000batch: iter_time=9.650e-05, forward_time=0.133, loss_ctc=61.061, loss_att=26.036, acc=0.866, loss=0.571, backward_time=0.155, grad_norm=76.411, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=2.867e-05, train_time=22.735
+[gpub071] 2025-02-02 04:47:02,122 (trainer:795) INFO: 2epoch:train:12001-12400batch: iter_time=9.647e-05, forward_time=0.131, loss_ctc=65.379, loss_att=27.644, acc=0.867, loss=0.609, backward_time=0.153, grad_norm=78.686, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.056, optim0_lr0=2.897e-05, train_time=22.343
+[gpub071] 2025-02-02 04:49:22,670 (trainer:795) INFO: 2epoch:train:12401-12800batch: iter_time=9.672e-05, forward_time=0.132, loss_ctc=64.334, loss_att=26.784, acc=0.870, loss=0.595, backward_time=0.154, grad_norm=75.874, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=2.930e-05, train_time=22.419
+[gpub071] 2025-02-02 04:51:40,818 (trainer:795) INFO: 2epoch:train:12801-13200batch: iter_time=9.710e-05, forward_time=0.130, loss_ctc=63.909, loss_att=26.619, acc=0.873, loss=0.591, backward_time=0.152, grad_norm=79.500, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=2.962e-05, train_time=21.983
+[gpub071] 2025-02-02 04:54:00,381 (trainer:795) INFO: 2epoch:train:13201-13600batch: iter_time=9.670e-05, forward_time=0.132, loss_ctc=67.723, loss_att=28.232, acc=0.869, loss=0.626, backward_time=0.153, grad_norm=82.593, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=2.992e-05, train_time=22.465
+[gpub071] 2025-02-02 04:56:23,081 (trainer:795) INFO: 2epoch:train:13601-14000batch: iter_time=9.757e-05, forward_time=0.134, loss_ctc=64.584, loss_att=26.887, acc=0.868, loss=0.597, backward_time=0.156, grad_norm=78.757, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=3.022e-05, train_time=22.822
+[gpub071] 2025-02-02 04:58:45,385 (trainer:795) INFO: 2epoch:train:14001-14400batch: iter_time=9.797e-05, forward_time=0.134, loss_ctc=59.833, loss_att=24.718, acc=0.873, loss=0.551, backward_time=0.156, grad_norm=78.291, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=3.055e-05, train_time=22.727
+[gpub071] 2025-02-02 05:01:03,352 (trainer:795) INFO: 2epoch:train:14401-14800batch: iter_time=9.937e-05, forward_time=0.131, loss_ctc=67.777, loss_att=28.433, acc=0.867, loss=0.629, backward_time=0.151, grad_norm=82.815, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=3.087e-05, train_time=22.102
+[gpub071] 2025-02-02 05:03:22,307 (trainer:795) INFO: 2epoch:train:14801-15200batch: iter_time=9.694e-05, forward_time=0.131, loss_ctc=67.659, loss_att=28.330, acc=0.867, loss=0.627, backward_time=0.152, grad_norm=79.290, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=3.117e-05, train_time=22.185
+[gpub071] 2025-02-02 05:05:44,188 (trainer:795) INFO: 2epoch:train:15201-15600batch: iter_time=9.767e-05, forward_time=0.134, loss_ctc=62.478, loss_att=25.366, acc=0.876, loss=0.570, backward_time=0.155, grad_norm=76.173, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=3.147e-05, train_time=22.602
+[gpub071] 2025-02-02 05:08:04,875 (trainer:795) INFO: 2epoch:train:15601-16000batch: iter_time=9.743e-05, forward_time=0.133, loss_ctc=65.878, loss_att=26.773, acc=0.873, loss=0.602, backward_time=0.154, grad_norm=82.035, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=3.180e-05, train_time=22.593
+[gpub071] 2025-02-02 05:10:24,129 (trainer:795) INFO: 2epoch:train:16001-16400batch: iter_time=9.828e-05, forward_time=0.131, loss_ctc=58.961, loss_att=24.739, acc=0.882, loss=0.547, backward_time=0.153, grad_norm=76.899, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=3.212e-05, train_time=22.249
+[gpub071] 2025-02-02 05:12:42,128 (trainer:795) INFO: 2epoch:train:16401-16800batch: iter_time=9.760e-05, forward_time=0.131, loss_ctc=64.415, loss_att=26.918, acc=0.871, loss=0.596, backward_time=0.151, grad_norm=79.388, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=3.242e-05, train_time=22.236
+[gpub071] 2025-02-02 05:15:01,084 (trainer:795) INFO: 2epoch:train:16801-17200batch: iter_time=9.569e-05, forward_time=0.131, loss_ctc=59.932, loss_att=25.112, acc=0.877, loss=0.556, backward_time=0.152, grad_norm=75.904, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=3.272e-05, train_time=22.087
+[gpub071] 2025-02-02 05:17:22,352 (trainer:795) INFO: 2epoch:train:17201-17600batch: iter_time=9.917e-05, forward_time=0.133, loss_ctc=58.139, loss_att=24.025, acc=0.880, loss=0.535, backward_time=0.155, grad_norm=70.537, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=3.305e-05, train_time=22.577
+[gpub071] 2025-02-02 05:19:44,343 (trainer:795) INFO: 2epoch:train:17601-18000batch: iter_time=9.683e-05, forward_time=0.134, loss_ctc=62.035, loss_att=25.863, acc=0.873, loss=0.574, backward_time=0.155, grad_norm=76.526, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=3.337e-05, train_time=22.725
+[gpub071] 2025-02-02 05:22:07,694 (trainer:795) INFO: 2epoch:train:18001-18400batch: iter_time=1.019e-04, forward_time=0.135, loss_ctc=56.149, loss_att=23.014, acc=0.882, loss=0.515, backward_time=0.157, grad_norm=74.580, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=3.367e-05, train_time=22.895
+[gpub071] 2025-02-02 05:24:33,125 (trainer:795) INFO: 2epoch:train:18401-18800batch: iter_time=9.789e-05, forward_time=0.137, loss_ctc=59.525, loss_att=24.623, acc=0.875, loss=0.548, backward_time=0.159, grad_norm=79.397, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=3.397e-05, train_time=23.302
+[gpub071] 2025-02-02 05:26:54,679 (trainer:795) INFO: 2epoch:train:18801-19200batch: iter_time=9.592e-05, forward_time=0.134, loss_ctc=59.752, loss_att=24.588, acc=0.884, loss=0.549, backward_time=0.155, grad_norm=78.786, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=3.430e-05, train_time=22.685
+[gpub071] 2025-02-02 05:29:13,924 (trainer:795) INFO: 2epoch:train:19201-19600batch: iter_time=9.632e-05, forward_time=0.131, loss_ctc=59.913, loss_att=24.609, acc=0.881, loss=0.550, backward_time=0.153, grad_norm=126.850, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=3.462e-05, train_time=22.174
+[gpub071] 2025-02-02 05:31:31,010 (trainer:795) INFO: 2epoch:train:19601-20000batch: iter_time=9.930e-05, forward_time=0.129, loss_ctc=62.987, loss_att=25.942, acc=0.881, loss=0.579, backward_time=0.150, grad_norm=79.349, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=3.492e-05, train_time=21.969
+[gpub071] 2025-02-02 05:33:50,456 (trainer:795) INFO: 2epoch:train:20001-20400batch: iter_time=9.579e-05, forward_time=0.132, loss_ctc=60.172, loss_att=24.759, acc=0.878, loss=0.553, backward_time=0.153, grad_norm=71.727, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=3.522e-05, train_time=22.193
+[gpub071] 2025-02-02 05:36:07,819 (trainer:795) INFO: 2epoch:train:20401-20800batch: iter_time=9.644e-05, forward_time=0.129, loss_ctc=62.006, loss_att=25.472, acc=0.880, loss=0.569, backward_time=0.151, grad_norm=77.557, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=3.555e-05, train_time=22.161
+[gpub071] 2025-02-02 05:38:29,052 (trainer:795) INFO: 2epoch:train:20801-21200batch: iter_time=9.798e-05, forward_time=0.133, loss_ctc=60.615, loss_att=24.964, acc=0.881, loss=0.557, backward_time=0.155, grad_norm=73.508, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=3.587e-05, train_time=22.568
+[gpub071] 2025-02-02 05:40:54,119 (trainer:795) INFO: 2epoch:train:21201-21600batch: iter_time=9.597e-05, forward_time=0.137, loss_ctc=54.945, loss_att=22.380, acc=0.884, loss=0.502, backward_time=0.158, grad_norm=75.482, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=3.617e-05, train_time=23.277
+[gpub071] 2025-02-02 05:43:19,851 (trainer:795) INFO: 2epoch:train:21601-22000batch: iter_time=9.640e-05, forward_time=0.137, loss_ctc=54.749, loss_att=22.592, acc=0.881, loss=0.504, backward_time=0.159, grad_norm=70.410, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=3.647e-05, train_time=23.275
+[gpub071] 2025-02-02 05:45:35,117 (trainer:795) INFO: 2epoch:train:22001-22400batch: iter_time=9.581e-05, forward_time=0.127, loss_ctc=63.099, loss_att=25.615, acc=0.882, loss=0.576, backward_time=0.149, grad_norm=93.577, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=3.680e-05, train_time=21.797
+[gpub071] 2025-02-02 05:47:53,283 (trainer:795) INFO: 2epoch:train:22401-22800batch: iter_time=9.662e-05, forward_time=0.130, loss_ctc=60.303, loss_att=24.771, acc=0.884, loss=0.554, backward_time=0.151, grad_norm=75.476, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=3.712e-05, train_time=22.018
+[gpub071] 2025-02-02 05:50:13,072 (trainer:795) INFO: 2epoch:train:22801-23200batch: iter_time=9.658e-05, forward_time=0.131, loss_ctc=57.645, loss_att=23.772, acc=0.879, loss=0.530, backward_time=0.153, grad_norm=75.295, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=3.742e-05, train_time=22.438
+[gpub071] 2025-02-02 05:52:33,849 (trainer:795) INFO: 2epoch:train:23201-23600batch: iter_time=9.585e-05, forward_time=0.133, loss_ctc=61.865, loss_att=24.718, acc=0.881, loss=0.560, backward_time=0.154, grad_norm=78.526, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=3.772e-05, train_time=22.602
+[gpub071] 2025-02-02 05:54:56,079 (trainer:795) INFO: 2epoch:train:23601-24000batch: iter_time=9.509e-05, forward_time=0.134, loss_ctc=55.350, loss_att=22.651, acc=0.888, loss=0.507, backward_time=0.155, grad_norm=75.712, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=3.805e-05, train_time=22.659
+[gpub071] 2025-02-02 05:57:14,925 (trainer:795) INFO: 2epoch:train:24001-24400batch: iter_time=9.614e-05, forward_time=0.131, loss_ctc=58.258, loss_att=23.536, acc=0.889, loss=0.531, backward_time=0.152, grad_norm=76.819, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=3.837e-05, train_time=22.176
+[gpub071] 2025-02-02 05:59:34,685 (trainer:795) INFO: 2epoch:train:24401-24800batch: iter_time=9.836e-05, forward_time=0.132, loss_ctc=60.501, loss_att=25.173, acc=0.881, loss=0.559, backward_time=0.153, grad_norm=78.304, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=3.867e-05, train_time=22.483
+[gpub071] 2025-02-02 06:23:18,967 (trainer:388) INFO: 2epoch results: [train] iter_time=1.012e-04, forward_time=0.133, loss_ctc=65.811, loss_att=27.744, acc=0.867, loss=0.612, backward_time=0.154, grad_norm=83.118, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=2.917e-05, train_time=22.535, time=2 hours, 25 minutes and 48.95 seconds, total_count=49692, gpu_max_cached_mem_GB=36.887, gpu_max_alloc_mem_GB=35.022, [valid] loss_ctc=26.548, cer_ctc=0.085, loss_att=10.798, acc=0.944, cer=0.174, wer=0.876, loss=15.523, time=19 minutes and 18.93 seconds, total_count=8000, gpu_max_cached_mem_GB=36.887, gpu_max_alloc_mem_GB=35.022, [att_plot] time=4 minutes and 7.56 seconds, total_count=0, gpu_max_cached_mem_GB=36.887, gpu_max_alloc_mem_GB=35.022
+[gpub071] 2025-02-02 06:23:45,618 (trainer:454) INFO: There are no improvements in this epoch
+[gpub071] 2025-02-02 06:23:45,619 (trainer:318) INFO: 3/20epoch started. Estimated time to finish: 2 days, 2 hours and 53 minutes
+[gpub071] 2025-02-02 06:26:04,535 (trainer:795) INFO: 3epoch:train:1-400batch: iter_time=3.784e-04, forward_time=0.130, loss_ctc=57.325, loss_att=23.016, acc=0.890, loss=0.520, backward_time=0.152, grad_norm=74.805, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=3.902e-05, train_time=22.130
+[gpub071] 2025-02-02 06:28:27,101 (trainer:795) INFO: 3epoch:train:401-800batch: iter_time=9.814e-05, forward_time=0.134, loss_ctc=55.524, loss_att=22.779, acc=0.881, loss=0.509, backward_time=0.156, grad_norm=71.300, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=3.932e-05, train_time=22.860
+[gpub071] 2025-02-02 06:30:46,008 (trainer:795) INFO: 3epoch:train:801-1200batch: iter_time=1.000e-04, forward_time=0.131, loss_ctc=58.471, loss_att=22.892, acc=0.885, loss=0.524, backward_time=0.152, grad_norm=76.794, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=3.963e-05, train_time=22.193
+[gpub071] 2025-02-02 06:33:08,086 (trainer:795) INFO: 3epoch:train:1201-1600batch: iter_time=1.011e-04, forward_time=0.134, loss_ctc=57.822, loss_att=23.366, acc=0.883, loss=0.527, backward_time=0.155, grad_norm=78.420, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=3.995e-05, train_time=22.714
+[gpub071] 2025-02-02 06:35:30,696 (trainer:795) INFO: 3epoch:train:1601-2000batch: iter_time=1.008e-04, forward_time=0.135, loss_ctc=54.416, loss_att=21.842, acc=0.884, loss=0.494, backward_time=0.156, grad_norm=76.966, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=4.027e-05, train_time=22.812
+[gpub071] 2025-02-02 06:37:53,826 (trainer:795) INFO: 3epoch:train:2001-2400batch: iter_time=1.001e-04, forward_time=0.135, loss_ctc=54.287, loss_att=21.610, acc=0.892, loss=0.491, backward_time=0.157, grad_norm=73.516, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=4.057e-05, train_time=22.982
+[gpub071] 2025-02-02 06:40:11,938 (trainer:795) INFO: 3epoch:train:2401-2800batch: iter_time=9.723e-05, forward_time=0.130, loss_ctc=57.579, loss_att=23.336, acc=0.886, loss=0.525, backward_time=0.151, grad_norm=77.114, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=4.087e-05, train_time=22.162
+[gpub071] 2025-02-02 06:42:30,580 (trainer:795) INFO: 3epoch:train:2801-3200batch: iter_time=9.809e-05, forward_time=0.131, loss_ctc=58.780, loss_att=23.326, acc=0.890, loss=0.531, backward_time=0.152, grad_norm=75.727, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=4.120e-05, train_time=22.108
+[gpub071] 2025-02-02 06:44:53,655 (trainer:795) INFO: 3epoch:train:3201-3600batch: iter_time=9.746e-05, forward_time=0.135, loss_ctc=57.137, loss_att=22.930, acc=0.889, loss=0.519, backward_time=0.156, grad_norm=72.588, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=4.152e-05, train_time=22.845
+[gpub071] 2025-02-02 06:47:18,841 (trainer:795) INFO: 3epoch:train:3601-4000batch: iter_time=9.879e-05, forward_time=0.136, loss_ctc=53.078, loss_att=21.190, acc=0.886, loss=0.481, backward_time=0.159, grad_norm=72.093, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=4.183e-05, train_time=23.352
+[gpub071] 2025-02-02 06:49:42,781 (trainer:795) INFO: 3epoch:train:4001-4400batch: iter_time=9.793e-05, forward_time=0.135, loss_ctc=52.005, loss_att=20.901, acc=0.890, loss=0.472, backward_time=0.158, grad_norm=72.784, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=4.212e-05, train_time=23.010
+[gpub071] 2025-02-02 06:52:06,988 (trainer:795) INFO: 3epoch:train:4401-4800batch: iter_time=9.723e-05, forward_time=0.136, loss_ctc=52.910, loss_att=21.187, acc=0.888, loss=0.480, backward_time=0.158, grad_norm=72.698, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=4.245e-05, train_time=23.023
+[gpub071] 2025-02-02 06:54:29,236 (trainer:795) INFO: 3epoch:train:4801-5200batch: iter_time=9.978e-05, forward_time=0.134, loss_ctc=54.328, loss_att=21.258, acc=0.889, loss=0.487, backward_time=0.156, grad_norm=72.379, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=4.277e-05, train_time=22.616
+[gpub071] 2025-02-02 06:56:48,456 (trainer:795) INFO: 3epoch:train:5201-5600batch: iter_time=9.922e-05, forward_time=0.131, loss_ctc=56.197, loss_att=22.226, acc=0.892, loss=0.507, backward_time=0.153, grad_norm=81.425, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=4.307e-05, train_time=22.444
+[gpub071] 2025-02-02 06:59:10,890 (trainer:795) INFO: 3epoch:train:5601-6000batch: iter_time=9.870e-05, forward_time=0.134, loss_ctc=53.520, loss_att=21.218, acc=0.897, loss=0.483, backward_time=0.156, grad_norm=76.578, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=4.337e-05, train_time=22.871
+[gpub071] 2025-02-02 07:01:29,461 (trainer:795) INFO: 3epoch:train:6001-6400batch: iter_time=9.769e-05, forward_time=0.131, loss_ctc=56.146, loss_att=22.293, acc=0.892, loss=0.507, backward_time=0.152, grad_norm=73.743, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=4.370e-05, train_time=22.126
+[gpub071] 2025-02-02 07:03:52,850 (trainer:795) INFO: 3epoch:train:6401-6800batch: iter_time=9.786e-05, forward_time=0.135, loss_ctc=52.397, loss_att=20.871, acc=0.891, loss=0.474, backward_time=0.157, grad_norm=73.673, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=4.402e-05, train_time=23.004
+[gpub071] 2025-02-02 07:06:17,633 (trainer:795) INFO: 3epoch:train:6801-7200batch: iter_time=9.659e-05, forward_time=0.137, loss_ctc=53.178, loss_att=20.783, acc=0.895, loss=0.477, backward_time=0.158, grad_norm=86.134, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=4.432e-05, train_time=22.831
+[gpub071] 2025-02-02 07:08:37,994 (trainer:795) INFO: 3epoch:train:7201-7600batch: iter_time=9.724e-05, forward_time=0.132, loss_ctc=55.768, loss_att=21.578, acc=0.895, loss=0.497, backward_time=0.154, grad_norm=74.629, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=4.462e-05, train_time=22.883
+[gpub071] 2025-02-02 07:11:02,620 (trainer:795) INFO: 3epoch:train:7601-8000batch: iter_time=9.977e-05, forward_time=0.136, loss_ctc=52.207, loss_att=20.602, acc=0.888, loss=0.470, backward_time=0.158, grad_norm=73.179, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=4.495e-05, train_time=22.978
+[gpub071] 2025-02-02 07:13:21,066 (trainer:795) INFO: 3epoch:train:8001-8400batch: iter_time=9.888e-05, forward_time=0.131, loss_ctc=55.430, loss_att=21.969, acc=0.896, loss=0.500, backward_time=0.152, grad_norm=81.810, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=4.527e-05, train_time=22.078
+[gpub071] 2025-02-02 07:15:38,045 (trainer:795) INFO: 3epoch:train:8401-8800batch: iter_time=9.762e-05, forward_time=0.129, loss_ctc=53.415, loss_att=21.058, acc=0.894, loss=0.481, backward_time=0.151, grad_norm=71.708, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=4.557e-05, train_time=21.880
+[gpub071] 2025-02-02 07:18:02,454 (trainer:795) INFO: 3epoch:train:8801-9200batch: iter_time=9.836e-05, forward_time=0.136, loss_ctc=53.384, loss_att=21.208, acc=0.889, loss=0.482, backward_time=0.158, grad_norm=71.713, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=4.587e-05, train_time=23.212
+[gpub071] 2025-02-02 07:20:23,647 (trainer:795) INFO: 3epoch:train:9201-9600batch: iter_time=9.632e-05, forward_time=0.133, loss_ctc=51.859, loss_att=20.654, acc=0.891, loss=0.469, backward_time=0.155, grad_norm=71.761, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=4.620e-05, train_time=22.572
+[gpub071] 2025-02-02 07:22:43,240 (trainer:795) INFO: 3epoch:train:9601-10000batch: iter_time=9.570e-05, forward_time=0.131, loss_ctc=57.721, loss_att=22.418, acc=0.889, loss=0.516, backward_time=0.153, grad_norm=75.477, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=4.652e-05, train_time=22.279
+[gpub071] 2025-02-02 07:24:59,267 (trainer:795) INFO: 3epoch:train:10001-10400batch: iter_time=9.271e-05, forward_time=0.129, loss_ctc=54.399, loss_att=21.312, acc=0.897, loss=0.488, backward_time=0.149, grad_norm=74.083, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=4.682e-05, train_time=21.925
+[gpub071] 2025-02-02 07:27:20,398 (trainer:795) INFO: 3epoch:train:10401-10800batch: iter_time=9.541e-05, forward_time=0.133, loss_ctc=53.436, loss_att=21.051, acc=0.892, loss=0.481, backward_time=0.155, grad_norm=75.222, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=4.712e-05, train_time=22.535
+[gpub071] 2025-02-02 07:29:43,535 (trainer:795) INFO: 3epoch:train:10801-11200batch: iter_time=9.448e-05, forward_time=0.134, loss_ctc=53.051, loss_att=20.673, acc=0.891, loss=0.475, backward_time=0.157, grad_norm=73.037, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=4.745e-05, train_time=22.778
+[gpub071] 2025-02-02 07:32:01,729 (trainer:795) INFO: 3epoch:train:11201-11600batch: iter_time=9.297e-05, forward_time=0.130, loss_ctc=52.327, loss_att=20.460, acc=0.895, loss=0.469, backward_time=0.152, grad_norm=67.430, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=4.777e-05, train_time=22.198
+[gpub071] 2025-02-02 07:34:21,295 (trainer:795) INFO: 3epoch:train:11601-12000batch: iter_time=9.677e-05, forward_time=0.131, loss_ctc=55.813, loss_att=21.975, acc=0.894, loss=0.502, backward_time=0.153, grad_norm=70.045, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=4.807e-05, train_time=22.372
+[gpub071] 2025-02-02 07:36:40,361 (trainer:795) INFO: 3epoch:train:12001-12400batch: iter_time=9.665e-05, forward_time=0.131, loss_ctc=55.014, loss_att=21.056, acc=0.894, loss=0.488, backward_time=0.153, grad_norm=66.745, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=4.837e-05, train_time=22.150
+[gpub071] 2025-02-02 07:38:59,242 (trainer:795) INFO: 3epoch:train:12401-12800batch: iter_time=9.845e-05, forward_time=0.131, loss_ctc=53.385, loss_att=20.910, acc=0.892, loss=0.479, backward_time=0.152, grad_norm=70.788, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=4.870e-05, train_time=22.197
+[gpub071] 2025-02-02 07:41:20,708 (trainer:795) INFO: 3epoch:train:12801-13200batch: iter_time=9.879e-05, forward_time=0.133, loss_ctc=52.407, loss_att=20.779, acc=0.895, loss=0.473, backward_time=0.155, grad_norm=73.808, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=4.902e-05, train_time=22.654
+[gpub071] 2025-02-02 07:43:40,920 (trainer:795) INFO: 3epoch:train:13201-13600batch: iter_time=9.836e-05, forward_time=0.132, loss_ctc=50.265, loss_att=19.651, acc=0.902, loss=0.451, backward_time=0.154, grad_norm=67.500, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=4.932e-05, train_time=22.519
+[gpub071] 2025-02-02 07:46:01,962 (trainer:795) INFO: 3epoch:train:13601-14000batch: iter_time=9.717e-05, forward_time=0.133, loss_ctc=54.057, loss_att=21.256, acc=0.900, loss=0.486, backward_time=0.154, grad_norm=71.776, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=4.962e-05, train_time=22.413
+[gpub071] 2025-02-02 07:48:21,285 (trainer:795) INFO: 3epoch:train:14001-14400batch: iter_time=9.529e-05, forward_time=0.132, loss_ctc=54.213, loss_att=21.390, acc=0.897, loss=0.488, backward_time=0.152, grad_norm=69.506, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=4.995e-05, train_time=22.360
+[gpub071] 2025-02-02 07:50:39,686 (trainer:795) INFO: 3epoch:train:14401-14800batch: iter_time=9.322e-05, forward_time=0.131, loss_ctc=53.216, loss_att=20.738, acc=0.900, loss=0.476, backward_time=0.152, grad_norm=79.733, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=5.027e-05, train_time=22.077
+[gpub071] 2025-02-02 07:53:00,543 (trainer:795) INFO: 3epoch:train:14801-15200batch: iter_time=1.044e-04, forward_time=0.133, loss_ctc=52.916, loss_att=20.733, acc=0.892, loss=0.475, backward_time=0.154, grad_norm=68.779, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=5.057e-05, train_time=22.443
+[gpub071] 2025-02-02 07:55:19,265 (trainer:795) INFO: 3epoch:train:15201-15600batch: iter_time=1.039e-04, forward_time=0.132, loss_ctc=53.245, loss_att=20.625, acc=0.899, loss=0.475, backward_time=0.152, grad_norm=68.346, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=5.087e-05, train_time=22.338
+[gpub071] 2025-02-02 07:57:40,420 (trainer:795) INFO: 3epoch:train:15601-16000batch: iter_time=9.774e-05, forward_time=0.133, loss_ctc=55.068, loss_att=21.834, acc=0.891, loss=0.497, backward_time=0.154, grad_norm=69.834, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=5.120e-05, train_time=22.569
+[gpub071] 2025-02-02 08:00:00,417 (trainer:795) INFO: 3epoch:train:16001-16400batch: iter_time=9.556e-05, forward_time=0.132, loss_ctc=48.824, loss_att=18.964, acc=0.905, loss=0.436, backward_time=0.153, grad_norm=63.067, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=5.152e-05, train_time=22.354
+[gpub071] 2025-02-02 08:02:24,430 (trainer:795) INFO: 3epoch:train:16401-16800batch: iter_time=9.824e-05, forward_time=0.137, loss_ctc=51.362, loss_att=20.271, acc=0.898, loss=0.462, backward_time=0.157, grad_norm=67.565, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=5.182e-05, train_time=23.004
+[gpub071] 2025-02-02 08:04:42,118 (trainer:795) INFO: 3epoch:train:16801-17200batch: iter_time=9.824e-05, forward_time=0.130, loss_ctc=54.307, loss_att=20.912, acc=0.902, loss=0.483, backward_time=0.151, grad_norm=72.004, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=5.212e-05, train_time=22.246
+[gpub071] 2025-02-02 08:07:02,923 (trainer:795) INFO: 3epoch:train:17201-17600batch: iter_time=9.704e-05, forward_time=0.133, loss_ctc=51.770, loss_att=20.608, acc=0.898, loss=0.468, backward_time=0.154, grad_norm=69.968, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=5.245e-05, train_time=22.411
+[gpub071] 2025-02-02 08:09:28,557 (trainer:795) INFO: 3epoch:train:17601-18000batch: iter_time=1.056e-04, forward_time=0.138, loss_ctc=47.538, loss_att=18.808, acc=0.896, loss=0.429, backward_time=0.159, grad_norm=66.883, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=5.277e-05, train_time=23.264
+[gpub071] 2025-02-02 08:11:49,145 (trainer:795) INFO: 3epoch:train:18001-18400batch: iter_time=9.694e-05, forward_time=0.132, loss_ctc=50.729, loss_att=19.847, acc=0.897, loss=0.455, backward_time=0.154, grad_norm=70.984, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=5.307e-05, train_time=22.630
+[gpub071] 2025-02-02 08:14:09,764 (trainer:795) INFO: 3epoch:train:18401-18800batch: iter_time=9.787e-05, forward_time=0.132, loss_ctc=50.207, loss_att=19.535, acc=0.898, loss=0.449, backward_time=0.154, grad_norm=74.737, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=5.338e-05, train_time=22.484
+[gpub071] 2025-02-02 08:16:28,744 (trainer:795) INFO: 3epoch:train:18801-19200batch: iter_time=9.424e-05, forward_time=0.131, loss_ctc=52.122, loss_att=20.553, acc=0.900, loss=0.469, backward_time=0.152, grad_norm=74.057, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=5.370e-05, train_time=22.220
+[gpub071] 2025-02-02 08:18:46,285 (trainer:795) INFO: 3epoch:train:19201-19600batch: iter_time=9.663e-05, forward_time=0.129, loss_ctc=52.462, loss_att=20.101, acc=0.898, loss=0.466, backward_time=0.151, grad_norm=71.220, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=5.402e-05, train_time=21.914
+[gpub071] 2025-02-02 08:21:09,734 (trainer:795) INFO: 3epoch:train:19601-20000batch: iter_time=9.826e-05, forward_time=0.135, loss_ctc=49.965, loss_att=19.368, acc=0.893, loss=0.446, backward_time=0.157, grad_norm=66.049, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=5.432e-05, train_time=22.804
+[gpub071] 2025-02-02 08:23:29,947 (trainer:795) INFO: 3epoch:train:20001-20400batch: iter_time=9.886e-05, forward_time=0.133, loss_ctc=53.080, loss_att=20.404, acc=0.901, loss=0.472, backward_time=0.153, grad_norm=67.458, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=5.463e-05, train_time=22.718
+[gpub071] 2025-02-02 08:25:47,221 (trainer:795) INFO: 3epoch:train:20401-20800batch: iter_time=9.876e-05, forward_time=0.129, loss_ctc=51.855, loss_att=20.384, acc=0.903, loss=0.466, backward_time=0.151, grad_norm=64.787, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=5.495e-05, train_time=21.979
+[gpub071] 2025-02-02 08:28:05,564 (trainer:795) INFO: 3epoch:train:20801-21200batch: iter_time=1.212e-04, forward_time=0.131, loss_ctc=54.337, loss_att=21.053, acc=0.899, loss=0.485, backward_time=0.153, grad_norm=70.127, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.016, optim0_lr0=5.527e-05, train_time=22.114
+[gpub071] 2025-02-02 08:30:26,406 (trainer:795) INFO: 3epoch:train:21201-21600batch: iter_time=1.052e-04, forward_time=0.133, loss_ctc=48.001, loss_att=18.499, acc=0.904, loss=0.427, backward_time=0.156, grad_norm=65.487, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.015, optim0_lr0=5.558e-05, train_time=22.588
+[gpub071] 2025-02-02 08:32:45,372 (trainer:795) INFO: 3epoch:train:21601-22000batch: iter_time=1.058e-04, forward_time=0.131, loss_ctc=55.735, loss_att=21.531, acc=0.898, loss=0.497, backward_time=0.155, grad_norm=72.646, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.015, optim0_lr0=5.587e-05, train_time=22.355
+[gpub071] 2025-02-02 08:35:09,355 (trainer:795) INFO: 3epoch:train:22001-22400batch: iter_time=1.056e-04, forward_time=0.135, loss_ctc=50.403, loss_att=19.639, acc=0.901, loss=0.451, backward_time=0.160, grad_norm=72.133, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.015, optim0_lr0=5.620e-05, train_time=22.828
+[gpub071] 2025-02-02 08:37:30,792 (trainer:795) INFO: 3epoch:train:22401-22800batch: iter_time=1.194e-04, forward_time=0.134, loss_ctc=51.988, loss_att=20.015, acc=0.898, loss=0.463, backward_time=0.155, grad_norm=65.755, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=5.652e-05, train_time=22.579
+[gpub071] 2025-02-02 08:39:52,898 (trainer:795) INFO: 3epoch:train:22801-23200batch: iter_time=1.019e-04, forward_time=0.134, loss_ctc=48.845, loss_att=18.690, acc=0.904, loss=0.433, backward_time=0.156, grad_norm=63.423, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=5.682e-05, train_time=22.695
+[gpub071] 2025-02-02 08:42:13,990 (trainer:795) INFO: 3epoch:train:23201-23600batch: iter_time=1.035e-04, forward_time=0.133, loss_ctc=49.730, loss_att=19.392, acc=0.901, loss=0.445, backward_time=0.155, grad_norm=65.738, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=5.712e-05, train_time=22.666
+[gpub071] 2025-02-02 08:44:37,577 (trainer:795) INFO: 3epoch:train:23601-24000batch: iter_time=1.193e-04, forward_time=0.136, loss_ctc=51.742, loss_att=20.304, acc=0.896, loss=0.465, backward_time=0.158, grad_norm=70.679, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.015, optim0_lr0=5.745e-05, train_time=22.940
+[gpub071] 2025-02-02 08:46:57,178 (trainer:795) INFO: 3epoch:train:24001-24400batch: iter_time=1.035e-04, forward_time=0.132, loss_ctc=50.601, loss_att=19.817, acc=0.902, loss=0.454, backward_time=0.153, grad_norm=74.849, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=5.778e-05, train_time=22.409
+[gpub071] 2025-02-02 08:49:20,691 (trainer:795) INFO: 3epoch:train:24401-24800batch: iter_time=1.228e-04, forward_time=0.135, loss_ctc=49.511, loss_att=19.125, acc=0.903, loss=0.441, backward_time=0.158, grad_norm=69.990, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.015, optim0_lr0=5.807e-05, train_time=22.994
+[gpub071] 2025-02-02 09:13:01,677 (trainer:388) INFO: 3epoch results: [train] iter_time=1.045e-04, forward_time=0.133, loss_ctc=53.253, loss_att=20.942, acc=0.895, loss=0.479, backward_time=0.154, grad_norm=72.003, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=4.857e-05, train_time=22.539, time=2 hours, 25 minutes and 50.85 seconds, total_count=74538, gpu_max_cached_mem_GB=37.189, gpu_max_alloc_mem_GB=35.022, [valid] loss_ctc=22.845, cer_ctc=0.071, loss_att=8.931, acc=0.955, cer=0.121, wer=0.775, loss=13.105, time=19 minutes and 15.27 seconds, total_count=12000, gpu_max_cached_mem_GB=37.189, gpu_max_alloc_mem_GB=35.022, [att_plot] time=4 minutes and 8.92 seconds, total_count=0, gpu_max_cached_mem_GB=37.189, gpu_max_alloc_mem_GB=35.022
+[gpub071] 2025-02-02 09:13:28,493 (trainer:454) INFO: There are no improvements in this epoch
+[gpub071] 2025-02-02 09:13:28,496 (trainer:318) INFO: 4/20epoch started. Estimated time to finish: 2 days, 4 minutes and 19.01 seconds
+[gpub071] 2025-02-02 09:15:52,353 (trainer:795) INFO: 4epoch:train:1-400batch: iter_time=4.285e-04, forward_time=0.134, loss_ctc=48.268, loss_att=18.374, acc=0.900, loss=0.427, backward_time=0.158, grad_norm=61.904, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=5.842e-05, train_time=22.985
+[gpub071] 2025-02-02 09:18:11,572 (trainer:795) INFO: 4epoch:train:401-800batch: iter_time=1.075e-04, forward_time=0.131, loss_ctc=49.391, loss_att=18.680, acc=0.900, loss=0.436, backward_time=0.153, grad_norm=74.440, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=5.872e-05, train_time=22.376
+[gpub071] 2025-02-02 09:20:34,227 (trainer:795) INFO: 4epoch:train:801-1200batch: iter_time=1.016e-04, forward_time=0.135, loss_ctc=47.592, loss_att=17.678, acc=0.903, loss=0.416, backward_time=0.156, grad_norm=65.988, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=5.903e-05, train_time=22.550
+[gpub071] 2025-02-02 09:22:57,515 (trainer:795) INFO: 4epoch:train:1201-1600batch: iter_time=1.008e-04, forward_time=0.135, loss_ctc=49.166, loss_att=18.903, acc=0.901, loss=0.437, backward_time=0.157, grad_norm=68.549, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=5.935e-05, train_time=23.028
+[gpub071] 2025-02-02 09:25:17,886 (trainer:795) INFO: 4epoch:train:1601-2000batch: iter_time=1.014e-04, forward_time=0.133, loss_ctc=47.810, loss_att=17.895, acc=0.907, loss=0.420, backward_time=0.153, grad_norm=64.487, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=5.967e-05, train_time=22.421
+[gpub071] 2025-02-02 09:27:37,764 (trainer:795) INFO: 4epoch:train:2001-2400batch: iter_time=1.027e-04, forward_time=0.132, loss_ctc=50.391, loss_att=19.198, acc=0.902, loss=0.446, backward_time=0.153, grad_norm=68.824, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=5.998e-05, train_time=22.369
+[gpub071] 2025-02-02 09:29:58,557 (trainer:795) INFO: 4epoch:train:2401-2800batch: iter_time=9.887e-05, forward_time=0.133, loss_ctc=49.818, loss_att=19.225, acc=0.901, loss=0.444, backward_time=0.154, grad_norm=68.656, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=6.027e-05, train_time=22.542
+[gpub071] 2025-02-02 09:32:24,802 (trainer:795) INFO: 4epoch:train:2801-3200batch: iter_time=1.046e-04, forward_time=0.137, loss_ctc=47.331, loss_att=17.802, acc=0.902, loss=0.417, backward_time=0.161, grad_norm=63.876, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=6.060e-05, train_time=23.327
+[gpub071] 2025-02-02 09:34:45,388 (trainer:795) INFO: 4epoch:train:3201-3600batch: iter_time=9.873e-05, forward_time=0.133, loss_ctc=47.004, loss_att=18.064, acc=0.904, loss=0.418, backward_time=0.154, grad_norm=60.327, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=6.092e-05, train_time=22.475
+[gpub071] 2025-02-02 09:37:09,059 (trainer:795) INFO: 4epoch:train:3601-4000batch: iter_time=1.018e-04, forward_time=0.136, loss_ctc=47.639, loss_att=18.192, acc=0.904, loss=0.422, backward_time=0.157, grad_norm=67.263, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=6.122e-05, train_time=23.065
+[gpub071] 2025-02-02 09:39:27,573 (trainer:795) INFO: 4epoch:train:4001-4400batch: iter_time=9.687e-05, forward_time=0.131, loss_ctc=54.007, loss_att=20.230, acc=0.902, loss=0.474, backward_time=0.152, grad_norm=67.017, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=6.152e-05, train_time=22.148
+[gpub071] 2025-02-02 09:41:46,144 (trainer:795) INFO: 4epoch:train:4401-4800batch: iter_time=9.954e-05, forward_time=0.131, loss_ctc=48.601, loss_att=18.404, acc=0.909, loss=0.429, backward_time=0.151, grad_norm=66.489, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=6.185e-05, train_time=22.173
+[gpub071] 2025-02-02 09:44:03,417 (trainer:795) INFO: 4epoch:train:4801-5200batch: iter_time=1.008e-04, forward_time=0.130, loss_ctc=51.722, loss_att=19.704, acc=0.907, loss=0.458, backward_time=0.150, grad_norm=70.465, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=6.217e-05, train_time=21.945
+[gpub071] 2025-02-02 09:46:25,407 (trainer:795) INFO: 4epoch:train:5201-5600batch: iter_time=9.871e-05, forward_time=0.134, loss_ctc=47.979, loss_att=18.162, acc=0.907, loss=0.424, backward_time=0.155, grad_norm=70.685, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=6.247e-05, train_time=22.660
+[gpub071] 2025-02-02 09:48:47,769 (trainer:795) INFO: 4epoch:train:5601-6000batch: iter_time=9.848e-05, forward_time=0.134, loss_ctc=48.026, loss_att=18.556, acc=0.901, loss=0.428, backward_time=0.156, grad_norm=73.552, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=6.277e-05, train_time=22.871
+[gpub071] 2025-02-02 09:51:08,851 (trainer:795) INFO: 4epoch:train:6001-6400batch: iter_time=9.712e-05, forward_time=0.133, loss_ctc=49.423, loss_att=18.769, acc=0.901, loss=0.437, backward_time=0.154, grad_norm=70.351, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=6.310e-05, train_time=22.550
+[gpub071] 2025-02-02 09:53:29,550 (trainer:795) INFO: 4epoch:train:6401-6800batch: iter_time=9.906e-05, forward_time=0.133, loss_ctc=47.247, loss_att=18.042, acc=0.904, loss=0.419, backward_time=0.154, grad_norm=68.249, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=6.342e-05, train_time=22.426
+[gpub071] 2025-02-02 09:55:49,704 (trainer:795) INFO: 4epoch:train:6801-7200batch: iter_time=9.995e-05, forward_time=0.133, loss_ctc=48.324, loss_att=18.240, acc=0.909, loss=0.426, backward_time=0.153, grad_norm=65.246, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=6.372e-05, train_time=22.426
+[gpub071] 2025-02-02 09:58:11,188 (trainer:795) INFO: 4epoch:train:7201-7600batch: iter_time=9.793e-05, forward_time=0.134, loss_ctc=47.047, loss_att=17.845, acc=0.906, loss=0.416, backward_time=0.155, grad_norm=64.157, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=6.402e-05, train_time=22.667
+[gpub071] 2025-02-02 10:00:27,832 (trainer:795) INFO: 4epoch:train:7601-8000batch: iter_time=9.993e-05, forward_time=0.129, loss_ctc=48.852, loss_att=18.569, acc=0.907, loss=0.432, backward_time=0.150, grad_norm=65.847, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=6.435e-05, train_time=21.980
+[gpub071] 2025-02-02 10:02:45,645 (trainer:795) INFO: 4epoch:train:8001-8400batch: iter_time=9.833e-05, forward_time=0.130, loss_ctc=49.524, loss_att=18.591, acc=0.910, loss=0.435, backward_time=0.151, grad_norm=64.438, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=6.467e-05, train_time=22.100
+[gpub071] 2025-02-02 10:05:03,168 (trainer:795) INFO: 4epoch:train:8401-8800batch: iter_time=1.001e-04, forward_time=0.130, loss_ctc=49.727, loss_att=18.448, acc=0.906, loss=0.435, backward_time=0.151, grad_norm=64.222, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=6.497e-05, train_time=21.937
+[gpub071] 2025-02-02 10:07:21,590 (trainer:795) INFO: 4epoch:train:8801-9200batch: iter_time=9.952e-05, forward_time=0.131, loss_ctc=51.377, loss_att=19.238, acc=0.902, loss=0.451, backward_time=0.152, grad_norm=64.501, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=6.528e-05, train_time=22.101
+[gpub071] 2025-02-02 10:09:41,882 (trainer:795) INFO: 4epoch:train:9201-9600batch: iter_time=9.885e-05, forward_time=0.133, loss_ctc=48.187, loss_att=18.093, acc=0.908, loss=0.424, backward_time=0.153, grad_norm=63.859, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.048, optim0_lr0=6.560e-05, train_time=22.460
+[gpub071] 2025-02-02 10:12:04,654 (trainer:795) INFO: 4epoch:train:9601-10000batch: iter_time=1.011e-04, forward_time=0.135, loss_ctc=48.186, loss_att=18.364, acc=0.904, loss=0.427, backward_time=0.156, grad_norm=63.164, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=6.592e-05, train_time=22.862
+[gpub071] 2025-02-02 10:14:22,067 (trainer:795) INFO: 4epoch:train:10001-10400batch: iter_time=1.066e-04, forward_time=0.130, loss_ctc=51.650, loss_att=18.862, acc=0.908, loss=0.448, backward_time=0.152, grad_norm=61.751, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=6.622e-05, train_time=22.154
+[gpub071] 2025-02-02 10:16:45,910 (trainer:795) INFO: 4epoch:train:10401-10800batch: iter_time=1.003e-04, forward_time=0.135, loss_ctc=46.098, loss_att=17.151, acc=0.907, loss=0.404, backward_time=0.158, grad_norm=68.038, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=6.652e-05, train_time=22.685
+[gpub071] 2025-02-02 10:19:07,045 (trainer:795) INFO: 4epoch:train:10801-11200batch: iter_time=9.596e-05, forward_time=0.133, loss_ctc=48.651, loss_att=18.201, acc=0.910, loss=0.427, backward_time=0.155, grad_norm=65.815, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=6.685e-05, train_time=22.708
+[gpub071] 2025-02-02 10:21:26,948 (trainer:795) INFO: 4epoch:train:11201-11600batch: iter_time=1.008e-04, forward_time=0.132, loss_ctc=48.713, loss_att=18.247, acc=0.902, loss=0.428, backward_time=0.154, grad_norm=69.312, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=6.717e-05, train_time=22.303
+[gpub071] 2025-02-02 10:23:48,056 (trainer:795) INFO: 4epoch:train:11601-12000batch: iter_time=1.012e-04, forward_time=0.133, loss_ctc=48.381, loss_att=17.776, acc=0.910, loss=0.421, backward_time=0.155, grad_norm=62.664, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=6.748e-05, train_time=22.574
+[gpub071] 2025-02-02 10:26:11,071 (trainer:795) INFO: 4epoch:train:12001-12400batch: iter_time=9.632e-05, forward_time=0.135, loss_ctc=44.668, loss_att=17.029, acc=0.908, loss=0.396, backward_time=0.157, grad_norm=64.461, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=6.777e-05, train_time=22.882
+[gpub071] 2025-02-02 10:28:32,609 (trainer:795) INFO: 4epoch:train:12401-12800batch: iter_time=9.756e-05, forward_time=0.133, loss_ctc=46.834, loss_att=17.565, acc=0.908, loss=0.412, backward_time=0.155, grad_norm=62.860, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=6.810e-05, train_time=22.715
+[gpub071] 2025-02-02 10:30:52,702 (trainer:795) INFO: 4epoch:train:12801-13200batch: iter_time=1.000e-04, forward_time=0.132, loss_ctc=48.686, loss_att=18.105, acc=0.909, loss=0.426, backward_time=0.153, grad_norm=66.536, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=6.842e-05, train_time=22.483
+[gpub071] 2025-02-02 10:33:11,086 (trainer:795) INFO: 4epoch:train:13201-13600batch: iter_time=9.816e-05, forward_time=0.131, loss_ctc=49.404, loss_att=18.267, acc=0.910, loss=0.431, backward_time=0.151, grad_norm=64.902, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=6.872e-05, train_time=22.104
+[gpub071] 2025-02-02 10:35:32,978 (trainer:795) INFO: 4epoch:train:13601-14000batch: iter_time=1.015e-04, forward_time=0.134, loss_ctc=46.411, loss_att=17.833, acc=0.905, loss=0.413, backward_time=0.156, grad_norm=65.136, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=6.902e-05, train_time=22.676
+[gpub071] 2025-02-02 10:37:56,249 (trainer:795) INFO: 4epoch:train:14001-14400batch: iter_time=9.789e-05, forward_time=0.134, loss_ctc=47.028, loss_att=18.020, acc=0.903, loss=0.418, backward_time=0.157, grad_norm=65.413, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=6.935e-05, train_time=22.866
+[gpub071] 2025-02-02 10:40:22,246 (trainer:795) INFO: 4epoch:train:14401-14800batch: iter_time=9.731e-05, forward_time=0.138, loss_ctc=43.266, loss_att=16.129, acc=0.910, loss=0.379, backward_time=0.159, grad_norm=57.097, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=6.967e-05, train_time=23.392
+[gpub071] 2025-02-02 10:42:39,340 (trainer:795) INFO: 4epoch:train:14801-15200batch: iter_time=9.915e-05, forward_time=0.129, loss_ctc=50.956, loss_att=18.994, acc=0.905, loss=0.447, backward_time=0.150, grad_norm=65.052, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=6.997e-05, train_time=22.059
+[gpub071] 2025-02-02 10:45:05,569 (trainer:795) INFO: 4epoch:train:15201-15600batch: iter_time=9.900e-05, forward_time=0.138, loss_ctc=44.655, loss_att=16.727, acc=0.908, loss=0.392, backward_time=0.160, grad_norm=63.161, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=7.027e-05, train_time=23.187
+[gpub071] 2025-02-02 10:47:27,110 (trainer:795) INFO: 4epoch:train:15601-16000batch: iter_time=9.789e-05, forward_time=0.134, loss_ctc=49.579, loss_att=18.254, acc=0.906, loss=0.432, backward_time=0.155, grad_norm=64.650, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=7.060e-05, train_time=22.719
+[gpub071] 2025-02-02 10:49:48,262 (trainer:795) INFO: 4epoch:train:16001-16400batch: iter_time=9.941e-05, forward_time=0.133, loss_ctc=48.216, loss_att=18.040, acc=0.905, loss=0.423, backward_time=0.154, grad_norm=65.964, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=7.092e-05, train_time=22.461
+[gpub071] 2025-02-02 10:52:09,805 (trainer:795) INFO: 4epoch:train:16401-16800batch: iter_time=9.752e-05, forward_time=0.134, loss_ctc=49.141, loss_att=18.464, acc=0.902, loss=0.432, backward_time=0.154, grad_norm=71.241, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=7.122e-05, train_time=22.811
+[gpub071] 2025-02-02 10:54:29,554 (trainer:795) INFO: 4epoch:train:16801-17200batch: iter_time=9.815e-05, forward_time=0.132, loss_ctc=49.621, loss_att=18.447, acc=0.900, loss=0.434, backward_time=0.153, grad_norm=63.691, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=7.152e-05, train_time=22.386
+[gpub071] 2025-02-02 10:56:50,922 (trainer:795) INFO: 4epoch:train:17201-17600batch: iter_time=9.799e-05, forward_time=0.133, loss_ctc=45.600, loss_att=17.088, acc=0.912, loss=0.401, backward_time=0.155, grad_norm=61.694, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=7.185e-05, train_time=22.551
+[gpub071] 2025-02-02 10:59:13,195 (trainer:795) INFO: 4epoch:train:17601-18000batch: iter_time=9.876e-05, forward_time=0.135, loss_ctc=47.897, loss_att=18.103, acc=0.907, loss=0.423, backward_time=0.155, grad_norm=59.605, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=7.217e-05, train_time=22.674
+[gpub071] 2025-02-02 11:01:34,179 (trainer:795) INFO: 4epoch:train:18001-18400batch: iter_time=9.910e-05, forward_time=0.133, loss_ctc=46.331, loss_att=17.227, acc=0.905, loss=0.406, backward_time=0.154, grad_norm=64.675, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=7.247e-05, train_time=22.749
+[gpub071] 2025-02-02 11:03:52,691 (trainer:795) INFO: 4epoch:train:18401-18800batch: iter_time=1.008e-04, forward_time=0.131, loss_ctc=50.878, loss_att=19.035, acc=0.905, loss=0.447, backward_time=0.152, grad_norm=63.789, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=7.277e-05, train_time=21.966
+[gpub071] 2025-02-02 11:06:14,113 (trainer:795) INFO: 4epoch:train:18801-19200batch: iter_time=9.911e-05, forward_time=0.134, loss_ctc=45.953, loss_att=17.266, acc=0.909, loss=0.404, backward_time=0.154, grad_norm=63.043, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=7.310e-05, train_time=22.693
+[gpub071] 2025-02-02 11:08:34,325 (trainer:795) INFO: 4epoch:train:19201-19600batch: iter_time=9.985e-05, forward_time=0.133, loss_ctc=49.920, loss_att=18.373, acc=0.908, loss=0.435, backward_time=0.153, grad_norm=62.307, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=7.342e-05, train_time=22.470
+[gpub071] 2025-02-02 11:10:50,018 (trainer:795) INFO: 4epoch:train:19601-20000batch: iter_time=9.968e-05, forward_time=0.128, loss_ctc=48.320, loss_att=18.240, acc=0.909, loss=0.426, backward_time=0.149, grad_norm=63.808, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=7.372e-05, train_time=21.907
+[gpub071] 2025-02-02 11:13:09,438 (trainer:795) INFO: 4epoch:train:20001-20400batch: iter_time=1.003e-04, forward_time=0.132, loss_ctc=51.030, loss_att=18.557, acc=0.909, loss=0.442, backward_time=0.152, grad_norm=68.012, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=7.402e-05, train_time=22.030
+[gpub071] 2025-02-02 11:15:32,995 (trainer:795) INFO: 4epoch:train:20401-20800batch: iter_time=1.048e-04, forward_time=0.135, loss_ctc=47.327, loss_att=17.908, acc=0.906, loss=0.418, backward_time=0.158, grad_norm=64.587, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=7.435e-05, train_time=22.920
+[gpub071] 2025-02-02 11:17:51,899 (trainer:795) INFO: 4epoch:train:20801-21200batch: iter_time=1.017e-04, forward_time=0.131, loss_ctc=45.709, loss_att=17.189, acc=0.912, loss=0.402, backward_time=0.152, grad_norm=60.132, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=7.467e-05, train_time=22.380
+[gpub071] 2025-02-02 11:20:10,423 (trainer:795) INFO: 4epoch:train:21201-21600batch: iter_time=1.012e-04, forward_time=0.131, loss_ctc=47.441, loss_att=17.354, acc=0.912, loss=0.412, backward_time=0.151, grad_norm=64.514, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=7.497e-05, train_time=22.137
+[gpub071] 2025-02-02 11:22:30,300 (trainer:795) INFO: 4epoch:train:21601-22000batch: iter_time=1.012e-04, forward_time=0.132, loss_ctc=47.768, loss_att=18.133, acc=0.907, loss=0.422, backward_time=0.153, grad_norm=67.940, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=7.528e-05, train_time=22.395
+[gpub071] 2025-02-02 11:24:52,581 (trainer:795) INFO: 4epoch:train:22001-22400batch: iter_time=1.072e-04, forward_time=0.134, loss_ctc=44.978, loss_att=16.624, acc=0.909, loss=0.393, backward_time=0.156, grad_norm=65.237, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=7.560e-05, train_time=22.587
+[gpub071] 2025-02-02 11:27:12,086 (trainer:795) INFO: 4epoch:train:22401-22800batch: iter_time=9.755e-05, forward_time=0.133, loss_ctc=49.342, loss_att=17.990, acc=0.910, loss=0.428, backward_time=0.152, grad_norm=74.549, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=7.592e-05, train_time=22.353
+[gpub071] 2025-02-02 11:29:32,222 (trainer:795) INFO: 4epoch:train:22801-23200batch: iter_time=9.725e-05, forward_time=0.133, loss_ctc=47.681, loss_att=17.523, acc=0.910, loss=0.415, backward_time=0.153, grad_norm=71.886, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=7.622e-05, train_time=22.346
+[gpub071] 2025-02-02 11:31:53,496 (trainer:795) INFO: 4epoch:train:23201-23600batch: iter_time=9.941e-05, forward_time=0.133, loss_ctc=46.030, loss_att=17.017, acc=0.908, loss=0.402, backward_time=0.155, grad_norm=69.231, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=7.652e-05, train_time=22.620
+[gpub071] 2025-02-02 11:34:12,115 (trainer:795) INFO: 4epoch:train:23601-24000batch: iter_time=9.724e-05, forward_time=0.131, loss_ctc=47.867, loss_att=17.908, acc=0.907, loss=0.420, backward_time=0.151, grad_norm=70.853, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=7.685e-05, train_time=22.231
+[gpub071] 2025-02-02 11:36:33,963 (trainer:795) INFO: 4epoch:train:24001-24400batch: iter_time=9.866e-05, forward_time=0.134, loss_ctc=45.533, loss_att=17.129, acc=0.909, loss=0.401, backward_time=0.155, grad_norm=68.678, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=7.717e-05, train_time=22.646
+[gpub071] 2025-02-02 11:38:54,027 (trainer:795) INFO: 4epoch:train:24401-24800batch: iter_time=9.894e-05, forward_time=0.132, loss_ctc=48.260, loss_att=17.428, acc=0.912, loss=0.417, backward_time=0.153, grad_norm=78.527, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=7.747e-05, train_time=22.427
+[gpub071] 2025-02-02 12:02:35,167 (trainer:388) INFO: 4epoch results: [train] iter_time=1.051e-04, forward_time=0.133, loss_ctc=48.177, loss_att=18.082, acc=0.906, loss=0.424, backward_time=0.154, grad_norm=66.117, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=6.797e-05, train_time=22.515, time=2 hours, 25 minutes and 40.73 seconds, total_count=99384, gpu_max_cached_mem_GB=37.189, gpu_max_alloc_mem_GB=35.061, [valid] loss_ctc=21.049, cer_ctc=0.066, loss_att=8.419, acc=0.954, cer=0.151, wer=0.826, loss=12.208, time=19 minutes and 15.19 seconds, total_count=16000, gpu_max_cached_mem_GB=37.189, gpu_max_alloc_mem_GB=35.061, [att_plot] time=4 minutes and 9.65 seconds, total_count=0, gpu_max_cached_mem_GB=37.189, gpu_max_alloc_mem_GB=35.061
+[gpub071] 2025-02-02 12:03:01,670 (trainer:454) INFO: There are no improvements in this epoch
+[gpub071] 2025-02-02 12:03:01,672 (trainer:318) INFO: 5/20epoch started. Estimated time to finish: 1 day, 21 hours and 14 minutes
+[gpub071] 2025-02-02 12:05:18,753 (trainer:795) INFO: 5epoch:train:1-400batch: iter_time=4.082e-04, forward_time=0.128, loss_ctc=46.427, loss_att=16.975, acc=0.913, loss=0.403, backward_time=0.150, grad_norm=74.304, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=7.782e-05, train_time=21.872
+[gpub071] 2025-02-02 12:07:38,734 (trainer:795) INFO: 5epoch:train:401-800batch: iter_time=1.008e-04, forward_time=0.131, loss_ctc=44.819, loss_att=16.216, acc=0.914, loss=0.387, backward_time=0.154, grad_norm=65.220, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=7.812e-05, train_time=22.363
+[gpub071] 2025-02-02 12:10:00,182 (trainer:795) INFO: 5epoch:train:801-1200batch: iter_time=1.015e-04, forward_time=0.134, loss_ctc=45.153, loss_att=16.746, acc=0.911, loss=0.395, backward_time=0.155, grad_norm=60.837, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=7.842e-05, train_time=22.685
+[gpub071] 2025-02-02 12:12:18,007 (trainer:795) INFO: 5epoch:train:1201-1600batch: iter_time=9.923e-05, forward_time=0.130, loss_ctc=47.770, loss_att=17.412, acc=0.910, loss=0.414, backward_time=0.151, grad_norm=63.333, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=7.875e-05, train_time=22.066
+[gpub071] 2025-02-02 12:14:41,473 (trainer:795) INFO: 5epoch:train:1601-2000batch: iter_time=9.952e-05, forward_time=0.135, loss_ctc=45.303, loss_att=16.589, acc=0.906, loss=0.394, backward_time=0.157, grad_norm=66.105, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=7.907e-05, train_time=23.067
+[gpub071] 2025-02-02 12:17:03,289 (trainer:795) INFO: 5epoch:train:2001-2400batch: iter_time=9.999e-05, forward_time=0.134, loss_ctc=44.138, loss_att=15.955, acc=0.916, loss=0.381, backward_time=0.155, grad_norm=62.017, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=7.937e-05, train_time=22.487
+[gpub071] 2025-02-02 12:19:25,541 (trainer:795) INFO: 5epoch:train:2401-2800batch: iter_time=9.743e-05, forward_time=0.134, loss_ctc=46.280, loss_att=16.679, acc=0.910, loss=0.399, backward_time=0.156, grad_norm=63.284, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=7.967e-05, train_time=23.055
+[gpub071] 2025-02-02 12:21:48,010 (trainer:795) INFO: 5epoch:train:2801-3200batch: iter_time=9.771e-05, forward_time=0.134, loss_ctc=43.511, loss_att=15.743, acc=0.916, loss=0.376, backward_time=0.156, grad_norm=58.199, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=8.000e-05, train_time=22.621
+[gpub071] 2025-02-02 12:24:12,510 (trainer:795) INFO: 5epoch:train:3201-3600batch: iter_time=9.833e-05, forward_time=0.136, loss_ctc=41.532, loss_att=15.498, acc=0.914, loss=0.364, backward_time=0.158, grad_norm=61.798, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=8.032e-05, train_time=23.211
+[gpub071] 2025-02-02 12:26:36,785 (trainer:795) INFO: 5epoch:train:3601-4000batch: iter_time=9.847e-05, forward_time=0.136, loss_ctc=42.457, loss_att=15.219, acc=0.913, loss=0.365, backward_time=0.158, grad_norm=56.323, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=8.062e-05, train_time=22.925
+[gpub071] 2025-02-02 12:28:56,392 (trainer:795) INFO: 5epoch:train:4001-4400batch: iter_time=9.771e-05, forward_time=0.132, loss_ctc=47.116, loss_att=16.767, acc=0.913, loss=0.404, backward_time=0.153, grad_norm=62.345, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=8.092e-05, train_time=22.462
+[gpub071] 2025-02-02 12:31:16,658 (trainer:795) INFO: 5epoch:train:4401-4800batch: iter_time=9.845e-05, forward_time=0.132, loss_ctc=45.981, loss_att=16.877, acc=0.912, loss=0.400, backward_time=0.154, grad_norm=64.675, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=8.125e-05, train_time=22.436
+[gpub071] 2025-02-02 12:33:37,563 (trainer:795) INFO: 5epoch:train:4801-5200batch: iter_time=1.071e-04, forward_time=0.133, loss_ctc=43.929, loss_att=16.136, acc=0.914, loss=0.382, backward_time=0.154, grad_norm=60.296, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=8.158e-05, train_time=22.440
+[gpub071] 2025-02-02 12:36:00,789 (trainer:795) INFO: 5epoch:train:5201-5600batch: iter_time=1.121e-04, forward_time=0.135, loss_ctc=42.616, loss_att=15.984, acc=0.911, loss=0.375, backward_time=0.157, grad_norm=58.850, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.015, optim0_lr0=8.187e-05, train_time=23.000
+[gpub071] 2025-02-02 12:38:21,295 (trainer:795) INFO: 5epoch:train:5601-6000batch: iter_time=9.951e-05, forward_time=0.132, loss_ctc=46.308, loss_att=17.012, acc=0.908, loss=0.403, backward_time=0.154, grad_norm=58.902, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=8.217e-05, train_time=22.553
+[gpub071] 2025-02-02 12:40:43,176 (trainer:795) INFO: 5epoch:train:6001-6400batch: iter_time=9.778e-05, forward_time=0.134, loss_ctc=42.166, loss_att=15.497, acc=0.917, loss=0.367, backward_time=0.155, grad_norm=62.561, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=8.250e-05, train_time=22.651
+[gpub071] 2025-02-02 12:43:02,458 (trainer:795) INFO: 5epoch:train:6401-6800batch: iter_time=9.699e-05, forward_time=0.131, loss_ctc=44.337, loss_att=16.208, acc=0.917, loss=0.385, backward_time=0.153, grad_norm=62.084, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=8.282e-05, train_time=22.247
+[gpub071] 2025-02-02 12:45:27,535 (trainer:795) INFO: 5epoch:train:6801-7200batch: iter_time=9.849e-05, forward_time=0.137, loss_ctc=44.565, loss_att=16.466, acc=0.909, loss=0.389, backward_time=0.159, grad_norm=57.605, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=8.312e-05, train_time=23.223
+[gpub071] 2025-02-02 12:47:46,191 (trainer:795) INFO: 5epoch:train:7201-7600batch: iter_time=9.698e-05, forward_time=0.131, loss_ctc=45.225, loss_att=16.482, acc=0.917, loss=0.392, backward_time=0.152, grad_norm=68.196, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=8.342e-05, train_time=22.280
+[gpub071] 2025-02-02 12:50:06,622 (trainer:795) INFO: 5epoch:train:7601-8000batch: iter_time=9.852e-05, forward_time=0.132, loss_ctc=45.738, loss_att=16.737, acc=0.912, loss=0.397, backward_time=0.154, grad_norm=60.585, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=8.375e-05, train_time=22.420
+[gpub071] 2025-02-02 12:52:23,586 (trainer:795) INFO: 5epoch:train:8001-8400batch: iter_time=1.060e-04, forward_time=0.130, loss_ctc=47.433, loss_att=17.335, acc=0.917, loss=0.412, backward_time=0.151, grad_norm=65.831, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=8.408e-05, train_time=21.996
+[gpub071] 2025-02-02 12:54:42,295 (trainer:795) INFO: 5epoch:train:8401-8800batch: iter_time=9.777e-05, forward_time=0.130, loss_ctc=48.097, loss_att=17.690, acc=0.913, loss=0.419, backward_time=0.153, grad_norm=63.030, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=8.437e-05, train_time=22.156
+[gpub071] 2025-02-02 12:57:03,390 (trainer:795) INFO: 5epoch:train:8801-9200batch: iter_time=9.771e-05, forward_time=0.133, loss_ctc=45.299, loss_att=16.116, acc=0.918, loss=0.389, backward_time=0.155, grad_norm=59.792, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=8.467e-05, train_time=22.505
+[gpub071] 2025-02-02 12:59:25,340 (trainer:795) INFO: 5epoch:train:9201-9600batch: iter_time=9.689e-05, forward_time=0.133, loss_ctc=44.484, loss_att=15.916, acc=0.917, loss=0.383, backward_time=0.156, grad_norm=58.118, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=8.500e-05, train_time=22.682
+[gpub071] 2025-02-02 13:01:43,767 (trainer:795) INFO: 5epoch:train:9601-10000batch: iter_time=1.080e-04, forward_time=0.131, loss_ctc=44.665, loss_att=16.758, acc=0.914, loss=0.393, backward_time=0.152, grad_norm=62.732, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=8.532e-05, train_time=21.978
+[gpub071] 2025-02-02 13:04:06,676 (trainer:795) INFO: 5epoch:train:10001-10400batch: iter_time=9.700e-05, forward_time=0.135, loss_ctc=44.187, loss_att=16.468, acc=0.911, loss=0.387, backward_time=0.156, grad_norm=59.756, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=8.562e-05, train_time=23.114
+[gpub071] 2025-02-02 13:06:27,824 (trainer:795) INFO: 5epoch:train:10401-10800batch: iter_time=9.813e-05, forward_time=0.133, loss_ctc=45.882, loss_att=16.857, acc=0.912, loss=0.399, backward_time=0.155, grad_norm=58.206, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=8.592e-05, train_time=22.704
+[gpub071] 2025-02-02 13:08:46,911 (trainer:795) INFO: 5epoch:train:10801-11200batch: iter_time=1.001e-04, forward_time=0.131, loss_ctc=43.889, loss_att=15.622, acc=0.918, loss=0.377, backward_time=0.153, grad_norm=57.560, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=8.625e-05, train_time=22.112
+[gpub071] 2025-02-02 13:11:03,242 (trainer:795) INFO: 5epoch:train:11201-11600batch: iter_time=9.653e-05, forward_time=0.129, loss_ctc=48.348, loss_att=17.654, acc=0.913, loss=0.420, backward_time=0.149, grad_norm=64.499, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=8.657e-05, train_time=21.796
+[gpub071] 2025-02-02 13:13:21,295 (trainer:795) INFO: 5epoch:train:11601-12000batch: iter_time=9.608e-05, forward_time=0.130, loss_ctc=47.866, loss_att=17.653, acc=0.909, loss=0.417, backward_time=0.152, grad_norm=65.445, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=8.687e-05, train_time=22.208
+[gpub071] 2025-02-02 13:15:37,218 (trainer:795) INFO: 5epoch:train:12001-12400batch: iter_time=1.041e-04, forward_time=0.129, loss_ctc=45.688, loss_att=16.548, acc=0.921, loss=0.395, backward_time=0.149, grad_norm=65.269, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=8.717e-05, train_time=21.791
+[gpub071] 2025-02-02 13:18:00,847 (trainer:795) INFO: 5epoch:train:12401-12800batch: iter_time=9.866e-05, forward_time=0.135, loss_ctc=41.471, loss_att=15.234, acc=0.916, loss=0.361, backward_time=0.158, grad_norm=58.687, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=8.750e-05, train_time=22.738
+[gpub071] 2025-02-02 13:20:25,678 (trainer:795) INFO: 5epoch:train:12801-13200batch: iter_time=9.858e-05, forward_time=0.136, loss_ctc=42.843, loss_att=15.578, acc=0.915, loss=0.371, backward_time=0.158, grad_norm=59.076, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=8.782e-05, train_time=23.160
+[gpub071] 2025-02-02 13:22:44,445 (trainer:795) INFO: 5epoch:train:13201-13600batch: iter_time=9.594e-05, forward_time=0.131, loss_ctc=42.417, loss_att=15.791, acc=0.914, loss=0.372, backward_time=0.152, grad_norm=62.464, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=8.812e-05, train_time=22.270
+[gpub071] 2025-02-02 13:25:04,760 (trainer:795) INFO: 5epoch:train:13601-14000batch: iter_time=9.855e-05, forward_time=0.132, loss_ctc=45.592, loss_att=16.668, acc=0.914, loss=0.396, backward_time=0.154, grad_norm=60.395, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=8.842e-05, train_time=22.444
+[gpub071] 2025-02-02 13:27:24,105 (trainer:795) INFO: 5epoch:train:14001-14400batch: iter_time=1.018e-04, forward_time=0.131, loss_ctc=45.388, loss_att=16.649, acc=0.913, loss=0.395, backward_time=0.153, grad_norm=61.255, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=8.875e-05, train_time=22.287
+[gpub071] 2025-02-02 13:29:43,912 (trainer:795) INFO: 5epoch:train:14401-14800batch: iter_time=9.730e-05, forward_time=0.132, loss_ctc=44.560, loss_att=16.185, acc=0.918, loss=0.386, backward_time=0.153, grad_norm=65.085, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=8.907e-05, train_time=22.344
+[gpub071] 2025-02-02 13:32:05,178 (trainer:795) INFO: 5epoch:train:14801-15200batch: iter_time=9.814e-05, forward_time=0.133, loss_ctc=41.971, loss_att=15.219, acc=0.919, loss=0.363, backward_time=0.155, grad_norm=67.398, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=8.937e-05, train_time=22.601
+[gpub071] 2025-02-02 13:34:28,891 (trainer:795) INFO: 5epoch:train:15201-15600batch: iter_time=1.107e-04, forward_time=0.136, loss_ctc=45.054, loss_att=16.158, acc=0.910, loss=0.388, backward_time=0.158, grad_norm=63.974, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=8.967e-05, train_time=23.006
+[gpub071] 2025-02-02 13:36:51,659 (trainer:795) INFO: 5epoch:train:15601-16000batch: iter_time=1.015e-04, forward_time=0.134, loss_ctc=43.347, loss_att=15.898, acc=0.910, loss=0.377, backward_time=0.157, grad_norm=63.989, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=9.000e-05, train_time=22.835
+[gpub071] 2025-02-02 13:39:12,749 (trainer:795) INFO: 5epoch:train:16001-16400batch: iter_time=1.102e-04, forward_time=0.132, loss_ctc=44.306, loss_att=16.181, acc=0.911, loss=0.385, backward_time=0.155, grad_norm=62.598, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=9.032e-05, train_time=22.650
+[gpub071] 2025-02-02 13:41:33,738 (trainer:795) INFO: 5epoch:train:16401-16800batch: iter_time=9.658e-05, forward_time=0.133, loss_ctc=43.364, loss_att=15.551, acc=0.915, loss=0.373, backward_time=0.154, grad_norm=64.321, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=9.062e-05, train_time=22.513
+[gpub071] 2025-02-02 13:43:52,627 (trainer:795) INFO: 5epoch:train:16801-17200batch: iter_time=9.939e-05, forward_time=0.131, loss_ctc=43.584, loss_att=15.906, acc=0.916, loss=0.378, backward_time=0.152, grad_norm=62.087, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=9.093e-05, train_time=22.101
+[gpub071] 2025-02-02 13:46:15,687 (trainer:795) INFO: 5epoch:train:17201-17600batch: iter_time=9.864e-05, forward_time=0.135, loss_ctc=46.102, loss_att=16.636, acc=0.917, loss=0.398, backward_time=0.156, grad_norm=62.441, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=9.125e-05, train_time=22.920
+[gpub071] 2025-02-02 13:48:33,134 (trainer:795) INFO: 5epoch:train:17601-18000batch: iter_time=9.840e-05, forward_time=0.131, loss_ctc=46.720, loss_att=16.931, acc=0.919, loss=0.404, backward_time=0.150, grad_norm=58.499, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=9.157e-05, train_time=21.928
+[gpub071] 2025-02-02 13:50:55,031 (trainer:795) INFO: 5epoch:train:18001-18400batch: iter_time=9.870e-05, forward_time=0.134, loss_ctc=44.586, loss_att=16.145, acc=0.914, loss=0.386, backward_time=0.155, grad_norm=59.932, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=9.187e-05, train_time=22.719
+[gpub071] 2025-02-02 13:53:16,659 (trainer:795) INFO: 5epoch:train:18401-18800batch: iter_time=9.891e-05, forward_time=0.134, loss_ctc=44.971, loss_att=16.334, acc=0.914, loss=0.389, backward_time=0.155, grad_norm=65.298, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=9.218e-05, train_time=22.732
+[gpub071] 2025-02-02 13:55:38,993 (trainer:795) INFO: 5epoch:train:18801-19200batch: iter_time=9.787e-05, forward_time=0.135, loss_ctc=45.795, loss_att=16.080, acc=0.914, loss=0.391, backward_time=0.155, grad_norm=65.400, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=9.250e-05, train_time=22.719
+[gpub071] 2025-02-02 13:58:01,852 (trainer:795) INFO: 5epoch:train:19201-19600batch: iter_time=9.807e-05, forward_time=0.135, loss_ctc=44.416, loss_att=16.235, acc=0.916, loss=0.386, backward_time=0.156, grad_norm=62.642, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=9.282e-05, train_time=22.901
+[gpub071] 2025-02-02 14:00:23,109 (trainer:795) INFO: 5epoch:train:19601-20000batch: iter_time=9.742e-05, forward_time=0.133, loss_ctc=45.337, loss_att=16.596, acc=0.916, loss=0.394, backward_time=0.155, grad_norm=64.748, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=9.313e-05, train_time=22.461
+[gpub071] 2025-02-02 14:02:42,117 (trainer:795) INFO: 5epoch:train:20001-20400batch: iter_time=9.517e-05, forward_time=0.132, loss_ctc=47.558, loss_att=16.929, acc=0.912, loss=0.408, backward_time=0.152, grad_norm=59.753, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=9.342e-05, train_time=22.360
+[gpub071] 2025-02-02 14:05:06,454 (trainer:795) INFO: 5epoch:train:20401-20800batch: iter_time=9.698e-05, forward_time=0.136, loss_ctc=42.881, loss_att=15.477, acc=0.918, loss=0.370, backward_time=0.158, grad_norm=62.390, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=9.375e-05, train_time=23.018
+[gpub071] 2025-02-02 14:07:27,330 (trainer:795) INFO: 5epoch:train:20801-21200batch: iter_time=9.787e-05, forward_time=0.133, loss_ctc=46.049, loss_att=16.197, acc=0.913, loss=0.393, backward_time=0.154, grad_norm=64.741, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=9.407e-05, train_time=22.562
+[gpub071] 2025-02-02 14:09:49,574 (trainer:795) INFO: 5epoch:train:21201-21600batch: iter_time=9.771e-05, forward_time=0.135, loss_ctc=48.266, loss_att=16.809, acc=0.915, loss=0.410, backward_time=0.155, grad_norm=63.701, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=9.437e-05, train_time=22.656
+[gpub071] 2025-02-02 14:12:14,758 (trainer:795) INFO: 5epoch:train:21601-22000batch: iter_time=9.953e-05, forward_time=0.137, loss_ctc=42.356, loss_att=15.372, acc=0.911, loss=0.367, backward_time=0.159, grad_norm=56.143, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=9.467e-05, train_time=23.245
+[gpub071] 2025-02-02 14:14:36,893 (trainer:795) INFO: 5epoch:train:22001-22400batch: iter_time=9.962e-05, forward_time=0.134, loss_ctc=44.915, loss_att=16.023, acc=0.914, loss=0.386, backward_time=0.155, grad_norm=57.753, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=9.500e-05, train_time=22.808
+[gpub071] 2025-02-02 14:16:54,425 (trainer:795) INFO: 5epoch:train:22401-22800batch: iter_time=9.634e-05, forward_time=0.130, loss_ctc=45.422, loss_att=16.141, acc=0.913, loss=0.389, backward_time=0.150, grad_norm=60.275, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=9.532e-05, train_time=21.958
+[gpub071] 2025-02-02 14:19:15,493 (trainer:795) INFO: 5epoch:train:22801-23200batch: iter_time=9.884e-05, forward_time=0.133, loss_ctc=46.441, loss_att=16.715, acc=0.914, loss=0.401, backward_time=0.154, grad_norm=67.538, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=9.562e-05, train_time=22.724
+[gpub071] 2025-02-02 14:21:36,144 (trainer:795) INFO: 5epoch:train:23201-23600batch: iter_time=9.769e-05, forward_time=0.133, loss_ctc=43.046, loss_att=15.555, acc=0.915, loss=0.372, backward_time=0.154, grad_norm=60.514, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=9.593e-05, train_time=22.451
+[gpub071] 2025-02-02 14:23:57,621 (trainer:795) INFO: 5epoch:train:23601-24000batch: iter_time=9.556e-05, forward_time=0.134, loss_ctc=42.632, loss_att=15.280, acc=0.917, loss=0.367, backward_time=0.155, grad_norm=58.082, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.013, optim0_lr0=9.625e-05, train_time=22.561
+[gpub071] 2025-02-02 14:26:16,704 (trainer:795) INFO: 5epoch:train:24001-24400batch: iter_time=9.771e-05, forward_time=0.131, loss_ctc=44.314, loss_att=15.788, acc=0.917, loss=0.380, backward_time=0.152, grad_norm=58.919, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=9.657e-05, train_time=22.293
+[gpub071] 2025-02-02 14:28:40,500 (trainer:795) INFO: 5epoch:train:24401-24800batch: iter_time=1.016e-04, forward_time=0.135, loss_ctc=43.481, loss_att=15.795, acc=0.913, loss=0.377, backward_time=0.159, grad_norm=57.705, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=9.687e-05, train_time=23.199
+[gpub071] 2025-02-02 14:52:19,069 (trainer:388) INFO: 5epoch results: [train] iter_time=1.044e-04, forward_time=0.133, loss_ctc=44.821, loss_att=16.279, acc=0.914, loss=0.388, backward_time=0.154, grad_norm=62.015, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=8.737e-05, train_time=22.550, time=2 hours, 25 minutes and 55.37 seconds, total_count=124230, gpu_max_cached_mem_GB=37.189, gpu_max_alloc_mem_GB=35.092, [valid] loss_ctc=20.457, cer_ctc=0.063, loss_att=7.831, acc=0.962, cer=0.085, wer=0.696, loss=11.619, time=19 minutes and 14.04 seconds, total_count=20000, gpu_max_cached_mem_GB=37.189, gpu_max_alloc_mem_GB=35.092, [att_plot] time=4 minutes and 6.96 seconds, total_count=0, gpu_max_cached_mem_GB=37.189, gpu_max_alloc_mem_GB=35.092
+[gpub071] 2025-02-02 14:52:45,779 (trainer:456) INFO: The best model has been updated: valid.cer
+[gpub071] 2025-02-02 14:52:45,782 (trainer:510) INFO: The model files were removed: exp/s2t_owsm_v3.1_lr0003_03_raw_en_bpe50000/2epoch.pth
+[gpub071] 2025-02-02 14:52:45,783 (trainer:318) INFO: 6/20epoch started. Estimated time to finish: 1 day, 18 hours and 24 minutes
+[gpub071] 2025-02-02 14:55:07,760 (trainer:795) INFO: 6epoch:train:1-400batch: iter_time=3.723e-04, forward_time=0.133, loss_ctc=40.630, loss_att=14.066, acc=0.918, loss=0.344, backward_time=0.155, grad_norm=60.406, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=9.722e-05, train_time=22.633
+[gpub071] 2025-02-02 14:57:30,592 (trainer:795) INFO: 6epoch:train:401-800batch: iter_time=1.004e-04, forward_time=0.135, loss_ctc=44.184, loss_att=15.891, acc=0.917, loss=0.381, backward_time=0.156, grad_norm=63.942, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=9.752e-05, train_time=22.786
+[gpub071] 2025-02-02 14:59:51,462 (trainer:795) INFO: 6epoch:train:801-1200batch: iter_time=9.902e-05, forward_time=0.133, loss_ctc=41.776, loss_att=14.767, acc=0.919, loss=0.357, backward_time=0.154, grad_norm=57.323, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=9.782e-05, train_time=22.643
+[gpub071] 2025-02-02 15:02:12,737 (trainer:795) INFO: 6epoch:train:1201-1600batch: iter_time=9.830e-05, forward_time=0.133, loss_ctc=41.169, loss_att=14.445, acc=0.915, loss=0.351, backward_time=0.155, grad_norm=55.897, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=9.815e-05, train_time=22.611
+[gpub071] 2025-02-02 15:04:34,286 (trainer:795) INFO: 6epoch:train:1601-2000batch: iter_time=9.814e-05, forward_time=0.133, loss_ctc=43.244, loss_att=15.391, acc=0.916, loss=0.371, backward_time=0.155, grad_norm=54.005, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=9.847e-05, train_time=22.711
+[gpub071] 2025-02-02 15:06:54,594 (trainer:795) INFO: 6epoch:train:2001-2400batch: iter_time=9.993e-05, forward_time=0.132, loss_ctc=41.691, loss_att=14.824, acc=0.918, loss=0.358, backward_time=0.154, grad_norm=55.387, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=9.877e-05, train_time=22.381
+[gpub071] 2025-02-02 15:09:16,916 (trainer:795) INFO: 6epoch:train:2401-2800batch: iter_time=9.881e-05, forward_time=0.134, loss_ctc=42.095, loss_att=14.825, acc=0.919, loss=0.359, backward_time=0.156, grad_norm=56.925, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=9.907e-05, train_time=22.669
+[gpub071] 2025-02-02 15:11:41,313 (trainer:795) INFO: 6epoch:train:2801-3200batch: iter_time=9.982e-05, forward_time=0.135, loss_ctc=41.926, loss_att=15.322, acc=0.916, loss=0.364, backward_time=0.158, grad_norm=56.216, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=9.940e-05, train_time=23.143
+[gpub071] 2025-02-02 15:14:02,503 (trainer:795) INFO: 6epoch:train:3201-3600batch: iter_time=9.893e-05, forward_time=0.133, loss_ctc=44.008, loss_att=15.779, acc=0.917, loss=0.379, backward_time=0.154, grad_norm=61.319, clip=100.000, loss_scale=6.554e+04, optim_step_time=0.014, optim0_lr0=9.972e-05, train_time=22.557
+[gpub071] 2025-02-02 15:16:25,400 (trainer:795) INFO: 6epoch:train:3601-4000batch: iter_time=9.935e-05, forward_time=0.134, loss_ctc=39.319, loss_att=14.224, acc=0.920, loss=0.340, backward_time=0.156, grad_norm=58.817, clip=100.000, loss_scale=8.738e+04, optim_step_time=0.014, optim0_lr0=1.000e-04, train_time=22.865
+[gpub071] 2025-02-02 15:18:49,017 (trainer:795) INFO: 6epoch:train:4001-4400batch: iter_time=9.882e-05, forward_time=0.135, loss_ctc=41.026, loss_att=14.638, acc=0.919, loss=0.352, backward_time=0.157, grad_norm=57.704, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.003e-04, train_time=22.948
+[gpub071] 2025-02-02 15:21:07,963 (trainer:795) INFO: 6epoch:train:4401-4800batch: iter_time=9.643e-05, forward_time=0.131, loss_ctc=44.169, loss_att=15.557, acc=0.920, loss=0.377, backward_time=0.152, grad_norm=61.968, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.006e-04, train_time=22.347
+[gpub071] 2025-02-02 15:23:31,010 (trainer:795) INFO: 6epoch:train:4801-5200batch: iter_time=9.888e-05, forward_time=0.134, loss_ctc=44.630, loss_att=15.606, acc=0.917, loss=0.380, backward_time=0.157, grad_norm=55.827, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.010e-04, train_time=22.780
+[gpub071] 2025-02-02 15:25:54,179 (trainer:795) INFO: 6epoch:train:5201-5600batch: iter_time=9.793e-05, forward_time=0.135, loss_ctc=40.339, loss_att=14.223, acc=0.918, loss=0.345, backward_time=0.157, grad_norm=57.022, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.013e-04, train_time=23.074
+[gpub071] 2025-02-02 15:28:13,884 (trainer:795) INFO: 6epoch:train:5601-6000batch: iter_time=9.828e-05, forward_time=0.131, loss_ctc=43.661, loss_att=15.509, acc=0.916, loss=0.374, backward_time=0.153, grad_norm=56.207, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.016e-04, train_time=22.479
+[gpub071] 2025-02-02 15:30:31,304 (trainer:795) INFO: 6epoch:train:6001-6400batch: iter_time=9.796e-05, forward_time=0.130, loss_ctc=43.131, loss_att=15.436, acc=0.917, loss=0.371, backward_time=0.151, grad_norm=63.375, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.019e-04, train_time=21.906
+[gpub071] 2025-02-02 15:32:54,261 (trainer:795) INFO: 6epoch:train:6401-6800batch: iter_time=9.945e-05, forward_time=0.134, loss_ctc=39.407, loss_att=14.108, acc=0.924, loss=0.339, backward_time=0.157, grad_norm=57.385, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.022e-04, train_time=22.830
+[gpub071] 2025-02-02 15:35:13,559 (trainer:795) INFO: 6epoch:train:6801-7200batch: iter_time=9.861e-05, forward_time=0.131, loss_ctc=45.731, loss_att=16.159, acc=0.916, loss=0.391, backward_time=0.153, grad_norm=69.146, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.025e-04, train_time=22.401
+[gpub071] 2025-02-02 15:37:34,703 (trainer:795) INFO: 6epoch:train:7201-7600batch: iter_time=9.979e-05, forward_time=0.133, loss_ctc=43.431, loss_att=15.412, acc=0.918, loss=0.372, backward_time=0.154, grad_norm=57.336, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.028e-04, train_time=22.474
+[gpub071] 2025-02-02 15:39:52,986 (trainer:795) INFO: 6epoch:train:7601-8000batch: iter_time=1.023e-04, forward_time=0.130, loss_ctc=43.431, loss_att=15.495, acc=0.922, loss=0.373, backward_time=0.152, grad_norm=63.150, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.031e-04, train_time=22.207
+[gpub071] 2025-02-02 15:42:14,597 (trainer:795) INFO: 6epoch:train:8001-8400batch: iter_time=9.946e-05, forward_time=0.133, loss_ctc=45.011, loss_att=15.957, acc=0.918, loss=0.386, backward_time=0.155, grad_norm=62.588, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.035e-04, train_time=22.541
+[gpub071] 2025-02-02 15:44:37,855 (trainer:795) INFO: 6epoch:train:8401-8800batch: iter_time=1.075e-04, forward_time=0.135, loss_ctc=42.087, loss_att=14.937, acc=0.916, loss=0.361, backward_time=0.157, grad_norm=54.029, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.038e-04, train_time=23.041
+[gpub071] 2025-02-02 15:46:56,816 (trainer:795) INFO: 6epoch:train:8801-9200batch: iter_time=1.016e-04, forward_time=0.131, loss_ctc=43.651, loss_att=15.218, acc=0.916, loss=0.371, backward_time=0.152, grad_norm=62.587, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.041e-04, train_time=22.079
+[gpub071] 2025-02-02 15:49:16,478 (trainer:795) INFO: 6epoch:train:9201-9600batch: iter_time=9.924e-05, forward_time=0.131, loss_ctc=43.853, loss_att=15.735, acc=0.916, loss=0.378, backward_time=0.153, grad_norm=60.834, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.044e-04, train_time=22.503
+[gpub071] 2025-02-02 15:51:37,341 (trainer:795) INFO: 6epoch:train:9601-10000batch: iter_time=1.002e-04, forward_time=0.132, loss_ctc=43.228, loss_att=15.084, acc=0.920, loss=0.368, backward_time=0.155, grad_norm=59.456, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.047e-04, train_time=22.489
+[gpub071] 2025-02-02 15:53:58,017 (trainer:795) INFO: 6epoch:train:10001-10400batch: iter_time=9.877e-05, forward_time=0.133, loss_ctc=42.881, loss_att=15.481, acc=0.915, loss=0.370, backward_time=0.154, grad_norm=56.484, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.050e-04, train_time=22.717
+[gpub071] 2025-02-02 15:56:19,332 (trainer:795) INFO: 6epoch:train:10401-10800batch: iter_time=1.002e-04, forward_time=0.133, loss_ctc=42.429, loss_att=15.325, acc=0.917, loss=0.367, backward_time=0.155, grad_norm=59.386, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.053e-04, train_time=22.442
+[gpub071] 2025-02-02 15:58:40,825 (trainer:795) INFO: 6epoch:train:10801-11200batch: iter_time=9.917e-05, forward_time=0.133, loss_ctc=44.151, loss_att=15.627, acc=0.917, loss=0.378, backward_time=0.155, grad_norm=59.111, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.056e-04, train_time=22.635
+[gpub071] 2025-02-02 16:00:59,161 (trainer:795) INFO: 6epoch:train:11201-11600batch: iter_time=9.949e-05, forward_time=0.131, loss_ctc=42.270, loss_att=15.102, acc=0.921, loss=0.363, backward_time=0.152, grad_norm=61.276, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.060e-04, train_time=22.192
+[gpub071] 2025-02-02 16:03:15,821 (trainer:795) INFO: 6epoch:train:11601-12000batch: iter_time=1.015e-04, forward_time=0.129, loss_ctc=45.407, loss_att=16.067, acc=0.918, loss=0.389, backward_time=0.150, grad_norm=60.993, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.063e-04, train_time=21.773
+[gpub071] 2025-02-02 16:05:32,863 (trainer:795) INFO: 6epoch:train:12001-12400batch: iter_time=9.890e-05, forward_time=0.130, loss_ctc=44.146, loss_att=15.707, acc=0.922, loss=0.379, backward_time=0.150, grad_norm=58.882, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.066e-04, train_time=22.112
+[gpub071] 2025-02-02 16:07:55,841 (trainer:795) INFO: 6epoch:train:12401-12800batch: iter_time=9.991e-05, forward_time=0.134, loss_ctc=43.569, loss_att=14.807, acc=0.919, loss=0.366, backward_time=0.157, grad_norm=61.266, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.069e-04, train_time=22.649
+[gpub071] 2025-02-02 16:10:13,783 (trainer:795) INFO: 6epoch:train:12801-13200batch: iter_time=1.008e-04, forward_time=0.130, loss_ctc=43.319, loss_att=15.338, acc=0.921, loss=0.371, backward_time=0.151, grad_norm=65.253, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.072e-04, train_time=22.067
+[gpub071] 2025-02-02 16:12:34,472 (trainer:795) INFO: 6epoch:train:13201-13600batch: iter_time=1.000e-04, forward_time=0.133, loss_ctc=44.219, loss_att=15.441, acc=0.917, loss=0.376, backward_time=0.154, grad_norm=59.361, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.075e-04, train_time=22.489
+[gpub071] 2025-02-02 16:14:55,943 (trainer:795) INFO: 6epoch:train:13601-14000batch: iter_time=1.012e-04, forward_time=0.133, loss_ctc=43.174, loss_att=15.514, acc=0.919, loss=0.372, backward_time=0.155, grad_norm=58.742, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.078e-04, train_time=22.649
+[gpub071] 2025-02-02 16:17:17,704 (trainer:795) INFO: 6epoch:train:14001-14400batch: iter_time=1.005e-04, forward_time=0.133, loss_ctc=40.727, loss_att=14.301, acc=0.921, loss=0.347, backward_time=0.155, grad_norm=54.935, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.081e-04, train_time=22.661
+[gpub071] 2025-02-02 16:19:39,895 (trainer:795) INFO: 6epoch:train:14401-14800batch: iter_time=9.918e-05, forward_time=0.134, loss_ctc=41.010, loss_att=14.826, acc=0.918, loss=0.354, backward_time=0.156, grad_norm=57.036, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.085e-04, train_time=22.751
+[gpub071] 2025-02-02 16:22:02,585 (trainer:795) INFO: 6epoch:train:14801-15200batch: iter_time=1.008e-04, forward_time=0.134, loss_ctc=43.248, loss_att=15.034, acc=0.919, loss=0.367, backward_time=0.157, grad_norm=60.682, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.088e-04, train_time=22.758
+[gpub071] 2025-02-02 16:24:23,025 (trainer:795) INFO: 6epoch:train:15201-15600batch: iter_time=1.009e-04, forward_time=0.133, loss_ctc=42.489, loss_att=14.678, acc=0.921, loss=0.360, backward_time=0.154, grad_norm=60.011, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.091e-04, train_time=22.504
+[gpub071] 2025-02-02 16:26:43,535 (trainer:795) INFO: 6epoch:train:15601-16000batch: iter_time=1.004e-04, forward_time=0.132, loss_ctc=44.078, loss_att=15.381, acc=0.917, loss=0.375, backward_time=0.154, grad_norm=56.968, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.094e-04, train_time=22.535
+[gpub071] 2025-02-02 16:29:04,984 (trainer:795) INFO: 6epoch:train:16001-16400batch: iter_time=1.001e-04, forward_time=0.133, loss_ctc=40.812, loss_att=14.805, acc=0.918, loss=0.353, backward_time=0.155, grad_norm=59.378, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.097e-04, train_time=22.533
+[gpub071] 2025-02-02 16:31:24,495 (trainer:795) INFO: 6epoch:train:16401-16800batch: iter_time=9.980e-05, forward_time=0.132, loss_ctc=43.922, loss_att=15.158, acc=0.918, loss=0.372, backward_time=0.153, grad_norm=66.289, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.100e-04, train_time=22.480
+[gpub071] 2025-02-02 16:33:43,996 (trainer:795) INFO: 6epoch:train:16801-17200batch: iter_time=1.014e-04, forward_time=0.131, loss_ctc=42.444, loss_att=15.215, acc=0.920, loss=0.365, backward_time=0.153, grad_norm=63.830, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.103e-04, train_time=22.222
+[gpub071] 2025-02-02 16:36:03,636 (trainer:795) INFO: 6epoch:train:17201-17600batch: iter_time=1.012e-04, forward_time=0.132, loss_ctc=43.295, loss_att=15.345, acc=0.918, loss=0.371, backward_time=0.153, grad_norm=68.484, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.106e-04, train_time=22.383
+[gpub071] 2025-02-02 16:38:26,331 (trainer:795) INFO: 6epoch:train:17601-18000batch: iter_time=1.088e-04, forward_time=0.135, loss_ctc=45.356, loss_att=15.251, acc=0.918, loss=0.379, backward_time=0.156, grad_norm=59.194, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.110e-04, train_time=22.912
+[gpub071] 2025-02-02 16:40:45,247 (trainer:795) INFO: 6epoch:train:18001-18400batch: iter_time=1.004e-04, forward_time=0.130, loss_ctc=43.956, loss_att=15.710, acc=0.916, loss=0.378, backward_time=0.153, grad_norm=57.986, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.113e-04, train_time=22.310
+[gpub071] 2025-02-02 16:43:05,364 (trainer:795) INFO: 6epoch:train:18401-18800batch: iter_time=1.009e-04, forward_time=0.132, loss_ctc=42.033, loss_att=14.918, acc=0.919, loss=0.360, backward_time=0.154, grad_norm=56.623, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.116e-04, train_time=22.406
+[gpub071] 2025-02-02 16:45:24,681 (trainer:795) INFO: 6epoch:train:18801-19200batch: iter_time=1.021e-04, forward_time=0.131, loss_ctc=44.330, loss_att=15.718, acc=0.918, loss=0.380, backward_time=0.154, grad_norm=60.064, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.119e-04, train_time=22.182
+[gpub071] 2025-02-02 16:47:45,463 (trainer:795) INFO: 6epoch:train:19201-19600batch: iter_time=9.858e-05, forward_time=0.132, loss_ctc=45.835, loss_att=16.209, acc=0.915, loss=0.392, backward_time=0.156, grad_norm=59.909, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.122e-04, train_time=22.455
+[gpub071] 2025-02-02 16:50:05,646 (trainer:795) INFO: 6epoch:train:19601-20000batch: iter_time=1.053e-04, forward_time=0.132, loss_ctc=41.003, loss_att=14.566, acc=0.921, loss=0.352, backward_time=0.155, grad_norm=57.272, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.125e-04, train_time=22.412
+[gpub071] 2025-02-02 16:52:28,602 (trainer:795) INFO: 6epoch:train:20001-20400batch: iter_time=9.941e-05, forward_time=0.134, loss_ctc=41.898, loss_att=14.803, acc=0.917, loss=0.358, backward_time=0.157, grad_norm=55.705, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.128e-04, train_time=22.926
+[gpub071] 2025-02-02 16:54:50,825 (trainer:795) INFO: 6epoch:train:20401-20800batch: iter_time=1.032e-04, forward_time=0.133, loss_ctc=40.684, loss_att=14.393, acc=0.919, loss=0.348, backward_time=0.156, grad_norm=59.996, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.131e-04, train_time=22.770
+[gpub071] 2025-02-02 16:57:12,523 (trainer:795) INFO: 6epoch:train:20801-21200batch: iter_time=1.075e-04, forward_time=0.133, loss_ctc=43.018, loss_att=15.432, acc=0.916, loss=0.370, backward_time=0.156, grad_norm=59.914, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.135e-04, train_time=22.619
+[gpub071] 2025-02-02 16:59:37,227 (trainer:795) INFO: 6epoch:train:21201-21600batch: iter_time=1.006e-04, forward_time=0.136, loss_ctc=41.425, loss_att=14.674, acc=0.918, loss=0.355, backward_time=0.158, grad_norm=61.314, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.138e-04, train_time=23.388
+[gpub071] 2025-02-02 17:01:58,853 (trainer:795) INFO: 6epoch:train:21601-22000batch: iter_time=1.061e-04, forward_time=0.133, loss_ctc=39.772, loss_att=14.062, acc=0.923, loss=0.340, backward_time=0.156, grad_norm=57.929, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.141e-04, train_time=22.432
+[gpub071] 2025-02-02 17:04:21,397 (trainer:795) INFO: 6epoch:train:22001-22400batch: iter_time=9.901e-05, forward_time=0.133, loss_ctc=44.131, loss_att=15.546, acc=0.919, loss=0.377, backward_time=0.156, grad_norm=59.055, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.144e-04, train_time=22.847
+[gpub071] 2025-02-02 17:06:39,334 (trainer:795) INFO: 6epoch:train:22401-22800batch: iter_time=9.816e-05, forward_time=0.130, loss_ctc=42.527, loss_att=14.737, acc=0.924, loss=0.361, backward_time=0.151, grad_norm=60.980, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.147e-04, train_time=21.981
+[gpub071] 2025-02-02 17:09:03,049 (trainer:795) INFO: 6epoch:train:22801-23200batch: iter_time=1.029e-04, forward_time=0.135, loss_ctc=40.543, loss_att=14.540, acc=0.919, loss=0.349, backward_time=0.158, grad_norm=57.631, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.150e-04, train_time=22.837
+[gpub071] 2025-02-02 17:11:22,166 (trainer:795) INFO: 6epoch:train:23201-23600batch: iter_time=1.018e-04, forward_time=0.130, loss_ctc=43.456, loss_att=15.193, acc=0.918, loss=0.370, backward_time=0.153, grad_norm=59.972, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.153e-04, train_time=22.461
+[gpub071] 2025-02-02 17:13:42,748 (trainer:795) INFO: 6epoch:train:23601-24000batch: iter_time=9.685e-05, forward_time=0.132, loss_ctc=42.131, loss_att=15.128, acc=0.921, loss=0.363, backward_time=0.154, grad_norm=56.661, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.156e-04, train_time=22.524
+[gpub071] 2025-02-02 17:16:03,804 (trainer:795) INFO: 6epoch:train:24001-24400batch: iter_time=9.852e-05, forward_time=0.132, loss_ctc=41.721, loss_att=15.064, acc=0.920, loss=0.360, backward_time=0.155, grad_norm=60.954, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.160e-04, train_time=22.589
+[gpub071] 2025-02-02 17:18:20,149 (trainer:795) INFO: 6epoch:train:24401-24800batch: iter_time=9.954e-05, forward_time=0.128, loss_ctc=44.086, loss_att=15.661, acc=0.918, loss=0.378, backward_time=0.150, grad_norm=62.832, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.163e-04, train_time=21.715
+[gpub071] 2025-02-02 17:42:00,182 (trainer:388) INFO: 6epoch results: [train] iter_time=1.047e-04, forward_time=0.133, loss_ctc=42.769, loss_att=15.145, acc=0.918, loss=0.366, backward_time=0.154, grad_norm=59.536, clip=100.000, loss_scale=1.209e+05, optim_step_time=0.014, optim0_lr0=1.068e-04, train_time=22.540, time=2 hours, 25 minutes and 50.84 seconds, total_count=149076, gpu_max_cached_mem_GB=38.754, gpu_max_alloc_mem_GB=35.092, [valid] loss_ctc=19.644, cer_ctc=0.062, loss_att=7.746, acc=0.957, cer=0.129, wer=0.788, loss=11.315, time=19 minutes and 16.13 seconds, total_count=24000, gpu_max_cached_mem_GB=38.754, gpu_max_alloc_mem_GB=35.092, [att_plot] time=4 minutes and 6.31 seconds, total_count=0, gpu_max_cached_mem_GB=38.754, gpu_max_alloc_mem_GB=35.092
+[gpub071] 2025-02-02 17:42:26,837 (trainer:454) INFO: There are no improvements in this epoch
+[gpub071] 2025-02-02 17:42:26,840 (trainer:510) INFO: The model files were removed: exp/s2t_owsm_v3.1_lr0003_03_raw_en_bpe50000/4epoch.pth
+[gpub071] 2025-02-02 17:42:26,841 (trainer:318) INFO: 7/20epoch started. Estimated time to finish: 1 day, 15 hours and 35 minutes
+[gpub071] 2025-02-02 17:44:47,869 (trainer:795) INFO: 7epoch:train:1-400batch: iter_time=4.286e-04, forward_time=0.132, loss_ctc=42.665, loss_att=14.949, acc=0.921, loss=0.363, backward_time=0.156, grad_norm=58.792, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.015, optim0_lr0=1.166e-04, train_time=22.386
+[gpub071] 2025-02-02 17:47:06,855 (trainer:795) INFO: 7epoch:train:401-800batch: iter_time=1.038e-04, forward_time=0.131, loss_ctc=44.379, loss_att=15.105, acc=0.923, loss=0.373, backward_time=0.153, grad_norm=59.785, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.169e-04, train_time=22.549
+[gpub071] 2025-02-02 17:49:24,313 (trainer:795) INFO: 7epoch:train:801-1200batch: iter_time=1.014e-04, forward_time=0.130, loss_ctc=41.720, loss_att=14.892, acc=0.923, loss=0.358, backward_time=0.151, grad_norm=57.987, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.172e-04, train_time=21.805
+[gpub071] 2025-02-02 17:51:44,870 (trainer:795) INFO: 7epoch:train:1201-1600batch: iter_time=1.027e-04, forward_time=0.132, loss_ctc=40.729, loss_att=14.104, acc=0.924, loss=0.345, backward_time=0.154, grad_norm=59.103, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.175e-04, train_time=22.466
+[gpub071] 2025-02-02 17:54:06,562 (trainer:795) INFO: 7epoch:train:1601-2000batch: iter_time=1.035e-04, forward_time=0.134, loss_ctc=41.248, loss_att=14.247, acc=0.921, loss=0.349, backward_time=0.155, grad_norm=54.238, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.179e-04, train_time=22.634
+[gpub071] 2025-02-02 17:56:27,902 (trainer:795) INFO: 7epoch:train:2001-2400batch: iter_time=1.006e-04, forward_time=0.133, loss_ctc=41.473, loss_att=14.294, acc=0.924, loss=0.351, backward_time=0.155, grad_norm=57.183, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.182e-04, train_time=22.647
+[gpub071] 2025-02-02 17:58:48,954 (trainer:795) INFO: 7epoch:train:2401-2800batch: iter_time=1.024e-04, forward_time=0.133, loss_ctc=41.242, loss_att=14.442, acc=0.919, loss=0.351, backward_time=0.154, grad_norm=58.864, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.185e-04, train_time=22.682
+[gpub071] 2025-02-02 18:01:09,989 (trainer:795) INFO: 7epoch:train:2801-3200batch: iter_time=1.016e-04, forward_time=0.133, loss_ctc=40.462, loss_att=14.309, acc=0.918, loss=0.346, backward_time=0.154, grad_norm=63.231, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.188e-04, train_time=22.477
+[gpub071] 2025-02-02 18:03:32,374 (trainer:795) INFO: 7epoch:train:3201-3600batch: iter_time=1.001e-04, forward_time=0.135, loss_ctc=38.332, loss_att=13.546, acc=0.925, loss=0.328, backward_time=0.155, grad_norm=53.750, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.191e-04, train_time=22.679
+[gpub071] 2025-02-02 18:05:52,439 (trainer:795) INFO: 7epoch:train:3601-4000batch: iter_time=1.018e-04, forward_time=0.132, loss_ctc=41.065, loss_att=14.192, acc=0.920, loss=0.348, backward_time=0.153, grad_norm=52.752, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.194e-04, train_time=22.560
+[gpub071] 2025-02-02 18:08:13,386 (trainer:795) INFO: 7epoch:train:4001-4400batch: iter_time=1.012e-04, forward_time=0.133, loss_ctc=37.077, loss_att=13.089, acc=0.926, loss=0.317, backward_time=0.154, grad_norm=54.058, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.197e-04, train_time=22.548
+[gpub071] 2025-02-02 18:10:33,084 (trainer:795) INFO: 7epoch:train:4401-4800batch: iter_time=1.011e-04, forward_time=0.132, loss_ctc=42.131, loss_att=14.642, acc=0.925, loss=0.358, backward_time=0.153, grad_norm=56.928, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.200e-04, train_time=22.338
+[gpub071] 2025-02-02 18:12:49,478 (trainer:795) INFO: 7epoch:train:4801-5200batch: iter_time=1.038e-04, forward_time=0.128, loss_ctc=41.476, loss_att=14.740, acc=0.924, loss=0.356, backward_time=0.150, grad_norm=55.167, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.204e-04, train_time=21.800
+[gpub071] 2025-02-02 18:15:09,395 (trainer:795) INFO: 7epoch:train:5201-5600batch: iter_time=9.811e-05, forward_time=0.132, loss_ctc=42.105, loss_att=14.966, acc=0.914, loss=0.361, backward_time=0.153, grad_norm=63.049, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.207e-04, train_time=22.422
+[gpub071] 2025-02-02 18:17:29,530 (trainer:795) INFO: 7epoch:train:5601-6000batch: iter_time=9.796e-05, forward_time=0.132, loss_ctc=41.635, loss_att=14.907, acc=0.922, loss=0.358, backward_time=0.154, grad_norm=56.727, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.210e-04, train_time=22.267
+[gpub071] 2025-02-02 18:19:50,138 (trainer:795) INFO: 7epoch:train:6001-6400batch: iter_time=1.010e-04, forward_time=0.132, loss_ctc=40.974, loss_att=14.242, acc=0.920, loss=0.348, backward_time=0.154, grad_norm=53.967, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.213e-04, train_time=22.589
+[gpub071] 2025-02-02 18:22:09,487 (trainer:795) INFO: 7epoch:train:6401-6800batch: iter_time=1.001e-04, forward_time=0.131, loss_ctc=42.331, loss_att=14.759, acc=0.922, loss=0.360, backward_time=0.153, grad_norm=61.960, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.216e-04, train_time=22.323
+[gpub071] 2025-02-02 18:24:32,677 (trainer:795) INFO: 7epoch:train:6801-7200batch: iter_time=1.007e-04, forward_time=0.135, loss_ctc=41.944, loss_att=14.851, acc=0.918, loss=0.359, backward_time=0.157, grad_norm=55.726, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.219e-04, train_time=22.876
+[gpub071] 2025-02-02 18:26:53,237 (trainer:795) INFO: 7epoch:train:7201-7600batch: iter_time=9.875e-05, forward_time=0.132, loss_ctc=41.593, loss_att=14.721, acc=0.922, loss=0.356, backward_time=0.154, grad_norm=52.539, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.222e-04, train_time=22.573
+[gpub071] 2025-02-02 18:29:13,548 (trainer:795) INFO: 7epoch:train:7601-8000batch: iter_time=9.738e-05, forward_time=0.132, loss_ctc=39.366, loss_att=13.660, acc=0.925, loss=0.334, backward_time=0.154, grad_norm=49.701, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.225e-04, train_time=22.397
+[gpub071] 2025-02-02 18:31:30,677 (trainer:795) INFO: 7epoch:train:8001-8400batch: iter_time=9.785e-05, forward_time=0.129, loss_ctc=44.262, loss_att=15.437, acc=0.921, loss=0.376, backward_time=0.151, grad_norm=57.586, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.229e-04, train_time=21.949
+[gpub071] 2025-02-02 18:33:51,618 (trainer:795) INFO: 7epoch:train:8401-8800batch: iter_time=1.053e-04, forward_time=0.132, loss_ctc=40.018, loss_att=14.082, acc=0.917, loss=0.342, backward_time=0.155, grad_norm=58.257, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.232e-04, train_time=22.497
+[gpub071] 2025-02-02 18:36:16,176 (trainer:795) INFO: 7epoch:train:8801-9200batch: iter_time=1.046e-04, forward_time=0.136, loss_ctc=39.034, loss_att=13.941, acc=0.922, loss=0.335, backward_time=0.158, grad_norm=53.988, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.235e-04, train_time=23.089
+[gpub071] 2025-02-02 18:38:35,339 (trainer:795) INFO: 7epoch:train:9201-9600batch: iter_time=9.721e-05, forward_time=0.131, loss_ctc=41.102, loss_att=14.371, acc=0.924, loss=0.350, backward_time=0.153, grad_norm=56.284, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.238e-04, train_time=22.368
+[gpub071] 2025-02-02 18:40:54,469 (trainer:795) INFO: 7epoch:train:9601-10000batch: iter_time=9.803e-05, forward_time=0.131, loss_ctc=39.823, loss_att=14.077, acc=0.923, loss=0.341, backward_time=0.153, grad_norm=55.996, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.241e-04, train_time=22.278
+[gpub071] 2025-02-02 18:43:13,744 (trainer:795) INFO: 7epoch:train:10001-10400batch: iter_time=1.028e-04, forward_time=0.131, loss_ctc=43.200, loss_att=15.232, acc=0.919, loss=0.369, backward_time=0.153, grad_norm=58.687, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.244e-04, train_time=22.066
+[gpub071] 2025-02-02 18:45:36,231 (trainer:795) INFO: 7epoch:train:10401-10800batch: iter_time=1.037e-04, forward_time=0.134, loss_ctc=40.329, loss_att=14.010, acc=0.920, loss=0.342, backward_time=0.156, grad_norm=55.747, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.247e-04, train_time=22.734
+[gpub071] 2025-02-02 18:47:58,788 (trainer:795) INFO: 7epoch:train:10801-11200batch: iter_time=9.847e-05, forward_time=0.134, loss_ctc=40.041, loss_att=14.167, acc=0.923, loss=0.343, backward_time=0.156, grad_norm=53.712, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.250e-04, train_time=22.997
+[gpub071] 2025-02-02 18:50:20,671 (trainer:795) INFO: 7epoch:train:11201-11600batch: iter_time=1.053e-04, forward_time=0.133, loss_ctc=41.557, loss_att=14.250, acc=0.923, loss=0.351, backward_time=0.156, grad_norm=57.825, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.254e-04, train_time=22.816
+[gpub071] 2025-02-02 18:52:38,629 (trainer:795) INFO: 7epoch:train:11601-12000batch: iter_time=9.954e-05, forward_time=0.130, loss_ctc=40.874, loss_att=14.283, acc=0.921, loss=0.348, backward_time=0.151, grad_norm=59.754, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.257e-04, train_time=21.944
+[gpub071] 2025-02-02 18:55:03,231 (trainer:795) INFO: 7epoch:train:12001-12400batch: iter_time=9.694e-05, forward_time=0.136, loss_ctc=37.769, loss_att=13.167, acc=0.923, loss=0.321, backward_time=0.158, grad_norm=57.331, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.260e-04, train_time=23.078
+[gpub071] 2025-02-02 18:57:22,949 (trainer:795) INFO: 7epoch:train:12401-12800batch: iter_time=1.000e-04, forward_time=0.131, loss_ctc=40.821, loss_att=14.376, acc=0.920, loss=0.349, backward_time=0.153, grad_norm=52.516, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.263e-04, train_time=22.447
+[gpub071] 2025-02-02 18:59:44,135 (trainer:795) INFO: 7epoch:train:12801-13200batch: iter_time=9.990e-05, forward_time=0.133, loss_ctc=41.888, loss_att=14.474, acc=0.922, loss=0.355, backward_time=0.155, grad_norm=53.874, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.266e-04, train_time=22.676
+[gpub071] 2025-02-02 19:02:04,742 (trainer:795) INFO: 7epoch:train:13201-13600batch: iter_time=1.007e-04, forward_time=0.133, loss_ctc=43.454, loss_att=15.133, acc=0.918, loss=0.369, backward_time=0.154, grad_norm=58.179, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.269e-04, train_time=22.525
+[gpub071] 2025-02-02 19:04:25,817 (trainer:795) INFO: 7epoch:train:13601-14000batch: iter_time=9.866e-05, forward_time=0.133, loss_ctc=41.523, loss_att=14.693, acc=0.917, loss=0.355, backward_time=0.154, grad_norm=56.346, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.272e-04, train_time=22.389
+[gpub071] 2025-02-02 19:06:43,358 (trainer:795) INFO: 7epoch:train:14001-14400batch: iter_time=9.743e-05, forward_time=0.130, loss_ctc=39.304, loss_att=13.916, acc=0.925, loss=0.336, backward_time=0.151, grad_norm=58.949, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.275e-04, train_time=22.123
+[gpub071] 2025-02-02 19:09:05,597 (trainer:795) INFO: 7epoch:train:14401-14800batch: iter_time=9.989e-05, forward_time=0.134, loss_ctc=42.870, loss_att=15.044, acc=0.918, loss=0.365, backward_time=0.156, grad_norm=53.768, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.279e-04, train_time=22.830
+[gpub071] 2025-02-02 19:11:24,235 (trainer:795) INFO: 7epoch:train:14801-15200batch: iter_time=9.776e-05, forward_time=0.130, loss_ctc=43.519, loss_att=14.951, acc=0.920, loss=0.368, backward_time=0.152, grad_norm=71.854, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.282e-04, train_time=22.067
+[gpub071] 2025-02-02 19:13:42,893 (trainer:795) INFO: 7epoch:train:15201-15600batch: iter_time=9.636e-05, forward_time=0.131, loss_ctc=42.030, loss_att=14.467, acc=0.920, loss=0.355, backward_time=0.152, grad_norm=65.388, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.285e-04, train_time=22.102
+[gpub071] 2025-02-02 19:16:01,397 (trainer:795) INFO: 7epoch:train:15601-16000batch: iter_time=9.749e-05, forward_time=0.130, loss_ctc=42.574, loss_att=14.854, acc=0.924, loss=0.362, backward_time=0.152, grad_norm=61.903, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.288e-04, train_time=22.292
+[gpub071] 2025-02-02 19:18:21,173 (trainer:795) INFO: 7epoch:train:16001-16400batch: iter_time=9.944e-05, forward_time=0.132, loss_ctc=42.347, loss_att=14.431, acc=0.922, loss=0.356, backward_time=0.153, grad_norm=58.778, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.291e-04, train_time=22.465
+[gpub071] 2025-02-02 19:20:43,803 (trainer:795) INFO: 7epoch:train:16401-16800batch: iter_time=1.026e-04, forward_time=0.135, loss_ctc=42.266, loss_att=14.508, acc=0.919, loss=0.357, backward_time=0.156, grad_norm=59.841, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.294e-04, train_time=22.644
+[gpub071] 2025-02-02 19:23:01,323 (trainer:795) INFO: 7epoch:train:16801-17200batch: iter_time=1.011e-04, forward_time=0.130, loss_ctc=41.280, loss_att=14.406, acc=0.925, loss=0.351, backward_time=0.151, grad_norm=63.629, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.297e-04, train_time=21.913
+[gpub071] 2025-02-02 19:25:25,355 (trainer:795) INFO: 7epoch:train:17201-17600batch: iter_time=1.012e-04, forward_time=0.135, loss_ctc=38.807, loss_att=13.498, acc=0.924, loss=0.330, backward_time=0.158, grad_norm=55.836, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.300e-04, train_time=23.117
+[gpub071] 2025-02-02 19:27:44,428 (trainer:795) INFO: 7epoch:train:17601-18000batch: iter_time=9.815e-05, forward_time=0.131, loss_ctc=45.241, loss_att=15.334, acc=0.922, loss=0.380, backward_time=0.152, grad_norm=62.714, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.304e-04, train_time=22.261
+[gpub071] 2025-02-02 19:30:06,083 (trainer:795) INFO: 7epoch:train:18001-18400batch: iter_time=9.918e-05, forward_time=0.133, loss_ctc=40.887, loss_att=14.154, acc=0.925, loss=0.346, backward_time=0.155, grad_norm=59.346, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.307e-04, train_time=22.704
+[gpub071] 2025-02-02 19:32:28,661 (trainer:795) INFO: 7epoch:train:18401-18800batch: iter_time=1.030e-04, forward_time=0.134, loss_ctc=42.109, loss_att=14.641, acc=0.923, loss=0.358, backward_time=0.156, grad_norm=55.152, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.310e-04, train_time=22.714
+[gpub071] 2025-02-02 19:34:46,548 (trainer:795) INFO: 7epoch:train:18801-19200batch: iter_time=9.674e-05, forward_time=0.130, loss_ctc=43.633, loss_att=15.016, acc=0.922, loss=0.369, backward_time=0.151, grad_norm=57.094, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.313e-04, train_time=22.159
+[gpub071] 2025-02-02 19:37:12,478 (trainer:795) INFO: 7epoch:train:19201-19600batch: iter_time=1.007e-04, forward_time=0.137, loss_ctc=40.685, loss_att=14.122, acc=0.920, loss=0.345, backward_time=0.160, grad_norm=53.466, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.316e-04, train_time=23.425
+[gpub071] 2025-02-02 19:39:31,559 (trainer:795) INFO: 7epoch:train:19601-20000batch: iter_time=9.881e-05, forward_time=0.131, loss_ctc=40.787, loss_att=14.480, acc=0.921, loss=0.350, backward_time=0.153, grad_norm=56.144, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.319e-04, train_time=22.271
+[gpub071] 2025-02-02 19:41:54,330 (trainer:795) INFO: 7epoch:train:20001-20400batch: iter_time=9.802e-05, forward_time=0.135, loss_ctc=40.331, loss_att=13.927, acc=0.920, loss=0.341, backward_time=0.156, grad_norm=52.851, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.322e-04, train_time=22.539
+[gpub071] 2025-02-02 19:44:15,134 (trainer:795) INFO: 7epoch:train:20401-20800batch: iter_time=1.046e-04, forward_time=0.132, loss_ctc=39.789, loss_att=13.980, acc=0.924, loss=0.339, backward_time=0.154, grad_norm=53.446, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.015, optim0_lr0=1.325e-04, train_time=22.739
+[gpub071] 2025-02-02 19:46:34,298 (trainer:795) INFO: 7epoch:train:20801-21200batch: iter_time=9.729e-05, forward_time=0.131, loss_ctc=42.687, loss_att=15.194, acc=0.919, loss=0.366, backward_time=0.153, grad_norm=58.122, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.329e-04, train_time=22.370
+[gpub071] 2025-02-02 19:48:53,306 (trainer:795) INFO: 7epoch:train:21201-21600batch: iter_time=9.979e-05, forward_time=0.131, loss_ctc=42.602, loss_att=14.382, acc=0.922, loss=0.357, backward_time=0.152, grad_norm=59.466, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.332e-04, train_time=22.181
+[gpub071] 2025-02-02 19:51:15,155 (trainer:795) INFO: 7epoch:train:21601-22000batch: iter_time=1.005e-04, forward_time=0.133, loss_ctc=43.338, loss_att=14.916, acc=0.921, loss=0.366, backward_time=0.155, grad_norm=64.471, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.335e-04, train_time=22.484
+[gpub071] 2025-02-02 19:53:34,661 (trainer:795) INFO: 7epoch:train:22001-22400batch: iter_time=9.963e-05, forward_time=0.131, loss_ctc=41.734, loss_att=14.183, acc=0.923, loss=0.351, backward_time=0.153, grad_norm=56.551, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.338e-04, train_time=22.474
+[gpub071] 2025-02-02 19:55:55,813 (trainer:795) INFO: 7epoch:train:22401-22800batch: iter_time=9.970e-05, forward_time=0.133, loss_ctc=39.050, loss_att=13.397, acc=0.925, loss=0.330, backward_time=0.154, grad_norm=52.895, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.341e-04, train_time=22.520
+[gpub071] 2025-02-02 19:58:16,300 (trainer:795) INFO: 7epoch:train:22801-23200batch: iter_time=9.994e-05, forward_time=0.132, loss_ctc=42.667, loss_att=14.633, acc=0.919, loss=0.360, backward_time=0.154, grad_norm=59.285, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.344e-04, train_time=22.563
+[gpub071] 2025-02-02 20:00:38,377 (trainer:795) INFO: 7epoch:train:23201-23600batch: iter_time=1.028e-04, forward_time=0.134, loss_ctc=40.161, loss_att=13.749, acc=0.924, loss=0.339, backward_time=0.156, grad_norm=56.771, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.347e-04, train_time=22.803
+[gpub071] 2025-02-02 20:03:00,857 (trainer:795) INFO: 7epoch:train:23601-24000batch: iter_time=1.026e-04, forward_time=0.134, loss_ctc=42.177, loss_att=14.875, acc=0.919, loss=0.360, backward_time=0.156, grad_norm=53.841, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.351e-04, train_time=22.697
+[gpub071] 2025-02-02 20:05:24,694 (trainer:795) INFO: 7epoch:train:24001-24400batch: iter_time=1.048e-04, forward_time=0.135, loss_ctc=38.407, loss_att=13.338, acc=0.925, loss=0.326, backward_time=0.158, grad_norm=48.923, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.354e-04, train_time=23.059
+[gpub071] 2025-02-02 20:07:46,288 (trainer:795) INFO: 7epoch:train:24401-24800batch: iter_time=1.035e-04, forward_time=0.133, loss_ctc=40.656, loss_att=14.315, acc=0.922, loss=0.347, backward_time=0.155, grad_norm=55.869, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.357e-04, train_time=22.684
+[gpub071] 2025-02-02 20:31:29,889 (trainer:388) INFO: 7epoch results: [train] iter_time=1.058e-04, forward_time=0.132, loss_ctc=41.308, loss_att=14.400, acc=0.922, loss=0.351, backward_time=0.154, grad_norm=57.188, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.262e-04, train_time=22.501, time=2 hours, 25 minutes and 35.92 seconds, total_count=173922, gpu_max_cached_mem_GB=38.754, gpu_max_alloc_mem_GB=35.092, [valid] loss_ctc=19.546, cer_ctc=0.061, loss_att=7.601, acc=0.961, cer=0.099, wer=0.713, loss=11.184, time=19 minutes and 19.84 seconds, total_count=28000, gpu_max_cached_mem_GB=38.754, gpu_max_alloc_mem_GB=35.092, [att_plot] time=4 minutes and 6.25 seconds, total_count=0, gpu_max_cached_mem_GB=38.754, gpu_max_alloc_mem_GB=35.092
+[gpub071] 2025-02-02 20:31:56,648 (trainer:454) INFO: There are no improvements in this epoch
+[gpub071] 2025-02-02 20:31:56,651 (trainer:510) INFO: The model files were removed: exp/s2t_owsm_v3.1_lr0003_03_raw_en_bpe50000/6epoch.pth
+[gpub071] 2025-02-02 20:31:56,652 (trainer:318) INFO: 8/20epoch started. Estimated time to finish: 1 day, 12 hours and 45 minutes
+[gpub071] 2025-02-02 20:34:15,379 (trainer:795) INFO: 8epoch:train:1-400batch: iter_time=3.823e-04, forward_time=0.130, loss_ctc=40.698, loss_att=13.853, acc=0.929, loss=0.342, backward_time=0.152, grad_norm=53.236, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.360e-04, train_time=22.123
+[gpub071] 2025-02-02 20:36:33,545 (trainer:795) INFO: 8epoch:train:401-800batch: iter_time=9.847e-05, forward_time=0.130, loss_ctc=40.000, loss_att=13.407, acc=0.924, loss=0.334, backward_time=0.152, grad_norm=56.655, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.363e-04, train_time=22.273
+[gpub071] 2025-02-02 20:38:54,655 (trainer:795) INFO: 8epoch:train:801-1200batch: iter_time=9.885e-05, forward_time=0.134, loss_ctc=39.469, loss_att=13.484, acc=0.928, loss=0.332, backward_time=0.154, grad_norm=57.405, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.366e-04, train_time=22.367
+[gpub071] 2025-02-02 20:41:15,186 (trainer:795) INFO: 8epoch:train:1201-1600batch: iter_time=9.854e-05, forward_time=0.132, loss_ctc=42.302, loss_att=14.378, acc=0.923, loss=0.356, backward_time=0.154, grad_norm=66.056, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.369e-04, train_time=22.513
+[gpub071] 2025-02-02 20:43:39,968 (trainer:795) INFO: 8epoch:train:1601-2000batch: iter_time=9.650e-05, forward_time=0.137, loss_ctc=40.096, loss_att=13.808, acc=0.923, loss=0.339, backward_time=0.158, grad_norm=60.594, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.373e-04, train_time=23.170
+[gpub071] 2025-02-02 20:45:58,897 (trainer:795) INFO: 8epoch:train:2001-2400batch: iter_time=9.523e-05, forward_time=0.131, loss_ctc=39.015, loss_att=13.170, acc=0.927, loss=0.327, backward_time=0.152, grad_norm=63.920, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.376e-04, train_time=22.215
+[gpub071] 2025-02-02 20:48:19,952 (trainer:795) INFO: 8epoch:train:2401-2800batch: iter_time=9.524e-05, forward_time=0.134, loss_ctc=40.913, loss_att=13.718, acc=0.926, loss=0.342, backward_time=0.154, grad_norm=69.992, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.379e-04, train_time=22.628
+[gpub071] 2025-02-02 20:50:37,702 (trainer:795) INFO: 8epoch:train:2801-3200batch: iter_time=9.433e-05, forward_time=0.130, loss_ctc=41.139, loss_att=14.288, acc=0.924, loss=0.349, backward_time=0.151, grad_norm=67.917, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.382e-04, train_time=22.062
+[gpub071] 2025-02-02 20:53:00,209 (trainer:795) INFO: 8epoch:train:3201-3600batch: iter_time=9.460e-05, forward_time=0.135, loss_ctc=37.900, loss_att=13.065, acc=0.926, loss=0.321, backward_time=0.156, grad_norm=50.701, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.385e-04, train_time=22.820
+[gpub071] 2025-02-02 20:55:20,100 (trainer:795) INFO: 8epoch:train:3601-4000batch: iter_time=9.868e-05, forward_time=0.132, loss_ctc=39.357, loss_att=13.651, acc=0.926, loss=0.334, backward_time=0.154, grad_norm=60.196, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.388e-04, train_time=22.277
+[gpub071] 2025-02-02 20:57:40,090 (trainer:795) INFO: 8epoch:train:4001-4400batch: iter_time=9.683e-05, forward_time=0.132, loss_ctc=39.680, loss_att=13.624, acc=0.923, loss=0.335, backward_time=0.153, grad_norm=51.754, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.391e-04, train_time=22.336
+[gpub071] 2025-02-02 21:00:00,504 (trainer:795) INFO: 8epoch:train:4401-4800batch: iter_time=9.358e-05, forward_time=0.132, loss_ctc=38.894, loss_att=13.169, acc=0.929, loss=0.326, backward_time=0.154, grad_norm=55.693, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.395e-04, train_time=22.600
+[gpub071] 2025-02-02 21:02:21,011 (trainer:795) INFO: 8epoch:train:4801-5200batch: iter_time=9.588e-05, forward_time=0.133, loss_ctc=40.408, loss_att=13.657, acc=0.925, loss=0.339, backward_time=0.154, grad_norm=55.824, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.398e-04, train_time=22.488
+[gpub071] 2025-02-02 21:04:42,287 (trainer:795) INFO: 8epoch:train:5201-5600batch: iter_time=9.455e-05, forward_time=0.133, loss_ctc=40.736, loss_att=14.314, acc=0.922, loss=0.348, backward_time=0.155, grad_norm=56.371, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.401e-04, train_time=22.677
+[gpub071] 2025-02-02 21:06:59,046 (trainer:795) INFO: 8epoch:train:5601-6000batch: iter_time=9.732e-05, forward_time=0.129, loss_ctc=42.250, loss_att=14.162, acc=0.923, loss=0.353, backward_time=0.150, grad_norm=60.156, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.404e-04, train_time=21.813
+[gpub071] 2025-02-02 21:09:21,217 (trainer:795) INFO: 8epoch:train:6001-6400batch: iter_time=1.007e-04, forward_time=0.134, loss_ctc=39.631, loss_att=13.520, acc=0.923, loss=0.334, backward_time=0.156, grad_norm=60.264, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.407e-04, train_time=22.692
+[gpub071] 2025-02-02 21:11:40,635 (trainer:795) INFO: 8epoch:train:6401-6800batch: iter_time=9.981e-05, forward_time=0.131, loss_ctc=40.229, loss_att=14.034, acc=0.923, loss=0.342, backward_time=0.153, grad_norm=54.135, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.410e-04, train_time=22.280
+[gpub071] 2025-02-02 21:14:00,950 (trainer:795) INFO: 8epoch:train:6801-7200batch: iter_time=1.002e-04, forward_time=0.132, loss_ctc=40.258, loss_att=13.714, acc=0.924, loss=0.339, backward_time=0.154, grad_norm=57.631, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.413e-04, train_time=22.440
+[gpub071] 2025-02-02 21:16:25,964 (trainer:795) INFO: 8epoch:train:7201-7600batch: iter_time=9.739e-05, forward_time=0.137, loss_ctc=36.213, loss_att=12.915, acc=0.925, loss=0.311, backward_time=0.159, grad_norm=50.250, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.416e-04, train_time=23.217
+[gpub071] 2025-02-02 21:18:47,785 (trainer:795) INFO: 8epoch:train:7601-8000batch: iter_time=9.947e-05, forward_time=0.133, loss_ctc=39.524, loss_att=13.579, acc=0.927, loss=0.334, backward_time=0.155, grad_norm=60.786, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.420e-04, train_time=22.707
+[gpub071] 2025-02-02 21:21:09,232 (trainer:795) INFO: 8epoch:train:8001-8400batch: iter_time=9.852e-05, forward_time=0.134, loss_ctc=37.437, loss_att=12.868, acc=0.927, loss=0.316, backward_time=0.154, grad_norm=60.199, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.423e-04, train_time=22.638
+[gpub071] 2025-02-02 21:23:33,863 (trainer:795) INFO: 8epoch:train:8401-8800batch: iter_time=9.887e-05, forward_time=0.136, loss_ctc=36.782, loss_att=12.835, acc=0.922, loss=0.313, backward_time=0.158, grad_norm=57.851, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.426e-04, train_time=23.121
+[gpub071] 2025-02-02 21:25:55,127 (trainer:795) INFO: 8epoch:train:8801-9200batch: iter_time=1.007e-04, forward_time=0.133, loss_ctc=40.204, loss_att=13.847, acc=0.924, loss=0.340, backward_time=0.155, grad_norm=56.440, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.429e-04, train_time=22.537
+[gpub071] 2025-02-02 21:28:18,635 (trainer:795) INFO: 8epoch:train:9201-9600batch: iter_time=9.896e-05, forward_time=0.135, loss_ctc=38.584, loss_att=13.453, acc=0.924, loss=0.328, backward_time=0.157, grad_norm=55.994, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.014, optim0_lr0=1.432e-04, train_time=23.009
+[gpub071] 2025-02-02 21:30:36,470 (trainer:795) INFO: 8epoch:train:9601-10000batch: iter_time=1.019e-04, forward_time=0.130, loss_ctc=40.228, loss_att=13.913, acc=0.927, loss=0.341, backward_time=0.151, grad_norm=66.370, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.015, optim0_lr0=1.435e-04, train_time=22.049
+[gpub071] 2025-02-02 21:32:57,015 (trainer:795) INFO: 8epoch:train:10001-10400batch: iter_time=1.236e-04, forward_time=0.132, loss_ctc=40.799, loss_att=14.293, acc=0.920, loss=0.348, backward_time=0.154, grad_norm=69.755, clip=100.000, loss_scale=1.311e+05, optim_step_time=0.013, optim0_lr0=1.438e-04, train_time=22.340
+

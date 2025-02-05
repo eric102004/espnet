@@ -147,6 +147,10 @@ s2t_speech_fold_length=800 # fold_length for speech data during S2T training.
 s2t_text_fold_length=150   # fold_length for text data during S2T training.
 lm_fold_length=150         # fold_length for LM training.
 
+# add argument for bpe model and token list
+bpemodel= # bpe model path
+bpetoken_list= # bpe token list path
+
 help_message=$(cat << EOF
 Usage: $0 --train_set "<train_set_name>" --valid_set "<valid_set_name>" --test_sets "<test_set_names>"
 
@@ -369,8 +373,14 @@ else
 fi
 bpedir="${token_listdir}/bpe_${bpemode}${nbpe}"
 bpeprefix="${bpedir}"/bpe
-bpemodel="${bpeprefix}".model
-bpetoken_list="${bpedir}"/tokens.txt
+if [ -z "${bpemodel}" ]; then
+    bpemodel="${bpeprefix}".model
+fi
+if [ -z "${bpetoken_list}" ]; then
+    bpetoken_list="${bpedir}"/tokens.txt
+fi
+#bpemodel="${bpeprefix}".model
+#bpetoken_list="${bpedir}"/tokens.txt
 chartoken_list="${token_listdir}"/char/tokens.txt
 hugging_face_token_list="${token_listdir}/hugging_face_"${hugging_face_model_name_or_path/\//-}/tokens.txt
 # NOTE: keep for future development.
