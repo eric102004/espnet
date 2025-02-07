@@ -143,12 +143,12 @@ class XEUSFrontend(AbsFrontend):
         #wavs_list = []
         #for wav, wav_len in zip(wavs, wavs_len):
         #    wavs_list.append(wav[:wav_len])
-        
+        use_mask = self.training
         if self.use_flash_attn:
             with torch.cuda.amp.autocast(dtype=torch.bfloat16):
-                hidden_states, out_lens, _, _ = self.upstream.encode(wavs, wavs_len, use_mask=False, use_final_output=False)
+                hidden_states, out_lens, _, _ = self.upstream.encode(wavs, wavs_len, use_mask=use_mask, use_final_output=False)
         else:
-                hidden_states, out_lens, _, _ = self.upstream.encode(wavs, wavs_len, use_mask=False, use_final_output=False)
+                hidden_states, out_lens, _, _ = self.upstream.encode(wavs, wavs_len, use_mask=use_mask, use_final_output=False)
         
         # repeat out_lens by num_layers times
         out_lens = [out_lens] * self.upstream.num_layers
