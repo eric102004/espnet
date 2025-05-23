@@ -46,31 +46,55 @@ class ASRInferenceRunner(InferenceRunner, nn.Module):
         return output
 
 
+def run_single_sample_inference(config_path):
+    config = OmegaConf.load(config_path)
+
+    runner = ASRInferenceRunner(
+        model_config=config.model,
+        dataset_config=config.dataset,
+    )
+    test_key = config.dataset.test[0].name
+    print(test_key, "TEST_KEY")
+    dataset = runner.initialize_dataset(test_key)
+    uid, sample = dataset[0]
+
+    result = runner.run_on_example(uid, sample)
+
+    print("==== DEBUG INFERENCE RESULT ====")
+    for key, val in result.items():
+        print(f"{key}: {val['value']}")
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--config",
         type=str,
-        required=True,
-        help="Path to training config (e.g., config.yaml)",
+        default="evaluate.yaml",
+        help="Path to evaluation config (e.g., evaluate.yaml)",
     )
     parser.add_argument("--no_resume", action="store_true", help="Disable resume mode")
+    parser.add_argument("--debug_sample", action="store_true",
+                        help="Run debug inference on one sample")
 
     args = parser.parse_args()
 
-    config = OmegaConf.load(args.config)
+    if args.debug_sample:
+        run_single_sample_inference(args.config)
+    else:
+        config = OmegaConf.load(args.config)
 
-    runner = ASRInferenceRunner(
-        model_config=config.model,
-        dataset_config=config.dataset,
-        parallel=config.parallel,
-    )
-    test_keys = [ds_conf.name for ds_conf in config.dataset.test]
+        runner = ASRInferenceRunner(
+            model_config=config.model,
+            dataset_config=config.dataset,
+            parallel=config.parallel,
+        )
+        test_keys = [ds_conf.name for ds_conf in config.dataset.test]
 
-    for test_key in test_keys:
-        runner.run_on_dataset(test_key, output_dir=f"{config.decode_dir}/{test_key}")
+        for test_key in test_keys:
+            runner.run_on_dataset(test_key, output_dir=f"{config.decode_dir}/{test_key}")
 
-    # runner.compute_metrics(train_config.test)
+        # runner.compute_metrics(train_config.test)
 
 
 if __name__ == "__main__":

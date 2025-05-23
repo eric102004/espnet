@@ -1,6 +1,6 @@
 recipedir: .
-num_device: 1
-expdir: ${recipedir}/exp/train_ctc
+num_device: 2
+expdir: ${recipedir}/exp/train_ctc_gpu2
 statsdir:  ${recipedir}/exp/stats
 vocab_size: 6500
 seed: 2024
@@ -105,21 +105,37 @@ dataloader:
     int_pad_value: -1
   train:
     iter_factory:
+      _target_: espnet2.iterators.sequence_iter_factory.SequenceIterFactory
+      shuffle: true
+      collate_fn: ${dataloader.collate_fn}
+      num_workers: 8
       batches:
+        _target_: espnet2.samplers.build_batch_sampler.build_batch_sampler
+        type: numel
+        shape_files:
+          - ${statsdir}/train/feats_shape
         batch_size: 4
-        batch_bins: 12000000
+        batch_bins: 1500000
   valid:
     iter_factory:
+      _target_: espnet2.iterators.sequence_iter_factory.SequenceIterFactory
+      shuffle: false
+      collate_fn: ${dataloader.collate_fn}
+      num_workers: 8
       batches:
+        _target_: espnet2.samplers.build_batch_sampler.build_batch_sampler
+        type: numel
+        shape_files:
+          - ${statsdir}/valid/feats_shape
         batch_size: 4
-        batch_bins: 12000000
-
+        batch_bins: ${dataloader.train.iter_factory.batches.batch_bins}
 
 trainer:
   max_epochs: 70
   precision: bf16-mixed
   accumulate_grad_batches: 4
-  fast_dev_run: 2
+  log_every_n_steps: 500
+  use_distributed_sampler: false
 
   logger:
     - _target_: lightning.pytorch.loggers.TensorBoardLogger
@@ -129,7 +145,7 @@ trainer:
     - _target_: lightning.pytorch.loggers.WandbLogger
       project: ESPnet3 development
       save_dir: ${expdir}/wandb
-      name: LS_100_GPU1
+      name: LS_100_GPU2
 
   strategy: auto
 

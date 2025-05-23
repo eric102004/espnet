@@ -17,6 +17,7 @@ scheduler:
   _target_: espnet2.schedulers.warmup_lr.WarmupLR
   warmup_steps: 15000
 
+
 dataloader:
   collate_fn:
     _target_: espnet2.train.collate_fn.CommonCollateFn
@@ -26,20 +27,18 @@ dataloader:
       _target_: espnet2.iterators.sequence_iter_factory.SequenceIterFactory
       shuffle: true
       collate_fn: ${dataloader.collate_fn}
-      num_workers: 4
       batches:
         _target_: espnet2.samplers.build_batch_sampler.build_batch_sampler
         type: numel
         shape_files:
           - ${statsdir}/train/feats_shape
         batch_size: 4
-        batch_bins: 12000000
+        batch_bins: 4000000
   valid:
     iter_factory:
       _target_: espnet2.iterators.sequence_iter_factory.SequenceIterFactory
       shuffle: false
       collate_fn: ${dataloader.collate_fn}
-      num_workers: 4
       batches:
         _target_: espnet2.samplers.build_batch_sampler.build_batch_sampler
         type: numel
@@ -48,11 +47,10 @@ dataloader:
         batch_size: 4
         batch_bins: ${dataloader.train.iter_factory.batches.batch_bins}
 
-
 best_model_criterion:
-  - - valid/acc
+  - - valid/loss
     - 3
-    - max
+    - min
 
 trainer:
   accelerator: gpu

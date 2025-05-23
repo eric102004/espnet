@@ -1,64 +1,38 @@
 recipedir: .
-num_device: ${oc.env:N_GPU}
-expdir: ${recipedir}/exp/gpu${num_device}_accum4
+num_device: 1
+expdir: ${recipedir}/exp/train_ctc
 statsdir:  ${recipedir}/exp/stats
 vocab_size: 6500
 seed: 2024
 task: asr
 
+# load default config
+defaults:
+  - dataset.yaml
+  - conf/default.yaml
+
 parallel:
   env: slurm
-  n_workers: 1
+  n_workers: 16
   options:
-    account: bbjs-delta-gpu
-    queue: gpuA40x4
+    account: bbjs-delta-cpu
+    queue: cpu
     cores: 1
     processes: 1
-    memory: 4GB
-    walltime: 30:00
+    memory: 8GB
+    # walltime: 30:00
     job_extra_directives:
-      - "--gres=gpu:1"
+      # - "--gres=gpu:1"
       - "--ntasks-per-node=1"
       - "--cpus-per-task=4"
       - "--output=parallel_log/%j-%x.log"
 
-dataset:
-  _target_: espnet3.data.DataOrganizer
-  train:
-    - name: train-clean-100
-      dataset:
-        _target_: egs3.librispeech_100.asr1.dataset.LibriSpeechDataset
-        split: train-clean-100
-  valid:
-    - name: dev-clean
-      dataset:
-        _target_: egs3.librispeech_100.asr1.dataset.LibriSpeechDataset
-        split: dev-clean
-    - name: dev-other
-      dataset:
-        _target_: egs3.librispeech_100.asr1.dataset.LibriSpeechDataset
-        split: dev-other
-  test:
-    - name: test-clean
-      dataset:
-        _target_: egs3.librispeech_100.asr1.dataset.LibriSpeechDataset
-        split: test-clean
-    - name: test-other
-      dataset:
-        _target_: egs3.librispeech_100.asr1.dataset.LibriSpeechDataset
-        split: test-other
-
-  preprocessor:
-    _target_: espnet2.train.preprocessor.CommonPreprocessor
-    train: true
-    token_type: bpe
-    token_list: ${recipedir}/sentencepiece_model/tokens.txt
-    bpemodel: ${recipedir}/sentencepiece_model/bpe.model
-    text_cleaner:
-
 
 model:
   vocab_size: ${vocab_size}
+
+  # Please run with `--train_tokenizer` to get tokenizer model.
+  # Otherwise set your token list here.
   token_list: ${load_line:'${recipedir}/sentencepiece_model/tokens.txt'}
 
   input_size:
@@ -85,23 +59,12 @@ model:
     macaron_ffn: true
     merge_conv_kernel: 31
 
-  decoder: transformer
-  decoder_conf:
-    attention_heads: 4
-    linear_units: 2048
-    num_blocks: 6
-    dropout_rate: 0.1
-    positional_dropout_rate: 0.1
-    self_attention_dropout_rate: 0.1
-    src_attention_dropout_rate: 0.1
-    layer_drop_rate: 0.0
-
   normalize: global_mvn
   normalize_conf:
     stats_file: ${recipedir}/exp/stats/train/feats_stats.npz
 
   model_conf:
-    ctc_weight: 0.3
+    ctc_weight: 1.0 # For CTC model
     lsm_weight: 0.1
     length_normalized_loss: false
 
@@ -117,10 +80,14 @@ model:
     time_warp_window: 5
     time_warp_mode: bicubic
     apply_freq_mask: true
-    freq_mask_width_range: [0, 27]
+    freq_mask_width_range:
+    - 0
+    - 27
     num_freq_mask: 2
     apply_time_mask: true
-    time_mask_width_ratio_range: [0., 0.05]
+    time_mask_width_ratio_range:
+    - 0.
+    - 0.05
     num_time_mask: 5
 
 optim:
@@ -141,18 +108,20 @@ dataloader:
       _target_: espnet2.iterators.sequence_iter_factory.SequenceIterFactory
       shuffle: true
       collate_fn: ${dataloader.collate_fn}
+      num_workers: 8
       batches:
         _target_: espnet2.samplers.build_batch_sampler.build_batch_sampler
         type: numel
         shape_files:
           - ${statsdir}/train/feats_shape
         batch_size: 4
-        batch_bins: 4000000
+        batch_bins: 1500000
   valid:
     iter_factory:
       _target_: espnet2.iterators.sequence_iter_factory.SequenceIterFactory
       shuffle: false
       collate_fn: ${dataloader.collate_fn}
+      num_workers: 8
       batches:
         _target_: espnet2.samplers.build_batch_sampler.build_batch_sampler
         type: numel
@@ -161,18 +130,11 @@ dataloader:
         batch_size: 4
         batch_bins: ${dataloader.train.iter_factory.batches.batch_bins}
 
-
-best_model_criterion:
-  - [valid/loss, 3, min]
-
 trainer:
-  accelerator: gpu
-  devices: ${num_device}
-  num_nodes: 1
-  accumulate_grad_batches: 4
-  gradient_clip_val: 1.0
-  log_every_n_steps: 500
   max_epochs: 70
+  precision: bf16-mixed
+  accumulate_grad_batches: 4
+  log_every_n_steps: 500
 
   logger:
     - _target_: lightning.pytorch.loggers.TensorBoardLogger
@@ -182,23 +144,10 @@ trainer:
     - _target_: lightning.pytorch.loggers.WandbLogger
       project: ESPnet3 development
       save_dir: ${expdir}/wandb
-      name: wandb_logger
+      name: LS_100_GPU1
 
   strategy: auto
 
+# If you want to resume training use the following config.
 # fit:
-#   ckpt_path: ${recipedir}/exp/gpu1/last.ckpt
-
-test:
-  - name: test-clean
-    metrics:
-      - _target_: espnet3.metrics.WER
-        inputs:
-          ref: text
-          hyp: hypothesis
-  - name: test-other
-    metrics:
-      - _target_: espnet3.metrics.WER
-        inputs:
-          ref: text
-          hyp: hypothesis
+#   ckpt_path: ${expdir}/last.ckpt
