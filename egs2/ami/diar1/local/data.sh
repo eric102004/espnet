@@ -49,9 +49,17 @@ num_spk=4
 # Segment duration, in seconds
 # The `duration` is not the actual length of the segment, but the minimum
 # length threshold when considering splitting the wav files.
+fixed=false
 duration=20
+hop_size=
+
+train_set=
+valid_set=
+test_sets=
 
 . utils/parse_options.sh || exit 1;
+
+log "${train_set} ${valid_set} ${test_sets}"
 
 if [ -z "${AMI}" ]; then
     log "Fill the value of 'AMI' of db.sh, typically AMI=downloads"
@@ -74,7 +82,8 @@ if [ ${stage} -le 0 ] && [ ${stop_stage} -ge 0 ] ; then
     log "Start downloading AMI-diarization-setup from github"
     # This is a fork created by Qingzheng Wang, mainly modified the database.yml,
     # to adapt to ESPNet's directory setting
-    URL=https://github.com/Qingzheng-Wang/AMI-diarization-setup.git
+    #URL=https://github.com/Qingzheng-Wang/AMI-diarization-setup.git
+    URL=https://github.com/pyannote/AMI-diarization-setup.git
     # our fork
     if [ ! -d "$setup_dir" ] ; then
         git clone "$URL" "$setup_dir"
@@ -119,13 +128,24 @@ if [ ${stage} -le 2 ] && [ ${stop_stage} -ge 2 ] ; then
     mkdir -p segmented_dataset/
 
     log "Start segmenting the dataset"
-    python3 local/segment_wav_rttm.py \
-        --ami_diarization_config ./${setup_dir}/pyannote/database.yml \
-        --mic_type "${mic_type}" \
-        --if_mini ${if_mini} \
-        --sound_type ${sound_type} \
-        --segment_output_dir ./segmented_dataset \
-        --duration ${duration}
+    if [ ${fixed} == true ]; then
+        python3 local/segment_wav_rttm_fixed.py \
+            --ami_diarization_config ./${setup_dir}/pyannote/database.yml \
+            --mic_type "${mic_type}" \
+            --if_mini ${if_mini} \
+            --sound_type ${sound_type} \
+            --segment_output_dir ./segmented_dataset_${mic_type}_${sound_type}_${duration}_${hop_size} \
+            --duration ${duration} \
+            --hop_size ${hop_size}
+    else
+        python3 local/segment_wav_rttm.py \
+            --ami_diarization_config ./${setup_dir}/pyannote/database.yml \
+            --mic_type "${mic_type}" \
+            --if_mini ${if_mini} \
+            --sound_type ${sound_type} \
+            --segment_output_dir ./segmented_dataset_${mic_type}_${sound_type}_${duration} \
+            --duration ${duration}
+    fi
 
     log "Successfully segmented the dataset"
 fi
@@ -135,31 +155,48 @@ if [ ${stage} -le 3 ] && [ ${stop_stage} -ge 3 ] ; then
     log "Start preparing Kaldi-style files"
     mkdir -p data/
 
+    if [ ${fixed} == true ]; then
+        segmented_dataset_dir=./segmented_dataset_${mic_type}_${sound_type}_${duration}_${hop_size}
+    else
+        segmented_dataset_dir=./segmented_dataset_${mic_type}_${sound_type}_${duration}
+    fi
+    
     python3 local/prepare_kaldi_files.py \
         --kaldi_files_base_dir ./data \
         --num_spk ${num_spk} \
-        --segmented_dataset_dir ./segmented_dataset \
-        --ami_setup_base_dir ./${setup_dir}
+        --segmented_dataset_dir ${segmented_dataset_dir} \
+        --ami_setup_base_dir ./${setup_dir} \
+        --train_set ${train_set} \
+        --valid_set ${valid_set} \
+        --test_set ${test_sets}
 
     if [ ${num_spk} -eq 3 ] || [ ${num_spk} -eq 5 ]; then
         # Since there is no or few test or dev set for 3 or 5 speakers,
         # and our main goal for num_spk == 3 or 5 is to adapt the model trained with 4 spks,
         # we directly use the train set as test and dev set
-        cp data/train/* data/dev/
-        cp data/train/* data/test/
+        cp data/${train_set}/* data/${valid_set}/
+        cp data/${train_set}/* data/${test_sets}/
     fi
 
     # Convert the utt2spk file to spk2utt file
-    for dir in data/test data/train data/dev; do
+    for dir in data/${test_sets} data/${train_set} data/${valid_set}; do
         utils/utt2spk_to_spk2utt.pl $dir/utt2spk > $dir/spk2utt
         sort $dir/utt2spk -o $dir/utt2spk
     done
 
-    for dir in data/test data/train data/dev; do
+    for dir in data/${test_sets} data/${train_set} data/${valid_set}; do
         utils/fix_data_dir.sh $dir
     done
 
     log "Successfully prepared Kaldi-style files"
+fi
+
+# remove utt ids not in brno's setup
+if [ ${stage} -le 4 ] && [ ${stop_stage} -ge 4 ] ; then
+    log "Start removing utt ids not in brno's AMI diarization setup"
+    python3 local/remove_by_utt_id.py --base_dir data/${train_set}
+
+    log "Successfully removed utt ids not in brno's AMI diarization setup"
 fi
 
 log "Successfully finished. [elapsed=${SECONDS}s]"

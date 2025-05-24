@@ -1,0 +1,104 @@
+input_size: 0
+num_workers: 1
+
+# network architecture
+model_conf:
+    diar_weight: 1.0
+    attractor_weight: 0.01
+    context_size: 0 # frames are concatenated on each frame
+    subsampling: 1 # do not subsample
+
+label_aggregator: label_aggregator
+label_aggregator_conf:
+    win_length: 400             
+    hop_length: 1024
+
+frontend: default
+frontend_conf:
+    fs: 16k
+    n_fft: 512
+    win_length: 400
+    hop_length: 160
+
+# encoder related (pre-trained OWSM encoder)
+encoder: e_branchformer
+encoder_conf:
+    output_size: 1024
+    attention_heads: 16
+    attention_layer_type: selfattn
+    pos_enc_layer_type: abs_pos
+    rel_pos_type: latest
+    cgmlp_linear_units: 4096
+    cgmlp_conv_kernel: 31
+    use_linear_after_conv: false
+    gate_activation: identity
+    num_blocks: 18
+    dropout_rate: 0.1
+    positional_dropout_rate: 0.1
+    attention_dropout_rate: 0.0
+    input_layer: conv2d8
+    layer_drop_rate: 0.0
+    linear_units: 4096
+    positionwise_layer_type: linear
+    use_ffn: true
+    macaron_ffn: true
+    merge_conv_kernel: 31
+    use_flash_attn: false
+
+
+# attractor related
+attractor: rnn
+attractor_conf:
+    unit: 1024 # same as encoder output size
+    layer: 1
+    dropout: 0.0
+    attractor_grad: True
+
+# optimization related
+optim: adam
+grad_clip: 5
+max_epoch: 450
+optim_conf:
+    lr: 0.00001
+scheduler: warmuplr
+scheduler_conf:
+    warmup_steps: 100000
+
+seed: 2025
+batch_type: numel
+batch_bins: 12800000
+accum_grad: 2
+patience: none
+num_att_plot: 0
+
+# others:
+best_model_criterion:
+-  - valid
+   - acc
+   - max
+keep_nbest_models: 10
+
+# initialization method for model parameters
+init: xavier_uniform
+
+specaug: specaug
+specaug_conf:
+    apply_time_warp: true
+    time_warp_window: 5
+    time_warp_mode: bicubic
+    apply_freq_mask: true
+    freq_mask_width_range:
+    - 0
+    - 27
+    num_freq_mask: 2
+    apply_time_mask: true
+    time_mask_width_ratio_range:
+    - 0.
+    - 0.05
+    num_time_mask: 10
+
+
+# if you have a separately trained two-speaker ASR model then you can initialize the ASR parameters and have better results for ASR
+init_param: ["/work/hdd/bbjs/clin10/espnet/egs2/librimix/diar1/exp_libri23mix_460/diar_v7_train_diar_eda_lr00003_warmup8000_raw/valid.acc.ave_3best.pth:encoder:encoder",
+             "/work/hdd/bbjs/clin10/espnet/egs2/librimix/diar1/exp_libri23mix_460/diar_v7_train_diar_eda_lr00003_warmup8000_raw/valid.acc.ave_3best.pth:attractor:attractor"
+             ]

@@ -32,9 +32,9 @@ def prepare_kaldi_files(
     # dataset_type: "train", "dev", "test"
 
     assert (
-        num_spk == "3" or num_spk == "4" or num_spk == "5"
-    ), f"num_spk should be 3, 4, or 5, but get {num_spk}"
-    num_spk = int(num_spk)
+        num_spk == "3" or num_spk == "4" or num_spk == "5" or num_spk == "None"
+    ), f"num_spk should be 3, 4, 5, or None, but get {num_spk}"
+    num_spk = int(num_spk) if num_spk != "None" else None
     kaldi_files_dir = os.path.join(kaldi_files_base_dir, dataset_type)
 
     if not os.path.exists(kaldi_files_dir):
@@ -46,12 +46,13 @@ def prepare_kaldi_files(
 
     # wav_id_txt is the txt file contains a list of wav_ids,
     # uri is used with the same meaning as "wav_id"
-    wav_id_txt = os.path.join(segmented_dataset_dir, dataset_type, "wav_ids.txt")
+    sub_dataset_type = dataset_type.split("_")[0]
+    wav_id_txt = os.path.join(segmented_dataset_dir, sub_dataset_type, "wav_ids.txt")
 
-    wav_path_template = f"{segmented_dataset_dir}/{dataset_type}/" f"wav/{{uri}}.wav"
-    rttm_path_template = f"{segmented_dataset_dir}/{dataset_type}/" f"rttm/{{uri}}.rttm"
+    wav_path_template = f"{segmented_dataset_dir}/{sub_dataset_type}/" f"wav/{{uri}}.wav"
+    rttm_path_template = f"{segmented_dataset_dir}/{sub_dataset_type}/" f"rttm/{{uri}}.rttm"
     full_rttm_path_template = (
-        f"{ami_setup_base_dir}/only_words/rttms/{dataset_type}/" f"{{uri_full}}.rttm"
+        f"{ami_setup_base_dir}/only_words/rttms/{sub_dataset_type}/" f"{{uri_full}}.rttm"
     )
 
     wav_ids = []
@@ -103,7 +104,7 @@ def prepare_kaldi_files(
             unique_speaker_all[wav_id_full] = unique_speaker_set
 
         # Skip the wav files with more or less than num_spk speakers
-        if len(unique_speaker_all[wav_id_full]) != num_spk:
+        if num_spk!=None and len(unique_speaker_all[wav_id_full]) != num_spk:
             continue
 
         # Prepare segments, utt2spk
@@ -217,12 +218,30 @@ parser.add_argument(
         "typically located at ./ami_diarization_setup"
     ),
 )
+parser.add_argument(
+    "--train_set",
+    type=str,
+    required=True,
+    help="Name of the train set directory, e.g., 'train'.",
+)
+parser.add_argument(
+    "--valid_set",
+    type=str,
+    required=True,
+    help="Name of the validation set directory, e.g., 'dev'.",
+)
+parser.add_argument(
+    "--test_set",
+    type=str,
+    required=True,
+    help="Name of the test set directory, e.g., 'test'.",
+)
 
 args = parser.parse_args()
 
 # Prepare train set
 prepare_kaldi_files(
-    "train",
+    args.train_set,
     args.kaldi_files_base_dir,
     args.num_spk,
     args.segmented_dataset_dir,
@@ -230,7 +249,7 @@ prepare_kaldi_files(
 )
 # Prepare dev set
 prepare_kaldi_files(
-    "dev",
+    args.valid_set,
     args.kaldi_files_base_dir,
     args.num_spk,
     args.segmented_dataset_dir,
@@ -238,7 +257,7 @@ prepare_kaldi_files(
 )
 # Prepare test set
 prepare_kaldi_files(
-    "test",
+    args.test_set,
     args.kaldi_files_base_dir,
     args.num_spk,
     args.segmented_dataset_dir,
