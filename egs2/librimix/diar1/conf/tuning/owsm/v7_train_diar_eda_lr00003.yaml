@@ -1,0 +1,118 @@
+# The initial version of this file is copied from egs2/librimix/diar1/conf/train_diar_eda.yaml
+# This config file is for EEND-EDA pre-training stage (training on data with 4 speakers).
+# The training time is about 1 day on a single V100-32GB GPU. (this is not correct when using OWSM as encoder)
+# For the details about EEND-EDA, refer to the following papers:
+# EEND-EDA: https://arxiv.org/pdf/2005.09921.pdf, https://arxiv.org/pdf/2106.10654.pdf
+
+#input_size: 0
+num_workers: 1
+
+# network architecture
+model_conf:
+    diar_weight: 1.0
+    attractor_weight: 0.01
+    context_size: 0 # frames are concatenated on each frame
+    subsampling: 1 # do not subsample
+
+label_aggregator: label_aggregator
+label_aggregator_conf:
+    win_length: 1600             
+    hop_length: 640        # since owsm uses conv2d, which in downsample input to 1/4
+
+frontend: default
+frontend_conf:
+    fs: 16k
+    n_fft: 512
+    win_length: 400
+    hop_length: 160
+    n_mels: 128
+
+encoder: e_branchformer
+encoder_conf:
+    output_size: 1024
+    attention_heads: 16
+    attention_layer_type: selfattn
+    pos_enc_layer_type: abs_pos
+    rel_pos_type: latest
+    # attention_qk_norm: false               # qk norm
+    # use_flash_attn: true                     # flash attn
+    cgmlp_linear_units: 4096
+    cgmlp_conv_kernel: 31
+    use_linear_after_conv: false
+    gate_activation: identity
+    num_blocks: 18
+    dropout_rate: 0.1
+    positional_dropout_rate: 0.1
+    attention_dropout_rate: 0.1
+    input_layer: conv2d
+    layer_drop_rate: 0.0
+    linear_units: 4096
+    positionwise_layer_type: linear
+    use_ffn: true
+    macaron_ffn: true
+    merge_conv_kernel: 31
+
+# attractor related
+attractor: rnn
+attractor_conf:
+    unit: 1024 # same as encoder output size
+    layer: 1
+    dropout: 0.0
+    attractor_grad: True
+
+# optimization related
+optim: adamw
+grad_clip: 5
+max_epoch: 10 # you can go till 500 according to EDA paper
+optim_conf:
+    lr: 0.00003
+    weight_decay: 0.000001
+scheduler: warmuplr
+scheduler_conf:
+    warmup_steps: 1000
+
+seed: 2025
+#batch_type: numel
+#batch_bins: 50000
+batch_type: unsorted
+batch_size: 4
+accum_grad: 4
+patience: none
+num_att_plot: 0
+
+use_amp: true
+unused_parameters: true  #num_iters_per_epoch: 1000
+
+# others:
+best_model_criterion:
+-  - valid
+   - acc
+   - max
+keep_nbest_models: 3
+
+# initialization method for model parameters
+init: xavier_uniform
+
+specaug: specaug
+specaug_conf:
+    apply_time_warp: true
+    time_warp_window: 5
+    time_warp_mode: bicubic
+    apply_freq_mask: true
+    freq_mask_width_range:
+    - 0
+    - 27
+    num_freq_mask: 2
+    apply_time_mask: true
+    time_mask_width_ratio_range:
+    - 0.
+    - 0.05
+    num_time_mask: 10
+
+
+# initialize the pre-trained three-speaker model trained on libri3mix 460 hours simulated dataset
+#init_param: ["exp/enh_asr_v1_owsm_lrg_libri3mix460_raw_en_char/valid.acc.ave_10best.pth:encoder:encoder",
+#            "exp/enh_asr_v1_owsm_lrg_libri3mix460_raw_en_char/valid.acc.ave_10best.pth:diar_model.attractor:attractor"
+#            ]
+init_param: ["/work/hdd/bbjs/clin10/diar/ami_baseline/espnet/egs2/ami/diar1/owsm_v4/models--espnet--owsm_v4_medium_1B/snapshots/300d22685c12274f5ac91314c6c9b713c95b9498/exp/s2t_train_conv2d8_size1024_e18_d18_mel128_raw_bpe50000/valid.total_count.ave_5best.pth:s2t_model.encoder:encoder"
+            ]
