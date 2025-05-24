@@ -2,6 +2,9 @@
 #    For the details about SA-EEND, refer to the following paper:
 #    SA-EEND: https://arxiv.org/pdf/1909.06247.pdf
 
+# by chyi-jiunn
+#use_amp: true
+
 # network architecture
 # encoder related
 encoder: transformer

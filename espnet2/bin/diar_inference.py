@@ -576,9 +576,18 @@ def inference(
                 for spk, w in enumerate(waves):
                     wav_writers[spk][keys[b]] = fs, w[b]
         else:
-            spk_predictions = diarize_speech(**batch)
+            _, spk_predictions = diarize_speech(**batch)
+            #try:
             for b in range(batch_size):
                 writer[keys[b]] = spk_predictions[b]
+            #except:
+                #breakpoint()
+            #    print(len(spk_predictions))
+            #    print(spk_predictions[1].shape)
+            #    print(batch_size)
+            #    for i in spk_predictions:
+            #        print(type(i))
+            #    raise ValueError(f"{len(spk_predictions)}, {spk_predictions}")
 
     if enh_s2t_task:
         for w in wav_writers:

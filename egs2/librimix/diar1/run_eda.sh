@@ -14,17 +14,21 @@ train_set="train"
 valid_set="dev"
 test_sets="test"
 
-train_config1="conf/train_diar_eda.yaml"
-train_config2="conf/train_diar_eda_adapt.yaml"
+lr=0002
+train_config_name=train_diar_eda
+train_config1="conf/${train_config_name}_lr${lr}.yaml"
+train_config2="conf/${train_config_name}_adapt.yaml"
 decode_config="conf/decode_diar_eda.yaml"
 
-pretrain_stage=true
+pretrain_stage=true                                               # change from true to false
 adapt_stage=true
 # If you want to run only one of the stages (e.g., the adaptation stage),
 # set "false" to the one you don't want to run (e.g., the pre-training stage)
 
 if [[ ${pretrain_stage} == "true" ]]; then
 ./diar.sh \
+    --stage 5 \
+    --fs 16k \
     --collar 0.0 \
     --train_set "${train_set}" \
     --valid_set "${valid_set}" \
@@ -34,7 +38,9 @@ if [[ ${pretrain_stage} == "true" ]]; then
     --inference_config "${decode_config}" \
     --inference_nj 5 \
     --local_data_opts "--num_spk 2" \
-    --stop_stage 5 \
+    --stop_stage 6 \
+    --dumpdir "dump_2spk" \
+    --expdir "exp_2spk" \
     "$@"
 fi
 
@@ -42,6 +48,8 @@ fi
 # according to the actual path of your experiment.
 if [[ ${adapt_stage} == "true" ]]; then
 ./diar.sh \
+    --stage 2 \
+    --fs 16k \
     --collar 0.0 \
     --train_set "${train_set}" \
     --valid_set "${valid_set}" \
@@ -51,8 +59,10 @@ if [[ ${adapt_stage} == "true" ]]; then
     --inference_config "${decode_config}" \
     --inference_nj 5 \
     --local_data_opts "--stage 2" \
-    --diar_args "--init_param exp/diar_train_diar_eda_5_raw_max_epoch250/valid.acc.ave_10best.pth" \
+    --diar_args "--init_param exp/diar_${train_config_name}_lr${lr}_raw/valid.acc.ave_10best.pth" \
     --diar_tag "train_diar_eda_adapt_raw" \
     --num_spk "3"\
+    --dumpdir "dump_3spk" \
+    --expdir "exp_3spk" \
     "$@"
 fi

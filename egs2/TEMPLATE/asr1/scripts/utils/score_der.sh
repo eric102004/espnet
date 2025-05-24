@@ -5,7 +5,7 @@
 
 collar=0.0
 frame_shift=128
-fs=8000
+fs=16000
 subsampling=1
 
 . ./utils/parse_options.sh || exit 1

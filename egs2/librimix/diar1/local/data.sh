@@ -13,11 +13,17 @@ log() {
 stage=0       # start from 0 if you need to start from data preparation
 stop_stage=100
 FOLDER=git_librimix
-fs=8k
+fs=16k
 num_spk="2 3"
 min_max_mode=max
 
- . utils/parse_options.sh || exit 1;
+train_set="train"
+valid_set="dev"
+test_sets="test"
+
+train_data_hrs=100
+
+. utils/parse_options.sh || exit 1;
 
 if [ -z "${LIBRIMIX}" ]; then
     log "Fill the value of 'LIBRIMIX' of db.sh"
@@ -47,44 +53,46 @@ if [ ${stage} -le 0 ] && [ ${stop_stage} -ge 0 ] ; then
 fi
 
 if [ ${stage} -le 1 ] && [ ${stop_stage} -ge 1 ] ; then
-# download data & generate librimix
-./local/generate_librimix_sd.sh $LIBRIMIX $FOLDER $fs $min_max_mode
+    # download data & generate librimix
+    ./local/generate_librimix_sd.sh $LIBRIMIX $FOLDER $fs $min_max_mode
 fi
 
 if [ ${stage} -le 2 ] && [ ${stop_stage} -ge 2 ] ; then
-# Create Kaldi-style files
-fs_int=${fs//k/"000"}
-mkdir -p data/
+    # Create Kaldi-style files
+    fs_int=${fs//k/"000"}
+    mkdir -p data/
 
-for i in $num_spk; do
-    python3 local/prepare_kaldifiles.py \
-        --target_dir data/ \
-        --source_dir ${LIBRIMIX}/Libri${i}Mix/wav${fs}/${min_max_mode}/metadata \
-        --rttm_dir ${FOLDER}/metadata/LibriSpeech \
-        --fs ${fs_int} \
-        --num_spk $i
-done
-
-# rm unnecessary files
-for i in $num_spk; do
-    for dir in data/test data/train data/dev; do
-        rm ${dir}${i}/spk*.scp noise1.scp
+    for i in $num_spk; do
+        python3 local/prepare_kaldifiles.py \
+            --target_dir data/ \
+            --source_dir ${LIBRIMIX}/Libri${i}Mix/wav${fs}/${min_max_mode}/metadata \
+            --rttm_dir ${FOLDER}/metadata/LibriSpeech \
+            --fs ${fs_int} \
+            --num_spk $i \
+            --train_data_hrs ${train_data_hrs} \
+            --train_set ${train_set}
     done
-done
 
-for file in reco2dur rttm segments spk2utt utt2spk wav.scp; do
-    for dir in data/test data/train data/dev; do
-        mkdir -p ${dir}
-        echo -n "" > ${dir}/${file}
-        for i in $num_spk; do
-            cat ${dir}${i}/${file} >> ${dir}/${file}
+    # rm unnecessary files
+    for i in $num_spk; do
+        for dir in data/${test_sets} data/${train_set} data/${valid_set}; do
+            rm ${dir}${i}/spk*.scp ${dir}${i}/noise1.scp
         done
     done
-done
 
-for dir in data/test data/train data/dev; do
-    utils/fix_data_dir.sh $dir
-done
+    for file in reco2dur rttm segments spk2utt utt2spk wav.scp; do
+        for dir in data/${test_sets} data/${train_set} data/${valid_set}; do
+            mkdir -p ${dir}
+            echo -n "" > ${dir}/${file}
+            for i in $num_spk; do
+                cat ${dir}${i}/${file} >> ${dir}/${file}
+            done
+        done
+    done
+
+    for dir in data/${test_sets} data/${train_set} data/${valid_set}; do
+        utils/fix_data_dir.sh $dir
+    done
 fi
 
 log "Successfully finished. [elapsed=${SECONDS}s]"

@@ -323,18 +323,20 @@ parser.add_argument("--source_dir", type=str, default="Libri2Mix/wav16k/max/meta
 parser.add_argument("--rttm_dir", type=str, default="metadata/LibriSpeech")
 parser.add_argument("--fs", type=int, default=8000)
 parser.add_argument("--num_spk", type=int, default=2)
+parser.add_argument("--train_data_hrs", type=int, default=100)
+parser.add_argument("--train_set", type=str, default="train")
 
 args = parser.parse_args()
 
 train_rttm, train_spk = load_rttm_text(
-    os.path.join(args.rttm_dir, "train_clean_100.rttm")
+    os.path.join(args.rttm_dir, f"train_clean_{args.train_data_hrs}.rttm")
 )
 dev_rttm, dev_spk = load_rttm_text(os.path.join(args.rttm_dir, "dev_clean.rttm"))
 test_rttm, test_spk = load_rttm_text(os.path.join(args.rttm_dir, "test_clean.rttm"))
 
 process_metadata(
-    os.path.join(args.source_dir, "mixture_train-100_mix_both.csv"),
-    os.path.join(args.target_dir, "train" + str(args.num_spk)),
+    os.path.join(args.source_dir, f"mixture_train-{args.train_data_hrs}_mix_both.csv"),
+    os.path.join(args.target_dir, args.train_set + str(args.num_spk)),
     train_rttm,
     args.fs,
     args.num_spk,
