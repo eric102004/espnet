@@ -1541,6 +1541,9 @@ class SVSPreprocessor(AbsPreprocessor):
             3: [0.1, 0.5, 1],
             4: [0.05, 0.1, 0.5, 1],
         },
+        discrete_token_name: str = "discrete_token",
+        pos_sample_name: str = "pos_idx",
+        neg_sample_name: str = "neg_idx",
     ):
         super().__init__(train)
         self.train = train
@@ -1553,6 +1556,9 @@ class SVSPreprocessor(AbsPreprocessor):
         self.singing_volume_normalize = singing_volume_normalize
         self.phn_seg = phn_seg
         self.time_shift = hop_length / fs
+        self.discrete_token_name = discrete_token_name
+        self.pos_sample_name = pos_sample_name
+        self.neg_sample_name = neg_sample_name
         if token_type is not None:
             if token_list is None:
                 raise ValueError("token_list is required if token_type is not None")
@@ -1666,6 +1672,54 @@ class SVSPreprocessor(AbsPreprocessor):
             data["phn_cnt"] = phn_cnt
             data["slur"] = slur
 
+        # Infer case of music score
+        if self.midi_name in data and self.label_name not in data:
+            # Load score info
+            tempo, syb_info = data[self.midi_name]
+            phn_cnt = []
+            midi = []
+            duration_phn = []
+            duration_ruled_phn = []
+            duration_syb = []
+            slur = []
+
+            for st, et, syb, note, phns in syb_info:
+                dur = et - st
+                _duration_syb = int(dur / self.time_shift + 0.5)
+                phone = phns.split("_")
+                phn_num = len(phone)
+                phn_cnt.append(phn_num)
+                pre_seg = 0
+                for k in range(phn_num):
+                    _duration_ruled_phn = int(
+                        (self.phn_seg[phn_num][k] - pre_seg) * dur / self.time_shift
+                        + 0.5
+                    )
+                    pre_seg = self.phn_seg[phn_num][k]
+                    # phone level feature
+                    midi.append(note)
+                    duration_ruled_phn.append(_duration_ruled_phn)
+                    duration_syb.append(_duration_syb)
+                    if syb == "—":
+                        slur.append(1)
+                    else:
+                        slur.append(0)
+
+            data.pop(self.midi_name)
+
+            midi = np.array(midi, dtype=np.int64)
+            duration_syb = np.array(duration_syb, dtype=np.int64)
+            duration_ruled_phn = np.array(duration_ruled_phn, dtype=np.int64)
+            phn_cnt = np.array(phn_cnt, dtype=np.int64)
+            slur = np.array(slur, dtype=np.int64)
+
+            data["midi"] = midi
+            data["duration_phn"] = None
+            data["duration_ruled_phn"] = duration_ruled_phn
+            data["duration_syb"] = duration_syb
+            data["phn_cnt"] = phn_cnt
+            data["slur"] = slur
+
         # TODO(Yuning): Add score from midi
 
         if self.text_name in data and self.tokenizer is not None:
@@ -1678,6 +1732,9 @@ class SVSPreprocessor(AbsPreprocessor):
                 tokens = self.tokenizer.text2tokens(text)
                 _text_ints = self.token_id_converter.tokens2ids(tokens)
                 data[self.text_name] = np.array(_text_ints, dtype=np.int64)
+                # Infer case of music score
+                if "label" not in data:
+                    data["label"] = np.array(_text_ints, dtype=np.int64)
 
         return data
 
@@ -1947,7 +2004,14 @@ class SpkPreprocessor(CommonPreprocessor):
         noise_apply_prob: float = 1.0,
         short_noise_thres: float = 0.5,
     ):
-        super().__init__(train, rir_scp=rir_scp, rir_apply_prob=rir_apply_prob)
+
+        self.train = train
+
+        if rir_apply_prob == 0:
+            self.rir_scp = None
+        else:
+            self.rir_scp = rir_scp
+        super().__init__(train, rir_scp=self.rir_scp, rir_apply_prob=rir_apply_prob)
 
         self.spk2label = None  # a dictionary that maps string speaker label to int
         self.sample_rate = sample_rate
@@ -1959,8 +2023,6 @@ class SpkPreprocessor(CommonPreprocessor):
                 self.spk2utt = f_s2u.readlines()
             self._make_label_mapping()
             self.nspk = len(self.spk2utt)
-
-        self.rir_scp = rir_scp
 
         self.noise_apply_prob = noise_apply_prob
         self.short_noise_thres = short_noise_thres
@@ -2497,7 +2559,7 @@ class S2TCTCPreprocessor(CommonPreprocessor):
                         # First two tokens are <lang> and <task>
                         # NOTE: must copy the array
                         data["prefix"] = copy.deepcopy(text_ints[:2])
-                        if np.random.uniform() > self.lang_apply_prob:
+                        if self.train and np.random.uniform() > self.lang_apply_prob:
                             data["prefix"][0] = self.nolang
 
                     elif name == self.text_ctc_name:
@@ -2599,10 +2661,10 @@ class SpeechLMPreprocessor(AbsPreprocessor):
         # speaker prompt
         self.speaker_prompt_length = speaker_prompt_length
 
+    @typechecked
     def __call__(
         self, uid: str, data: Dict[str, Union[str, np.ndarray]]
     ) -> Dict[str, np.ndarray]:
-        assert check_argument_types()
 
         # (1) task parsing
         task_name = uid.strip().split(" ")[0]
@@ -2614,7 +2676,7 @@ class SpeechLMPreprocessor(AbsPreprocessor):
                 raise ValueError("Continuous feature is not supported yet.")
 
         # (2) encoder & decoder sequence
-        seqs, conti_feats = [], []
+        seqs, conti_feats = [], []  # noqa
         n_enc_entries = len(task.encoder_entries)
         for e_idx, entries in enumerate([task.encoder_entries, task.decoder_entries]):
             for entry in entries:
@@ -2708,7 +2770,7 @@ class SpeechLMPreprocessor(AbsPreprocessor):
         enc_seq = data.get("enc_seq", None)
         dec_seq = data.get("dec_seq", None)
 
-        logging.warning(f"Diagnose in preprocessor ...")
+        logging.warning("Diagnose in preprocessor ...")
         for name, seq in [("encoder", enc_seq), ("decoder", dec_seq)]:
             if seq is None:
                 continue
