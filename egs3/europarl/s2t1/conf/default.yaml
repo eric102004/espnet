@@ -34,6 +34,7 @@ dataloader:
           - ${statsdir}/train/feats_shape
         batch_size: 4
         batch_bins: 4000000
+        min_batch_size: ${num_device}
   valid:
     iter_factory:
       _target_: espnet2.iterators.sequence_iter_factory.SequenceIterFactory
@@ -46,6 +47,7 @@ dataloader:
           - ${statsdir}/valid/feats_shape
         batch_size: 4
         batch_bins: ${dataloader.train.iter_factory.batches.batch_bins}
+        min_batch_size: ${num_device}
 
 best_model_criterion:
   - - valid/loss
