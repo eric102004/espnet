@@ -12,7 +12,7 @@ log() {
 SECONDS=0
 
 
-stage=1
+stage=4
 stop_stage=100000
 data_url=www.openslr.org/resources/12
 train_set="train_960"
@@ -54,9 +54,9 @@ if [ ${stage} -le 4 ] && [ ${stop_stage} -ge 4 ]; then
         log "Stage 4: Downloading  from https://zenodo.org/record/2619474#.Y2F3ZewVDu0"
         mkdir -p ${alignment_phoneme_dir}
 
-        wget \
-            -O ${alignment_phoneme_dir}/librispeech_alignments.zip \
-            https://zenodo.org/record/2619474/files/librispeech_alignments.zip?download=1
+        #wget \
+        #    -O ${alignment_phoneme_dir}/librispeech_alignments.zip \
+        #    https://zenodo.org/record/2619474/files/librispeech_alignments.zip?download=1
 
         unzip "${alignment_phoneme_dir}/librispeech_alignments.zip" -d "${alignment_phoneme_dir}"
         python local/dump_librispeech_alignment_from_textgrid.py \

@@ -13,6 +13,8 @@ fi
 src=$1
 dst=$2
 
+. ./path.sh
+
 # all utterances are FLAC compressed
 if ! which flac >&/dev/null; then
    echo "Please install 'flac' on ALL worker nodes!"

@@ -203,12 +203,12 @@ if [ ${stage} -le 2 ] && [ ${stop_stage} -ge 2 ] && ! [[ " ${skip_stages} " =~ [
         log "Subsampling ${portion_nutt} utterances for Kmeans training."
     fi
 
-    # It typically requires 120GB RAM to run kmeans steps.
+    # It typically requires 120GB RAM to run kmeans steps.      chyijiunn: use 0.1 to avoid OOM
     ${cpu_cmd} --num_threads ${num_threads} ${_logdir}/learn_kmeans.log \
         ${python} pyscripts/utils/learn_kmeans.py \
             --km_path ${km_dir}/km_${nclusters}.mdl \
             --n_clusters ${nclusters} \
-            --percent -1 \
+            --percent 0.1 \
             --in_filetype mat \
             "scp:${km_dir}/train.scp" || exit 1;
 fi

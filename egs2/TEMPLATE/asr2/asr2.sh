@@ -786,7 +786,6 @@ if [ ${stage} -le 5 ] && [ ${stop_stage} -ge 5 ] && ! [[ " ${skip_stages} " =~ [
 
     if [ "${tokenization_choice}" == "ssl" ]; then
         scripts/feats/perform_kmeans.sh \
-            --stage 1 --stop-stage 4 \
             --train_set "${train_set}" \
             --dev_set "${_dev_set}" \
             --other_sets "${test_sets} ${train_sp_sets}" \
@@ -944,7 +943,7 @@ if [ ${stage} -le 6 ] && [ ${stop_stage} -ge 6 ] && ! [[ " ${skip_stages} " =~ [
     fi
     if [ "${feats_type}" = raw ]; then
         # NOTE(Jinchuan): data prep with codec tokenization has been done. Skip this part
-        if [ "${tokenization_choice}" == "codec"]; then
+        if [ "${tokenization_choice}" == "codec" ]; then
             continue
         fi
         log "Stage 6: ${data_extract} -> ${data_feats}"
