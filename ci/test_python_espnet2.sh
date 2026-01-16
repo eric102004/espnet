@@ -15,6 +15,7 @@ exclude+="test_utils/bats-assert,espnet,espnet3,egs3"
 # TODO(nelson): Add documentation on espnet2 folder and uncomment this.
 # echo "=== Run test flake8 ==="
 # "$(dirname $0)"/test_flake8.sh espnet2
+
 # pycodestyle
 echo "=== Run pycodestyle tests ==="
 pycodestyle --exclude "${exclude}" --show-source --show-pep8

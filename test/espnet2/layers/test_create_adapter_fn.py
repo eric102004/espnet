@@ -17,6 +17,7 @@ pytest.importorskip("s3prl")
 pytest.importorskip("loralib")
 is_python_3_8_plus = sys.version_info >= (3, 8)
 is_torch_2_6_plus = V(torch.__version__) >= V("2.6.0")
+is_torch_2_9_plus = V(torch.__version__) >= V("2.9.0")
 
 
 def init_S3prl_model(frontend_conf={"upstream": "hubert_base"}):
@@ -44,11 +45,8 @@ def init_decoder_model():
 # =========================================Houlsby================================================
 @pytest.mark.execution_timeout(20)
 @pytest.mark.skipif(
-<<<<<<< HEAD
-    not is_torch_1_8_plus or not is_python_3_8_plus, reason="Not supported"
-=======
-    not is_torch_2_6_plus or not is_python_3_8_plus, reason="Not supported"
->>>>>>> 9c38ce04e014751bccb63ba9f442d1e33887e376
+    not is_torch_2_6_plus or not is_python_3_8_plus or is_torch_2_9_plus,
+    reason="Not supported",
 )
 @pytest.mark.parametrize("model, bottleneck, target_layers", [("s3prl", 64, [])])
 def test_create_houlsby_adapter_bottleneck(
@@ -71,7 +69,8 @@ def test_create_houlsby_adapter_bottleneck(
 
 @pytest.mark.execution_timeout(20)
 @pytest.mark.skipif(
-    not is_torch_2_6_plus or not is_python_3_8_plus, reason="Not supported"
+    not is_torch_2_6_plus or not is_python_3_8_plus or is_torch_2_9_plus,
+    reason="Not supported",
 )
 @pytest.mark.parametrize(
     "model, bottleneck, target_layers",
@@ -108,11 +107,8 @@ def test_create_houlsby_adapter_hf_wav2vec2_custom_bottleneck(
 
 @pytest.mark.execution_timeout(20)
 @pytest.mark.skipif(
-<<<<<<< HEAD
-    not is_torch_1_8_plus or not is_python_3_8_plus, reason="Not supported"
-=======
-    not is_torch_2_6_plus or not is_python_3_8_plus, reason="Not supported"
->>>>>>> 9c38ce04e014751bccb63ba9f442d1e33887e376
+    not is_torch_2_6_plus or not is_python_3_8_plus or is_torch_2_9_plus,
+    reason="Not supported",
 )
 @pytest.mark.parametrize("model, bottleneck, target_layers", [("s3prl", 64, [1, 2])])
 def test_create_houlsby_adapter_target_layers(
@@ -157,6 +153,10 @@ def test_create_houlsby_adapter_invalid_target_layers(
 ):
     if not is_torch_2_6_plus:
         pytest.skip("Due to vulnerabilities, this test will be skipped.")
+    if is_torch_2_9_plus:
+        pytest.skip(
+            "Due to S3PRL does not support torchaudio 2.9, this test will be skipped."
+        )
     assert model == "s3prl"
     model = init_S3prl_model()
     with pytest.raises(ValueError):

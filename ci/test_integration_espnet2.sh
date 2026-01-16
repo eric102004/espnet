@@ -33,7 +33,7 @@ python3 test_utils/uninstall_extra.py
 
 # [ESPnet2] test asr recipe
 # Install ASR dependency
-python3 -m pip install -e '.[task-asr]'
+python3 -m pip install -e '.[asr]'
 
 # Run tests
 cd ./egs2/mini_an4/asr1
@@ -170,12 +170,12 @@ if [ "${task}" == "asr" ] || [ "${task}" == "all" ]; then
 fi
 cd "${cwd}"
 
-# Uninstall task-dependency
+# Uninstall extra dependency
 python3 test_utils/uninstall_extra.py
 
 # [ESPnet2] test tts recipe
 # Install TTS dependency
-python3 -m pip install -e '.[task-tts]'
+python3 -m pip install -e '.[tts]'
 
 # Run tests
 cd ./egs2/mini_an4/tts1
@@ -199,13 +199,13 @@ if [ "${task}" == "tts" ] || [ "${task}" == "all" ]; then
     fi
 fi
 cd "${cwd}"
-# Uninstall task-dependency
+# Uninstall extra dependency
 python3 test_utils/uninstall_extra.py
 
 
 # [ESPnet2] test asr2 recipe
 # Install ASR2 dependency
-python3 -m pip install -e '.[task-asr2]'
+python3 -m pip install -e '.[asr]'
 cd ./egs2/mini_an4/asr2
 gen_dummy_coverage
 echo "==== [ESPnet2] ASR2 ==="
@@ -213,15 +213,15 @@ echo "==== [ESPnet2] ASR2 ==="
 # Remove generated files in order to reduce the disk usage
 rm -rf exp dump data
 cd "${cwd}"
-# Uninstall task-dependency
+# Uninstall extra dependency
 python3 test_utils/uninstall_extra.py
 
 
 # [ESPnet2] test enh recipe
 # Install ENH dependency
 # ENH + Speech2Text requires s2t dependency
-python3 -m pip install -e '.[task-enh]'
-python3 -m pip install -e '.[task-st]'
+python3 -m pip install -e '.[enh]'
+python3 -m pip install -e '.[st]'
 
 # Run tests
 if python -c 'import torch as t; from packaging.version import parse as L; assert L(t.__version__) >= L("1.2.0")' &> /dev/null; then
@@ -280,7 +280,7 @@ if python -c 'import torch as t; from packaging.version import parse as L; asser
 fi
 
 # [ESPnet2] test enh_asr1 recipe
-python3 -m pip install -e '.[task-asr]'
+python3 -m pip install -e '.[asr]'
 if python -c 'import torch as t; from packaging.version import parse as L; assert L(t.__version__) >= L("1.2.0")' &> /dev/null; then
     cd ./egs2/mini_an4/enh_asr1
     gen_dummy_coverage
@@ -290,7 +290,7 @@ if python -c 'import torch as t; from packaging.version import parse as L; asser
     rm -rf exp dump data
     cd "${cwd}"
 fi
-# Uninstall task-dependency
+# Uninstall extra dependency
 python3 test_utils/uninstall_extra.py
 
 # [ESPnet2] test ssl1 recipe
@@ -321,7 +321,7 @@ fi
 
 # [ESPnet2] test st recipe
 # Install ST dependency
-python3 -m pip install -e '.[task-st]'
+python3 -m pip install -e '.[st]'
 
 # Run tests
 cd ./egs2/mini_an4/st1
@@ -369,10 +369,15 @@ if [ "${task}" == "asr2" ] || [ "${task}" == "all" ]; then
     rm -rf exp dump data
 fi
 cd "${cwd}"
+<<<<<<< HEAD
+=======
+# Uninstall extra dependency
+python3 test_utils/uninstall_extra.py
+>>>>>>> origin/espnet3/recipe/asr_ls100
 
 # [ESPnet2] test spk1 recipe
 # Install SPK dependency
-python3 -m pip install -e '.[task-spk]'
+python3 -m pip install -e '.[spk]'
 
 # Run tests
 cd ./egs2/mini_an4/spk1
@@ -392,7 +397,7 @@ if [ "${task}" == "spk" ] || [ "${task}" == "all" ]; then
     rm -rf exp dump data
 fi
 cd "${cwd}"
-# Uninstall task-dependency
+# Uninstall extra dependency
 python3 test_utils/uninstall_extra.py
 
 # [ESPnet2] test lid1 recipe
@@ -407,7 +412,7 @@ cd "${cwd}"
 
 # [ESPnet2] test s2t1 recipe
 # # Install s2t dependency
-python3 -m pip install -e '.[task-s2t]'
+python3 -m pip install -e '.[s2t]'
 
 cd ./egs2/mini_an4/s2t1
 if [ "${task}" == "s2t" ] || [ "${task}" == "all" ]; then
@@ -418,16 +423,36 @@ if [ "${task}" == "s2t" ] || [ "${task}" == "all" ]; then
     rm -rf exp dump data
 fi
 cd "${cwd}"
-# Uninstall task-dependency
+# Uninstall extra dependency
 python3 test_utils/uninstall_extra.py
 
 # [ESPnet2] test s2st1 recipe
 # # Install s2st dependency
-python3 -m pip install -e '.[task-s2st]'
+python3 -m pip install -e '.[s2st]'
 
+<<<<<<< HEAD
 # [ESPnet2] test s2st1 recipe
 cd ./egs2/mini_an4/s2st1
 if [ "${task}" == "s2st" ] || [ "${task}" == "all" ]; then
+=======
+pytorch_plus(){
+    python3 <<EOF
+from packaging.version import parse as L
+import torch
+if L(torch.__version__) >= L('$1'):
+    print("true")
+else:
+    print("false")
+EOF
+}
+
+if pytorch_plus 2.9.0; then
+    # TODO(Nelson): Remove this once s3prl supports torchaudio 2.9.0
+    echo "WARN: Currently, S3prl does not support pytorch/torchaudio 2.9.0. CI test related to s3prl has been disabled."
+else
+    # [ESPnet2] test s2st1 recipe
+    cd ./egs2/mini_an4/s2st1
+>>>>>>> origin/espnet3/recipe/asr_ls100
     gen_dummy_coverage
     echo "==== [ESPnet2] S2ST ==="
     ./run.sh --ngpu 0 --stage 1 --stop_stage 8 --use_discrete_unit false --s2st_config conf/s2st_spec_debug.yaml --python "${python}"
@@ -436,9 +461,13 @@ if [ "${task}" == "s2st" ] || [ "${task}" == "all" ]; then
     fi
     # Remove generated files in order to reduce the disk usage
     rm -rf exp dump data ckpt .cache
+<<<<<<< HEAD
+=======
+    cd "${cwd}"
+>>>>>>> origin/espnet3/recipe/asr_ls100
 fi
 cd "${cwd}"
-# Uninstall task-dependency
+# Uninstall extra dependency
 python3 test_utils/uninstall_extra.py
 
 # [ESPnet2] test lm1 recipe

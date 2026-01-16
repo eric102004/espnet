@@ -11,8 +11,15 @@ exclude+="test_utils/bats-core,test_utils/bats-support,"
 exclude+="test_utils/bats-assert,espnet2,espnet,test_utils/utils3"
 
 # flake8
+<<<<<<< HEAD
 "$(dirname $0)"/test_flake8.sh
+=======
+echo "=== Run test flake8 ==="
+"$(dirname $0)"/test_flake8.sh espnet3
+
+>>>>>>> origin/espnet3/recipe/asr_ls100
 # pycodestyle
+echo "=== Run pycodestyle tests ==="
 pycodestyle --exclude "${exclude}" --show-source --show-pep8
 
 # It will set default timeout to 10.0 seconds for each test.
