@@ -1,0 +1,30 @@
+recipedir: .
+num_device: 1
+expdir: ${recipedir}/exp/finetune_owsm_gpu${num_device}
+decode_dir: ${expdir}/decode
+data_dir: ./data/portugal
+model_tag: espnet/owsm_v4_medium_1B
+
+model:
+  _target_: espnet2.bin.asr_inference.Speech2Text
+  asr_train_config: ${expdir}/config.yaml
+  asr_model_file: ${expdir}/last.ckpt
+  beam_size: 1
+
+dataset:
+  _target_: espnet3.data.DataOrganizer
+  test:
+    - name: test
+      dataset:
+        _target_: egs3.eurospeech_portugal.s2t1.dataset.EuroSpeechPortugalDataset
+        data_dir: ${data_dir}
+        split: test
+
+  preprocessor:
+    _target_: egs3.eurospeech_portugal.s2t1.dataset.OWSMTokenizeTransform
+    model_tag: ${model_tag}
+
+parallel:
+  env: local_gpu
+  n_workers: 4
+

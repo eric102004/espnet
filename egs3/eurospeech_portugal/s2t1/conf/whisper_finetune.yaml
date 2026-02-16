@@ -1,0 +1,111 @@
+recipedir: .
+hdd_recipedir: /work/hdd/bbjs/clin10/eurospeech_finetune
+num_device: 1
+lr: 0.00003
+expdir: ${hdd_recipedir}/exp/finetune_whisper_lr${lr}
+# expdir: ${hdd_recipedir}/exp/finetune_whisper_debug
+statsdir:  ${recipedir}/exp/stats
+stats_dir: ${statsdir}                        # bug 1: some code uses stats_dir while others use statsdir
+vocab_size: 6500
+seed: 2024
+
+# load default config
+defaults:
+  - dataset.yaml
+  - default.yaml
+
+parallel:
+  # env: local
+  # n_workers: 1
+  env: slurm
+  n_workers: 16
+  options:
+    account: bbjs-delta-cpu
+    queue: cpu
+    cores: 1
+    processes: 1
+    memory: 10GB
+    death_timeout: 180
+    # walltime: 30:00
+    job_extra_directives:
+      # - "--gres=gpu:1"
+      - "--ntasks-per-node=1"
+      - "--cpus-per-task=2"
+      - "--output=parallel_log/%j-%x.log"
+
+model:
+  _target_: egs3.eurospeech_portugal.s2t1.model.WhisperFinetune
+  model_tag: openai/whisper-large-v3
+
+optim:
+  _target_: torch.optim.AdamW
+  lr: ${lr}
+  weight_decay: 0.000001
+
+scheduler:
+  _target_: espnet2.schedulers.warmup_lr.WarmupLR
+  warmup_steps: 6000
+
+dataloader:
+  collate_fn:
+    _target_: espnet2.train.collate_fn.CommonCollateFn
+    int_pad_value: 50256                        # whisper's pad token id is 50256, which is different from owsmp's -1
+  
+  train:
+    iter_factory:
+      _target_: espnet2.iterators.sequence_iter_factory.SequenceIterFactory
+      shuffle: true
+      collate_fn: ${dataloader.collate_fn}
+      num_workers: 8
+      num_iters_per_epoch: 15000
+      # num_iters_per_epoch: 10
+      batches:
+        type: numel
+        shape_files:
+          - ${statsdir}/train/feats_shape
+        batch_size: 4
+        batch_bins: 100000
+  valid:
+    iter_factory:
+      _target_: espnet2.iterators.sequence_iter_factory.SequenceIterFactory
+      shuffle: false
+      collate_fn: ${dataloader.collate_fn}
+      num_workers: 8
+      num_iters_per_epoch: 15000
+      # num_iters_per_epoch: 10
+      batches:
+        type: numel
+        shape_files:
+          - ${statsdir}/valid/feats_shape
+        batch_size: 4
+        batch_bins: ${dataloader.train.iter_factory.batches.batch_bins}
+
+trainer:
+  max_epochs: 30
+  precision: bf16-mixed
+  # use 32 bit
+  # precision: 32
+  accumulate_grad_batches: 48
+  log_every_n_steps: 500
+  gradient_clip_val: 1.0
+
+  logger:
+    - _target_: lightning.pytorch.loggers.TensorBoardLogger
+      save_dir: ${expdir}/tensorboard
+      name: tb_logger
+
+    - _target_: lightning.pytorch.loggers.WandbLogger
+      project: ESPnet3 development
+      save_dir: ${expdir}/wandb
+      name: whisper_lr${lr}
+
+  strategy: auto
+
+dataset:
+  preprocessor:
+    _target_: egs3.eurospeech_portugal.s2t1.dataset.dataset.WhisperTokenizeTransform
+    model_tag: ${model.model_tag}
+
+# If you want to resume training use the following config.
+# fit:
+#   ckpt_path: ${expdir}/last.ckpt

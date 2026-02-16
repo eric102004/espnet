@@ -1,0 +1,8 @@
+# load default config
+defaults:
+  - whisper_finetune.yaml
+
+num_device: 2
+
+trainer:
+  strategy: ddp_find_unused_parameters_true

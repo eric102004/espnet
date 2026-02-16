@@ -1,0 +1,35 @@
+data_dir: ./data/portugal
+
+dataset:
+  _target_: espnet3.components.data.data_organizer.DataOrganizer
+  train:
+    # ASR dataset
+    - name: train
+      dataset:
+        _target_: egs3.eurospeech_portugal.s2t1.dataset.EuroSpeechPortugalDataset
+        data_dir: ${data_dir}
+        split: train
+        ratio: 1.0
+        # ratio: 0.025
+
+
+  valid:
+    # ASR data
+    - name: valid
+      dataset:
+        _target_: egs3.eurospeech_portugal.s2t1.dataset.EuroSpeechPortugalDataset
+        data_dir: ${data_dir}
+        split: validation
+
+
+  test:
+    # ASR data
+    - name: test
+      dataset:
+        _target_: egs3.eurospeech_portugal.s2t1.dataset.EuroSpeechPortugalDataset
+        data_dir: ${data_dir}
+        split: test
+
+  preprocessor:
+    _target_: null
+    model_tag: null
