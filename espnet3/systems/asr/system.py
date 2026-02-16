@@ -28,6 +28,11 @@ def load_function(path):
 
     Raises:
         (Exception): Propagated import or attribute lookup errors.
+
+    Example:
+        >>> fn = load_function(\"math.sqrt\")
+        >>> fn(9)
+        3.0
     """
     module_path, func_name = path.rsplit(".", 1)
     module = import_module(module_path)
@@ -114,7 +119,7 @@ class ASRSystem(BaseSystem):
             stats_dir = getattr(self.train_config, "stats_dir", None)
             if stats_dir:
                 return Path(stats_dir)
-        elif stage in {"train", "publish"}:
+        elif stage in {"train", "publish", "pack_model", "upload_model"}:
             exp_dir = getattr(self.train_config, "exp_dir", None)
             if exp_dir:
                 return Path(exp_dir)
@@ -184,8 +189,6 @@ class ASRSystem(BaseSystem):
             logger.info("Tokenizer already exists. Skipping train_tokenizer().")
             return
         start = time.perf_counter()
-        output_path = Path(self.train_config.tokenizer.save_path)
-        output_path.mkdir(parents=True, exist_ok=True)
         tokenizer_cfg = getattr(self.train_config, "tokenizer", None)
         builder_cfg = (
             getattr(tokenizer_cfg, "text_builder", None) if tokenizer_cfg else None
@@ -217,8 +220,22 @@ class ASRSystem(BaseSystem):
             raise RuntimeError(
                 "Tokenizer text_builder returned no text. Check dataset preparation."
             )
-        logger.info("Collected %d transcript lines for tokenizer training", len(texts))
-        with open(output_path / "train.txt", "w", encoding="utf-8") as f:
+        output_path = Path(self.train_config.tokenizer.save_path)
+        output_path.mkdir(parents=True, exist_ok=True)
+        train_text_path = getattr(tokenizer_cfg, "train_file", None)
+        if train_text_path:
+            train_text_path = Path(train_text_path)
+        else:
+            train_text_path = output_path / "train.txt"
+        if train_text_path.exists():
+            raise RuntimeError(
+                f"Tokenizer training text already exists: {train_text_path}"
+            )
+        train_text_path.parent.mkdir(parents=True, exist_ok=True)
+        logger.info(
+            "Collected %d transcript lines for tokenizer training", len(texts)
+        )
+        with open(train_text_path, "w", encoding="utf-8") as f:
             f.write("\n".join(texts))
 
         logger.info(f"Training tokenizer: {self.train_config.tokenizer.model_type}")
@@ -226,7 +243,7 @@ class ASRSystem(BaseSystem):
 
         # Example placeholder:
         train_sentencepiece(
-            output_path / "train.txt",
+            train_text_path,
             output_path,
             self.train_config.tokenizer.vocab_size,
             model_type=self.train_config.tokenizer.model_type,
@@ -234,3 +251,29 @@ class ASRSystem(BaseSystem):
         logger.info(
             "Tokenizer training completed in %.2fs", time.perf_counter() - start
         )
+
+    # ---------------------------------------------------------
+    # Publication helpers
+    # ---------------------------------------------------------
+    def pack_model(self, *args, **kwargs):
+        """Pack model artifacts into an espnet3 bundle."""
+        self._reject_stage_args("pack_model", args, kwargs)
+        from espnet3.utils.publish import pack_model
+
+        extra_paths = []
+        if self.train_config is not None:
+            tokenizer_cfg = getattr(self.train_config, "tokenizer", None)
+            if tokenizer_cfg is not None:
+                save_path = getattr(tokenizer_cfg, "save_path", None)
+                if save_path:
+                    extra_paths.append(Path(save_path))
+            stats_dir = getattr(self.train_config, "stats_dir", None)
+            if stats_dir:
+                extra_paths.append(Path(stats_dir))
+            data_dir = getattr(self.train_config, "data_dir", None)
+            if data_dir:
+                data_tokenizer = Path(data_dir) / "tokenizer"
+                if data_tokenizer.exists():
+                    extra_paths.append(data_tokenizer)
+
+        return pack_model(self, extra=extra_paths)

@@ -51,6 +51,11 @@ dataset:
     token_list: ${tokenizer.save_path}/tokens.txt
     bpemodel: ${tokenizer.save_path}/bpe.model
     text_cleaner:
+    fs: 16000
+    data_aug_effects:
+      - - 0.6
+        - - [0.5, "speed_perturb", {"factor": 0.9}]
+          - [0.5, "speed_perturb", {"factor": 1.1}]
 
 # Parallel execution settings used by espnet3.parallel (local by default).
 parallel:
@@ -115,11 +120,11 @@ trainer:
   accelerator: auto
   devices: ${num_device}
   num_nodes: ${num_nodes}
-  accumulate_grad_batches: 1
+  accumulate_grad_batches: 4
   check_val_every_n_epoch: 1
   gradient_clip_val: 1.0
   log_every_n_steps: 100
-  max_epochs: 70
+  max_epochs: 200
   precision: bf16-mixed
 
   logger:

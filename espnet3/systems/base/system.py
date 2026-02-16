@@ -6,7 +6,7 @@ from pathlib import Path
 from omegaconf import DictConfig
 
 from espnet3.systems.base.inference import inference
-from espnet3.systems.base.score import score
+from espnet3.systems.base.measure import measure
 from espnet3.systems.base.train import collect_stats, train
 
 logger = logging.getLogger(__name__)
@@ -18,8 +18,8 @@ class BaseSystem:
     Each system should implement the following:
       - create_dataset()
       - train()
-      - decode()
-      - score()
+      - infer()
+      - measure()
       - publish()
 
     This class intentionally does NOT implement:
@@ -36,11 +36,17 @@ class BaseSystem:
         train_config: DictConfig | None = None,
         infer_config: DictConfig | None = None,
         measure_config: DictConfig | None = None,
+        publish_config: DictConfig | None = None,
+        demo_config: DictConfig | None = None,
+        demo_config_path: Path | None = None,
     ) -> None:
         """Initialize the system with optional stage configs."""
         self.train_config = train_config
         self.infer_config = infer_config
         self.metric_config = measure_config
+        self.publish_config = publish_config
+        self.demo_config = demo_config
+        self.demo_config_path = demo_config_path
         if train_config is not None:
             self.exp_dir = Path(train_config.exp_dir)
             self.exp_dir.mkdir(parents=True, exist_ok=True)
@@ -48,11 +54,13 @@ class BaseSystem:
             self.exp_dir = None
         logger.info(
             "Initialized %s with train_config=%s infer_config=%s "
-            "measure_config=%s exp_dir=%s",
+            "measure_config=%s publish_config=%s demo_config=%s exp_dir=%s",
             self.__class__.__name__,
             train_config is not None,
             infer_config is not None,
             measure_config is not None,
+            publish_config is not None,
+            demo_config is not None,
             self.exp_dir,
         )
 
@@ -118,34 +126,60 @@ class BaseSystem:
         )
         return train(self.train_config)
 
-    def evaluate(self, *args, **kwargs):
-        """Run inference and measurement in sequence."""
-        self._reject_stage_args("evaluate", args, kwargs)
-        # Backward-compat shim if someone calls evaluate directly.
-        self.infer()
-        return self.measure()
-
     def infer(self, *args, **kwargs):
         """Run inference on the configured datasets."""
         self._reject_stage_args("infer", args, kwargs)
         logger.info(
-            "Inference start | decode_dir=%s",
-            getattr(self.infer_config, "decode_dir", None),
+            "Inference start | infer_dir=%s",
+            getattr(self.infer_config, "infer_dir", None),
         )
         return inference(self.infer_config)
 
     def measure(self, *args, **kwargs):
-        """Compute evaluation metrics from inference outputs."""
+        """Compute evaluation metrics from hypothesis/reference outputs."""
         self._reject_stage_args("measure", args, kwargs)
         logger.info(
-            "Scoring start | metric_config=%s",
+            "Measurement start | metric_config=%s",
             self.metric_config is not None,
         )
-        result = score(self.metric_config)
-        logger.info("Scoring results: %s", result)
+        result = measure(self.metric_config)
+        logger.info("Measurement results: %s", result)
         return result
 
     def publish(self, *args, **kwargs):
         """Publish artifacts from the experiment."""
         self._reject_stage_args("publish", args, kwargs)
-        logger.info("Running publish() (BaseSystem stub). Nothing done.")
+        logger.info("Running publish(): pack_model -> upload_model")
+        self.pack_model()
+        return self.upload_model()
+
+    # ---------------------------------------------------------
+    # Publication stages (optional overrides)
+    # ---------------------------------------------------------
+    def pack_model(self, *args, **kwargs):
+        """Pack model artifacts into an espnet3 bundle."""
+        self._reject_stage_args("pack_model", args, kwargs)
+        from espnet3.utils.publish import pack_model
+
+        return pack_model(self)
+
+    def upload_model(self, *args, **kwargs):
+        """Upload model bundle to HuggingFace."""
+        self._reject_stage_args("upload_model", args, kwargs)
+        from espnet3.utils.publish import upload_model
+
+        return upload_model(self)
+
+    def pack_demo(self, *args, **kwargs):
+        """Pack demo artifacts into a runnable demo bundle."""
+        self._reject_stage_args("pack_demo", args, kwargs)
+        from espnet3.demo.pack import pack_demo
+
+        return pack_demo(self)
+
+    def upload_demo(self, *args, **kwargs):
+        """Upload demo bundle to HuggingFace Spaces (stub)."""
+        self._reject_stage_args("upload_demo", args, kwargs)
+        from espnet3.demo.pack import upload_demo
+
+        return upload_demo(self)

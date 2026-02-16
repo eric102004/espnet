@@ -37,6 +37,11 @@ def update_shard(config: Union[dict, list], shard_idx: int) -> Union[dict, list]
     Returns:
         Union[dict, list]: A new config structure with all "{shard_idx}"
             placeholders replaced by the given shard index.
+
+    Example:
+        >>> cfg = {"shape_files": ["stats/speech_shape.{shard_idx}"]}
+        >>> update_shard(cfg, shard_idx=3)
+        {'shape_files': ['stats/speech_shape.3']}
     """
     if isinstance(config, dict):
         return {k: update_shard(v, shard_idx) for k, v in config.items()}
@@ -199,7 +204,12 @@ class DataLoaderBuilder:
                     )
             batches = [batch[rank::world_size] for batch in batches]
 
-        iter_factory = instantiate(factory_config, dataset, batches=batches)
+        # Avoid OmegaConf merge errors when passing list batches via kwargs.
+        factory_kwargs = factory_config
+        if isinstance(factory_config, dict):
+            factory_kwargs = dict(factory_config)
+            factory_kwargs.pop("batches", None)
+        iter_factory = instantiate(factory_kwargs, dataset, batches=batches)
 
         return iter_factory.build_iter(self.epoch, shuffle=False)
 

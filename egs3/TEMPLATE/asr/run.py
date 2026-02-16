@@ -22,8 +22,17 @@ DEFAULT_STAGES: List[str] = [
     "train",
     "infer",
     "measure",
+    "pack_model",
+    "upload_model",
     "publish",
 ]
+
+DEMO_STAGES: List[str] = [
+    "pack_demo",
+    "upload_demo",
+]
+
+ALL_STAGES: List[str] = DEFAULT_STAGES + DEMO_STAGES
 
 # Type alias for a System class
 SystemCls = Type[Any]
@@ -32,6 +41,8 @@ AddArgsFn = Callable[[argparse.ArgumentParser], None]
 
 def build_parser(
     stages: Sequence[str],
+    *,
+    default_stages: Sequence[str] | None = None,
     add_arguments: Optional[AddArgsFn] = None,
 ) -> argparse.ArgumentParser:
     """Build base ArgumentParser and let caller extend it."""
@@ -41,7 +52,7 @@ def build_parser(
         "--stages",
         choices=list(stages) + ["all"],
         nargs="+",
-        default=["all"],
+        default=list(default_stages or stages),
         help="Which stages to run. Multiple values allowed.",
     )
     parser.add_argument(
@@ -64,6 +75,18 @@ def build_parser(
         default=None,
         type=Path,
         help="Hydra config for measure/scoring stage.",
+    )
+    parser.add_argument(
+        "--publish_config",
+        default=None,
+        type=Path,
+        help="Hydra config for pack/upload stages.",
+    )
+    parser.add_argument(
+        "--demo_config",
+        default=None,
+        type=Path,
+        help="Hydra config for demo pack/upload stages.",
     )
     parser.add_argument(
         "--dry_run",
@@ -98,7 +121,7 @@ def main(
     args,
     system_cls: SystemCls,
     *,
-    stages: Sequence[str] = DEFAULT_STAGES,
+    stages: Sequence[str] = ALL_STAGES,
 ) -> None:
     stages_to_run = resolve_stages(args.stages, stages)
 
@@ -120,7 +143,16 @@ def main(
         if args.measure_config is None
         else load_config_with_defaults(args.measure_config)
     )
-
+    publish_config = (
+        None
+        if args.publish_config is None
+        else load_config_with_defaults(args.publish_config)
+    )
+    demo_config = (
+        None
+        if args.demo_config is None
+        else load_config_with_defaults(args.demo_config)
+    )
     logger = configure_logging()
 
     # -----------------------------------------
@@ -130,6 +162,9 @@ def main(
         train_config=train_config,
         infer_config=infer_config,
         measure_config=measure_config,
+        publish_config=publish_config,
+        demo_config=demo_config,
+        demo_config_path=args.demo_config,
     )
 
     # -----------------------------------------
@@ -149,6 +184,14 @@ def main(
     required_configs = {}
     required_configs.update({stage: train_config for stage in pretrain_stages})
     required_configs.update({"infer": infer_config, "measure": measure_config})
+    required_configs.update(
+        {
+            "pack_model": train_config,
+            "upload_model": publish_config,
+            "pack_demo": demo_config,
+            "upload_demo": demo_config,
+        }
+    )
     missing = [
         s
         for s in stages_to_run
@@ -171,6 +214,8 @@ def main(
             train_config=train_config,
             infer_config=infer_config,
             measure_config=measure_config,
+            publish_config=publish_config,
+            demo_config=demo_config,
         ),
     )
 
@@ -182,6 +227,8 @@ def _log_stage_metadata(
     train_config,
     infer_config,
     measure_config,
+    publish_config,
+    demo_config,
 ) -> None:
     log_run_metadata(
         logger,
@@ -190,6 +237,8 @@ def _log_stage_metadata(
             "train": Path(args.train_config) if args.train_config else None,
             "infer": Path(args.infer_config) if args.infer_config else None,
             "measure": Path(args.measure_config) if args.measure_config else None,
+            "publish": Path(args.publish_config) if args.publish_config else None,
+            "demo": Path(args.demo_config) if args.demo_config else None,
         },
         write_requirements=args.write_requirements,
     )
@@ -207,11 +256,16 @@ def _log_stage_metadata(
             "Measure config content:\n%s",
             OmegaConf.to_yaml(measure_config, resolve=True),
         )
+    if publish_config is not None:
+        logger.info(
+            "Publish config content:\n%s",
+            OmegaConf.to_yaml(publish_config, resolve=True),
+        )
 
 
 if __name__ == "__main__":
-    parser = build_parser(stages=DEFAULT_STAGES)
-    args, stages_to_run = parse_cli_and_stage_args(parser, stages=DEFAULT_STAGES)
+    parser = build_parser(stages=ALL_STAGES, default_stages=DEFAULT_STAGES)
+    args, stages_to_run = parse_cli_and_stage_args(parser, stages=ALL_STAGES)
 
     # Here you should replace `YourSystemClass` with the actual system class
     # you want to use for your experiment.
@@ -220,5 +274,5 @@ if __name__ == "__main__":
     main(
         args=args,
         system_cls=ASRSystem,
-        stages=DEFAULT_STAGES,
+        stages=ALL_STAGES,
     )

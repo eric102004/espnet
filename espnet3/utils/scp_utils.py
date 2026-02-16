@@ -1,11 +1,29 @@
-"""SCP file helpers for ESPnet3 decoding outputs."""
+"""SCP file helpers for ESPnet3 hypothesis/reference files."""
 
 from pathlib import Path
 from typing import Dict, List, Union
 
 
 def read_scp(scp_file):
-    """Read an SCP file into a key/value dictionary."""
+    """Read a Kaldi-style SCP file into a key/value dictionary.
+
+    Each non-empty line is parsed as ``<key><space><value>``. If a line contains
+    only a key, the value is set to an empty string.
+
+    Args:
+        scp_file: Path-like object pointing to an SCP text file.
+
+    Returns:
+        dict: Mapping from key to the rest of the line (value string).
+
+    Raises:
+        FileNotFoundError: If ``scp_file`` does not exist.
+        OSError: If the file cannot be read.
+
+    Example:
+        >>> d = read_scp(\"data/text.scp\")  # doctest: +SKIP
+        >>> list(d.items())[:1]  # doctest: +SKIP
+    """
     with open(scp_file, "r") as f:
         lines = [line.strip() for line in f.readlines()]
     parsed = {}
@@ -20,12 +38,24 @@ def read_scp(scp_file):
 
 
 def get_class_path(obj) -> str:
-    """Return the fully qualified class path for an object."""
+    """Return the fully qualified class path for an object.
+
+    Args:
+        obj: Any Python object.
+
+    Returns:
+        str: Dotted import path in the form ``<module>.<ClassName>``.
+
+    Example:
+        >>> class Foo: ...
+        >>> get_class_path(Foo()).endswith(\".Foo\")
+        True
+    """
     return f"{obj.__module__}.{obj.__class__.__name__}"
 
 
 def load_scp_fields(
-    decode_dir: Path,
+    infer_dir: Path,
     test_name: str,
     inputs: Union[List[str], Dict[str, str]],
     file_suffix: str = ".scp",
@@ -38,7 +68,7 @@ def load_scp_fields(
         - <alias>: list of aligned values for each key (e.g., "ref", "hyp")
 
     Args:
-        decode_dir (Path): Root directory of decode results.
+        infer_dir (Path): Root directory of hypothesis/reference files.
         test_name (str): Subdirectory name of the test set (e.g., "test-clean").
         inputs (Union[List[str], Dict[str, str]]): SCP keys to read.
             - List[str]: alias and filename are the same.
@@ -60,7 +90,7 @@ def load_scp_fields(
 
     Example:
         >>> load_scp_fields(
-        ...     Path("decode"),
+        ...     Path("infer"),
         ...     "test-other",
         ...     inputs={"ref": "text", "hyp": "hypothesis"},
         ... )
@@ -74,8 +104,8 @@ def load_scp_fields(
         - Utterance IDs are sorted to ensure consistent alignment.
         - Useful as direct input to `AbsMetrics.__call__()`.
     """
-    task_dir = decode_dir / test_name
-    assert task_dir.exists(), f"Missing decode output: {task_dir}"
+    task_dir = infer_dir / test_name
+    assert task_dir.exists(), f"Missing hypothesis/reference files in infer_dir: {task_dir}"
 
     input_map = {k: k for k in inputs} if isinstance(inputs, list) else dict(inputs)
 
