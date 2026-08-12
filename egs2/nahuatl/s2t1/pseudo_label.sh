@@ -86,6 +86,10 @@ THR=$(python local/tune_threshold.py --decode_dir "$WORK/decode_valid" \
       --ref_text dump/raw/nahuatl_valid/text --target_cer "${TARGET_CER:-0.15}" \
       | awk '/^THRESHOLD/{print $2}')
 echo "chosen threshold: $THR"
+if [ -z "$THR" ] || [ "$THR" = "inf" ]; then
+    echo "ERROR: no confidence threshold met the target CER (THR='$THR'); no pseudo-labels would pass. Aborting." >&2
+    exit 1
+fi
 
 # --- filter each region + combine into data/pseudo ---
 pdirs=()
