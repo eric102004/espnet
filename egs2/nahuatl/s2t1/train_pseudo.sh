@@ -13,9 +13,16 @@
 #      --init_param to it) on the combined set via the train_set override
 #      added in run.sh, stages 3-11 (re-format wav.scp, collect stats, train;
 #      feats_stats symlink + region-token bpe are unchanged from the baseline
-#      run and are reused as-is).
+#      run and are reused as-is). Uses a distinct --s2t_tag so this run gets
+#      its own exp dir: s2t.sh keys the exp dir off s2t_config/feats_type/
+#      token_type/nbpe/s2t_args, NOT train_set, so without a distinct tag this
+#      would collide with the baseline's exp dir — which already has an
+#      epoch-30 checkpoint.pth that --resume true (unconditional in s2t.sh)
+#      would load over --init_param, making stage 11 a silent no-op that never
+#      trains on the pseudo data. See inline comment at step 2 for detail.
 #   4) decode + score the 3 region test sets plus the combined aggregate via
-#      decode.sh (reuses local/score.sh's symmetric CER).
+#      decode.sh, pointed at the pseudo exp dir via the S2T_EXP override added
+#      to decode.sh (reuses local/score.sh's symmetric CER).
 #SBATCH -N 1 -n 1 -p gpuA40x4,gpuA100x4
 #SBATCH --gres=gpu:1 -c 16 --mem 60000M
 #SBATCH --account=bbjs-delta-gpu
@@ -51,10 +58,22 @@ utils/validate_data_dir.sh --no-feats data/nahuatl_train_plus_pseudo
 
 # ── 2) Retrain from patched OWSM on the combined set ────────────────────────
 # run.sh's --init_param already points at the patched OWSM checkpoint (not the
-# current fine-tuned model), so overriding only train_set here gives a fresh
-# retrain from OWSM on labeled+pseudo data.
+# current fine-tuned model). BUT: s2t.sh derives the exp dir (s2t_exp) from
+# s2t_config + feats_type + token_type + nbpe + s2t_args — NOT from train_set
+# (see egs2/TEMPLATE/s2t1/s2t.sh ~417-436, 490-491). Without a distinct
+# --s2t_tag, train_set=nahuatl_train_plus_pseudo would resolve to the SAME exp
+# dir as the finished baseline run, which already has an epoch-30
+# checkpoint.pth; s2t.sh passes --resume true unconditionally, so resume()
+# would load the baseline's fine-tuned weights over --init_param and
+# start_epoch (31) > max_epoch (30) would make stage 11 a no-op — silently
+# exporting the untouched baseline model and never touching the pseudo data.
+# Pass a distinct tag so a fresh exp dir is created (no baseline checkpoint
+# there -> clean start from the patched OWSM --init_param).
 export train_set=nahuatl_train_plus_pseudo
-bash run.sh --stage 3 --stop_stage 11 2>&1 | tee pseudo_train_live.log
+PSEUDO_TAG=train_owsm_v4_nahuatl_pseudo
+bash run.sh --stage 3 --stop_stage 11 --s2t_tag "$PSEUDO_TAG" 2>&1 | tee pseudo_train_live.log
 
 # ── 3) Evaluate on the 3 region test sets + combined aggregate ─────────────
-bash decode.sh
+# Point decode.sh at the pseudo exp dir (exp/s2t_${PSEUDO_TAG}), not the
+# baseline, via the S2T_EXP override added to decode.sh.
+S2T_EXP="exp/s2t_${PSEUDO_TAG}" bash decode.sh

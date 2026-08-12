@@ -40,7 +40,7 @@ done
 
 # ── Combine the three regions into an aggregate CER (== the mixed test set) ───
 # Locate the score_cer dirs produced above (one per region) and concatenate.
-s2t_exp=$(ls -d exp/s2t_train_owsm_v4_nahuatl_raw_bpe50000_init_param* 2>/dev/null | head -1)
+s2t_exp="${S2T_EXP:-$(ls -d exp/s2t_train_owsm_v4_nahuatl_raw_bpe50000_init_param* 2>/dev/null | head -1)}"
 for base in "${s2t_exp}"/*/nahuatl_hidalgo_test/score_cer; do
     [ -d "$base" ] || continue
     inf_dir=$(dirname "$(dirname "$base")")
