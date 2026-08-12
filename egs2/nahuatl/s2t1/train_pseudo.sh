@@ -21,8 +21,11 @@
 #      would load over --init_param, making stage 11 a silent no-op that never
 #      trains on the pseudo data. See inline comment at step 2 for detail.
 #   4) decode + score the 3 region test sets plus the combined aggregate via
-#      decode.sh, pointed at the pseudo exp dir via the S2T_EXP override added
-#      to decode.sh (reuses local/score.sh's symmetric CER).
+#      decode.sh, pointed at the pseudo exp dir via the S2T_TAG override added
+#      to decode.sh — S2T_TAG must equal the SAME literal tag passed to
+#      run.sh's --s2t_tag in step 3, so the per-region decode calls, the
+#      aggregation glob, AND the training run all resolve to the identical
+#      exp dir (reuses local/score.sh's symmetric CER).
 #SBATCH -N 1 -n 1 -p gpuA40x4,gpuA100x4
 #SBATCH --gres=gpu:1 -c 16 --mem 60000M
 #SBATCH --account=bbjs-delta-gpu
@@ -74,6 +77,9 @@ PSEUDO_TAG=train_owsm_v4_nahuatl_pseudo
 bash run.sh --stage 3 --stop_stage 11 --s2t_tag "$PSEUDO_TAG" 2>&1 | tee pseudo_train_live.log
 
 # ── 3) Evaluate on the 3 region test sets + combined aggregate ─────────────
-# Point decode.sh at the pseudo exp dir (exp/s2t_${PSEUDO_TAG}), not the
-# baseline, via the S2T_EXP override added to decode.sh.
-S2T_EXP="exp/s2t_${PSEUDO_TAG}" bash decode.sh
+# Point decode.sh at the pseudo exp dir, not the baseline, via the S2T_TAG
+# override added to decode.sh. Must be the identical literal used for
+# PSEUDO_TAG above (--s2t_tag) so decode.sh's per-region decode calls AND its
+# aggregation glob both resolve to exp/s2t_train_owsm_v4_nahuatl_pseudo — the
+# same exp dir stage 11 just trained into.
+S2T_TAG="$PSEUDO_TAG" bash decode.sh

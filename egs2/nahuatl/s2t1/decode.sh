@@ -30,17 +30,32 @@ declare -A CFG=(
     [zacatlan_tepetzintla]="conf/decode_owsm_ztp.yaml"
 )
 
+# Optional tag passthrough: when S2T_TAG is set, route the SAME --s2t_tag
+# through both the per-region decode calls and the aggregation glob below, so
+# they resolve to the identical exp dir (s2t.sh derives s2t_exp purely from
+# config/args — including --s2t_tag — never from an env var, so the env var
+# must be turned into a --s2t_tag CLI arg here to take effect on the decode
+# calls too, not just used locally for the glob). Unset S2T_TAG => identical
+# baseline behavior (auto-derived exp dir, no extra arg on the decode calls).
+if [ -n "${S2T_TAG:-}" ]; then
+    tag_opt="--s2t_tag ${S2T_TAG}"
+    s2t_exp="exp/s2t_${S2T_TAG}"
+else
+    tag_opt=""
+    s2t_exp=$(ls -d exp/s2t_train_owsm_v4_nahuatl_raw_bpe50000_init_param* 2>/dev/null | head -1)
+fi
+
 for region in "${regions[@]}"; do
     echo "=== Decoding nahuatl_${region}_test with ${CFG[$region]} ==="
     bash run.sh --stage 12 --stop_stage 13 \
         --gpu_inference true \
         --test_sets "nahuatl_${region}_test" \
-        --inference_config "${CFG[$region]}"
+        --inference_config "${CFG[$region]}" \
+        ${tag_opt}
 done
 
 # ── Combine the three regions into an aggregate CER (== the mixed test set) ───
 # Locate the score_cer dirs produced above (one per region) and concatenate.
-s2t_exp="${S2T_EXP:-$(ls -d exp/s2t_train_owsm_v4_nahuatl_raw_bpe50000_init_param* 2>/dev/null | head -1)}"
 for base in "${s2t_exp}"/*/nahuatl_hidalgo_test/score_cer; do
     [ -d "$base" ] || continue
     inf_dir=$(dirname "$(dirname "$base")")
