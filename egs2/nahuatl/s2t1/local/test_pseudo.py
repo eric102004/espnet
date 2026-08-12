@@ -60,3 +60,10 @@ def test_pick_threshold_keeps_high_confidence():
     rows = [(-0.1, 0.05), (-0.2, 0.10), (-0.9, 0.60), (-1.0, 0.70)]
     thr, frac, est = tt.pick_threshold(rows, target_cer=0.15)
     assert thr == -0.2 and abs(est - 0.075) < 1e-9  # keeps first two
+
+
+def test_is_degenerate():
+    fp = _load("filter_pseudo")
+    assert fp.is_degenerate("") is True
+    assert fp.is_degenerate("a a a a a a a a") is True
+    assert fp.is_degenerate("nika chiwa se tapowalistli") is False

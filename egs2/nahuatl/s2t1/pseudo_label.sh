@@ -75,3 +75,27 @@ for R in "${!REG[@]}"; do
   decode_dir "$fmtdir/wav.scp" "$WORK/decode_${slug}" "conf/decode_owsm_${cfg}.yaml"
   echo "decoded $slug: $(wc -l < "$WORK/decode_${slug}/text") segments"
 done
+
+# --- tune threshold on val (decode val once) ---
+# dump/raw/nahuatl_valid/wav.scp already has real paths (materialized by the
+# baseline training's stage 3), so decode_dir can read it directly - no
+# format_wav_scp.sh needed here.
+decode_dir dump/raw/nahuatl_valid/wav.scp "$WORK/decode_valid" \
+    conf/decode_owsm_hid.yaml
+THR=$(python local/tune_threshold.py --decode_dir "$WORK/decode_valid" \
+      --ref_text dump/raw/nahuatl_valid/text --target_cer "${TARGET_CER:-0.15}" \
+      | awk '/^THRESHOLD/{print $2}')
+echo "chosen threshold: $THR"
+
+# --- filter each region + combine into data/pseudo ---
+pdirs=()
+for R in "${!REG[@]}"; do
+  IFS=: read slug tok cfg <<< "${REG[$R]}"
+  python local/filter_pseudo.py --decode_dir "$WORK/decode_${slug}" \
+     --unlabeled_dir "$WORK/unlabeled_${slug}" --region_token "$tok" \
+     --threshold "$THR" --output_dir "$WORK/pseudo_${slug}"
+  pdirs+=("$WORK/pseudo_${slug}")
+done
+utils/combine_data.sh data/pseudo "${pdirs[@]}"
+utils/validate_data_dir.sh --no-feats data/pseudo
+echo "pseudo utterances: $(wc -l < data/pseudo/text)"
