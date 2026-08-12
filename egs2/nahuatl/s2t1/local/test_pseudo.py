@@ -47,6 +47,7 @@ def test_char_cer():
     tt = _load("tune_threshold")
     assert tt.char_cer("abcd", "abcd") == 0.0
     assert abs(tt.char_cer("abcd", "abXd") - 0.25) < 1e-9
+    assert abs(tt.char_cer("a b", "ab") - (1/3)) < 1e-9   # deleting the space is 1 error over 3 ref tokens
 
 
 def test_strip_special():

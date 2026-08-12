@@ -22,8 +22,8 @@ def strip_special(t):
 
 
 def char_cer(ref, hyp):
-    r = list(ref.replace(" ", ""))
-    h = list(hyp.replace(" ", ""))
+    r = list(ref)
+    h = list(hyp)
     prev = list(range(len(h) + 1))
     for i in range(1, len(r) + 1):
         cur = [i] + [0] * len(h)
