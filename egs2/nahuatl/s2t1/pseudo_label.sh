@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+# Decode unlabeled (untranscribed) Nahuatl recordings per region with the
+# fine-tuned OWSM S2T model to produce pseudo-label hypotheses.
+#
+# Per-region: prep_unlabeled.py VAD-segments the recordings not already used
+# for train/val/test (Task 1), then s2t_inference.py decodes each segment.
+# s2t_inference's DatadirWriter (espnet2/fileio/datadir_writer.py) writes one
+# line per key "uttid value" per file under "{n}best_recog/"; with the default
+# --nbest 1 that's "1best_recog/{text,token,token_int,score,text_nospecial}".
+# All three files we need (text, score, token_int) are keyed by uttid and, once
+# each is independently line-sorted, stay aligned since "sort" orders by the
+# leading uttid field the same way in each file.
+#SBATCH -N 1 -n 1 -p gpuA40x4,gpuA100x4
+#SBATCH --gres=gpu:1 -c 16 --mem 60000M
+#SBATCH --account=bbjs-delta-gpu
+#SBATCH --time=12:00:00
+#SBATCH --job-name=nahuatl-pl
+#SBATCH --output=%x_%j.log
+set -o pipefail
+RECIPE_DIR="${SLURM_SUBMIT_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}"
+cd "$RECIPE_DIR"; source path.sh
+# path.sh does not set cuda_cmd (only cmd.sh does) - decode_dir needs it below.
+source cmd.sh
+export PATH="/work/hdd/bbjs/clin10/kaldi/tools/sctk/bin:$PATH"
+
+RAW=/work/nvme/bbjs/shared/nahuatl/nahuatl
+SPLITS=/work/nvme/bbjs/clin10/nahuatl_asr/splits.json
+WORK=/work/hdd/bbjs/clin10/pl                # intermediates off /work/nvme
+S2T_EXP=$(ls -d exp/s2t_train_owsm_v4_nahuatl_raw_bpe50000_init_param* | head -1)
+MODEL="$S2T_EXP/valid.acc.ave.pth"
+MAX_HOURS="${MAX_HOURS:-30}"                  # subset cap (per region)
+
+# region -> "slug:lang_sym:decode_cfg_suffix". lang_sym here is informational
+# only (it documents which <nah_*> tag conf/decode_owsm_${cfg}.yaml bakes in
+# via its `lang_sym:` key); decode_dir does not consume it directly.
+declare -A REG=( [Hidalgo]="hidalgo:<nah_hid>:hid"
+                 [Orizaba-Zongolica]="orizaba_zongolica:<nah_ozg>:ozg"
+                 [Zacatlan-Tepetzintla]="zacatlan_tepetzintla:<nah_ztp>:ztp" )
+
+decode_dir() {  # $1=wav.scp  $2=out  $3=decode_cfg
+  local scp="$1" out="$2" cfg="$3" nj=8
+  mkdir -p "$out/logdir"
+  utils/split_scp.pl "$scp" $(for j in $(seq $nj); do echo "$out/logdir/wav.$j.scp"; done)
+  ${cuda_cmd} --gpu 1 JOB=1:$nj "$out/logdir/infer.JOB.log" \
+    python -m espnet2.bin.s2t_inference --ngpu 1 --batch_size 1 \
+      --data_path_and_name_and_type "$out/logdir/wav.JOB.scp,speech,sound" \
+      --key_file "$out/logdir/wav.JOB.scp" \
+      --s2t_train_config "$S2T_EXP/config.yaml" --s2t_model_file "$MODEL" \
+      --config "$cfg" --output_dir "$out/logdir/out.JOB"
+  for f in text score token_int; do
+    for j in $(seq $nj); do cat "$out/logdir/out.$j/1best_recog/$f"; done | sort > "$out/$f"
+  done
+}
+
+for R in "${!REG[@]}"; do
+  IFS=: read slug tok cfg <<< "${REG[$R]}"
+  udir="$WORK/unlabeled_${slug}"
+  python local/prep_unlabeled.py --raw_region_dir "$RAW/$R" --splits_file "$SPLITS" \
+      --output_dir "$udir" --max_hours "$MAX_HOURS"
+  utils/validate_data_dir.sh --no-feats --no-text "$udir"
+  decode_dir "$udir/wav.scp" "$WORK/decode_${slug}" "conf/decode_owsm_${cfg}.yaml"
+  echo "decoded $slug: $(wc -l < "$WORK/decode_${slug}/text") segments"
+done
