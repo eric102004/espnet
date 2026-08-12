@@ -41,3 +41,21 @@ def test_val_test_consultants():
         excl = prep.val_test_consultants(splits_file)
     assert excl == {"VAL222", "TST333"}
     assert "TRA111" not in excl
+
+
+def test_char_cer():
+    tt = _load("tune_threshold")
+    assert tt.char_cer("abcd", "abcd") == 0.0
+    assert abs(tt.char_cer("abcd", "abXd") - 0.25) < 1e-9
+
+
+def test_strip_special():
+    tt = _load("tune_threshold")
+    assert tt.strip_special("<nah_hid><asr><notimestamps> hola") == "hola"
+
+
+def test_pick_threshold_keeps_high_confidence():
+    tt = _load("tune_threshold")
+    rows = [(-0.1, 0.05), (-0.2, 0.10), (-0.9, 0.60), (-1.0, 0.70)]
+    thr, frac, est = tt.pick_threshold(rows, target_cer=0.15)
+    assert thr == -0.2 and abs(est - 0.075) < 1e-9  # keeps first two
