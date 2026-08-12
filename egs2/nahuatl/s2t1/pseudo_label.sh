@@ -10,6 +10,14 @@
 # All three files we need (text, score, token_int) are keyed by uttid and, once
 # each is independently line-sorted, stay aligned since "sort" orders by the
 # leading uttid field the same way in each file.
+#
+# prep_unlabeled.py's wav.scp entries are Kaldi unix-pipe commands
+# ("UTTID ffmpeg ... -f wav - |"), which ESPnet2's SoundScpReader (the
+# ",sound" data type used below) cannot read directly - it calls
+# soundfile.SoundFile() on the scp value and does not support pipes. Mirror
+# stage 3 of egs2/TEMPLATE/s2t1/s2t.sh: materialize each region's wav.scp to
+# real per-utterance .wav files with scripts/audio/format_wav_scp.sh BEFORE
+# decode_dir, then decode against the materialized wav.scp.
 #SBATCH -N 1 -n 1 -p gpuA40x4,gpuA100x4
 #SBATCH --gres=gpu:1 -c 16 --mem 60000M
 #SBATCH --account=bbjs-delta-gpu
@@ -58,6 +66,12 @@ for R in "${!REG[@]}"; do
   python local/prep_unlabeled.py --raw_region_dir "$RAW/$R" --splits_file "$SPLITS" \
       --output_dir "$udir" --max_hours "$MAX_HOURS"
   utils/validate_data_dir.sh --no-feats --no-text "$udir"
-  decode_dir "$udir/wav.scp" "$WORK/decode_${slug}" "conf/decode_owsm_${cfg}.yaml"
+  # Materialize the pipe-style wav.scp to real 16k mono .wav files (see note
+  # above) - writes "$fmtdir/wav.scp" with real file paths. train_cmd comes
+  # from cmd.sh (sourced above); it's "run.pl" for this recipe's local backend.
+  fmtdir="$WORK/fmt_${slug}"
+  scripts/audio/format_wav_scp.sh --nj 8 --cmd "${train_cmd}" \
+      --audio-format wav --fs 16k "$udir/wav.scp" "$fmtdir"
+  decode_dir "$fmtdir/wav.scp" "$WORK/decode_${slug}" "conf/decode_owsm_${cfg}.yaml"
   echo "decoded $slug: $(wc -l < "$WORK/decode_${slug}/text") segments"
 done
