@@ -93,7 +93,11 @@ def main():
             continue
         if args.max_recordings and nrec >= args.max_recordings:
             break
-        wav, sr = load_16k_mono(w)
+        try:
+            wav, sr = load_16k_mono(w)
+        except Exception as e:
+            print(f"WARNING: skipping unreadable {w}: {e}")
+            continue
         base = sanitize(os.path.splitext(os.path.basename(w))[0])
         for s, e in vad_segments(wav, sr, get_speech_timestamps, model):
             utt = f"{pc}_{base}_{int(s * 100):07d}"
