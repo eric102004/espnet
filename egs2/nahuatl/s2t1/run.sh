@@ -25,7 +25,7 @@ cd "$RECIPE_DIR"
 . path.sh
 
 # ── Recipe configuration ────────────────────────────────────────────────────
-train_set="nahuatl_train"
+train_set="${train_set:-nahuatl_train}"
 valid_set="nahuatl_valid"
 # Only the three single-region test sets: espnet2 decoding applies one --lang_sym
 # to the whole run, so a mixed-region set cannot be decoded correctly. decode.sh
