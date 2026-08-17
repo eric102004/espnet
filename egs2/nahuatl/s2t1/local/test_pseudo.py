@@ -27,6 +27,41 @@ def test_sanitize():
     assert prep.sanitize("a-b.c d") == "a_b_c_d"
 
 
+def test_all_codes():
+    prep = _load("prep_unlabeled")
+    assert prep.all_codes("Itzoc_Comid_JBM566-MPH564_x_2023-05-04-d.wav") == [
+        "JBM566",
+        "MPH564",
+    ]
+    assert prep.all_codes("no_codes.wav") == []
+
+
+def test_secondary_speaker_excluded():
+    prep = _load("prep_unlabeled")
+    # ACT470 is the secondary (interviewer) speaker code in this filename.
+    fname = "Itzoc_Comid_JBM566-ACT470_x_2023-06-01-a.wav"
+    exclude = {"ACT470"}
+    codes = prep.all_codes(fname)
+    assert any(c in exclude for c in codes) is True
+    # sanity: ACT470 is not the primary code, so the old primary-only check
+    # would have missed this recording.
+    assert prep.primary_code(fname) != "ACT470"
+
+
+def test_labeled_uids():
+    prep = _load("prep_unlabeled")
+    splits = {
+        "Hidalgo/Transcriptions/Itzoc_Comid_TRA111-MPH564_x_2023-05-04-a.trs": "hidalgo-train",
+        "Hidalgo/Transcriptions/Itzoc_Comid_VAL222-MPH564_y_2023-05-05-b.eaf": "hidalgo-val",
+    }
+    with tempfile.TemporaryDirectory() as td:
+        splits_file = os.path.join(td, "splits.json")
+        with open(splits_file, "w") as f:
+            json.dump(splits, f)
+        uids = prep.labeled_uids(splits_file)
+    assert uids == {"2023-05-04-a", "2023-05-05-b"}
+
+
 def test_val_test_consultants():
     prep = _load("prep_unlabeled")
     splits = {

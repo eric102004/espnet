@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Segment untranscribed Nahuatl recordings into a Kaldi dir for pseudo-labeling.
 
-Drops any recording whose primary consultant (first filename code) is in the
-val/test splits, runs silero-VAD to cut recordings into <=30 s speech chunks,
-and writes an ffmpeg-pipe wav.scp (16 kHz mono) plus utt2spk / spk2utt. No text.
+Drops any recording where ANY speaker code in the filename (primary consultant
+or secondary/interviewer) is a val/test consultant, and drops any recording
+that is already part of a labeled train/val/test split. Runs silero-VAD to cut
+the remaining recordings into <=30 s speech chunks, and writes an ffmpeg-pipe
+wav.scp (16 kHz mono) plus utt2spk / spk2utt. No text.
 """
 import argparse
 import collections
@@ -15,6 +17,7 @@ import re
 import subprocess
 
 _CODE = re.compile(r"^([A-Za-z]{2,4}\d{3,})$")
+_DATE_UID = re.compile(r"\d{4}-\d{2}-\d{2}-[A-Za-z]")
 
 
 def primary_code(fname):
@@ -23,6 +26,17 @@ def primary_code(fname):
             if _CODE.match(s):
                 return s
     return None
+
+
+def all_codes(fname):
+    """Return every speaker code (primary + secondary/interviewer) found in
+    the filename, in order of appearance."""
+    codes = []
+    for part in os.path.splitext(os.path.basename(fname))[0].split("_"):
+        for s in part.split("-"):
+            if _CODE.match(s):
+                codes.append(s)
+    return codes
 
 
 def sanitize(s):
@@ -65,6 +79,22 @@ def val_test_consultants(splits_file):
     return excl
 
 
+def labeled_uids(splits_file):
+    """Return the set of date-uid strings (e.g. "2023-05-04-a") for every
+    recording that already appears in splits.json (any split: train/val/test).
+    Used to skip raw wavs that are already part of the labeled corpus so they
+    don't also get pseudo-labeled (double-counting audio and re-injecting the
+    interviewer turns the supervised recipe excludes)."""
+    splits = json.load(open(splits_file))
+    uids = set()
+    for path in splits:
+        fname = os.path.basename(path)
+        m = _DATE_UID.search(fname)
+        if m:
+            uids.add(m.group(0))
+    return uids
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--raw_region_dir", required=True)
@@ -75,6 +105,7 @@ def main():
     args = p.parse_args()
 
     exclude = val_test_consultants(args.splits_file)
+    labeled = labeled_uids(args.splits_file)
     from silero_vad import get_speech_timestamps, load_silero_vad
 
     model = load_silero_vad()
@@ -88,9 +119,13 @@ def main():
     total = 0.0
     nrec = 0
     for w in wavs:
-        pc = primary_code(w)
-        if pc is None or pc in exclude:
+        m = _DATE_UID.search(os.path.basename(w))
+        if m and m.group(0) in labeled:
             continue
+        codes = all_codes(w)
+        if not codes or any(c in exclude for c in codes):
+            continue
+        pc = primary_code(w)
         if args.max_recordings and nrec >= args.max_recordings:
             break
         try:
