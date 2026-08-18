@@ -21,7 +21,7 @@
 #SBATCH -N 1 -n 1 -p gpuA40x4,gpuA100x4
 #SBATCH --gres=gpu:1 -c 16 --mem 60000M
 #SBATCH --account=bbjs-delta-gpu
-#SBATCH --time=12:00:00
+#SBATCH --time=24:00:00
 #SBATCH --job-name=nahuatl-pl
 #SBATCH --output=%x_%j.log
 set -o pipefail
@@ -46,9 +46,17 @@ declare -A REG=( [Hidalgo]="hidalgo:<nah_hid>:hid"
                  [Zacatlan-Tepetzintla]="zacatlan_tepetzintla:<nah_ztp>:ztp" )
 
 decode_dir() {  # $1=wav.scp  $2=out  $3=decode_cfg
-  local scp="$1" out="$2" cfg="$3" nj=8
+  # nj=1: run.pl counts the node's physical GPUs via `nvidia-smi -L` (ignoring
+  # the SLURM cgroup, which exposes only our 1 allocated GPU) and does NOT pin a
+  # distinct CUDA_VISIBLE_DEVICES per job. With nj>1 that piled several 1B-model
+  # decodes onto the single visible GPU -> OOM/thrash, ~2 of 8 jobs progressing.
+  # One job per allocated GPU + a real batch avoids the contention.
+  local scp="$1" out="$2" cfg="$3" nj=1
   mkdir -p "$out/logdir"
   utils/split_scp.pl "$scp" $(for j in $(seq $nj); do echo "$out/logdir/wav.$j.scp"; done)
+  # batch_size stays 1: espnet2.bin.s2t_inference raises NotImplementedError for
+  # batch_size > 1 ("batch decoding is not implemented"). Speedup must come from
+  # one job per GPU (nj matched to allocated GPUs), not batching.
   ${cuda_cmd} --gpu 1 JOB=1:$nj "$out/logdir/infer.JOB.log" \
     python -m espnet2.bin.s2t_inference --ngpu 1 --batch_size 1 \
       --data_path_and_name_and_type "$out/logdir/wav.JOB.scp,speech,sound" \
