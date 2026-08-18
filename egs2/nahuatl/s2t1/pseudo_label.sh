@@ -33,7 +33,8 @@ export PATH="/work/hdd/bbjs/clin10/kaldi/tools/sctk/bin:$PATH"
 
 RAW=/work/nvme/bbjs/shared/nahuatl/nahuatl
 SPLITS=/work/nvme/bbjs/clin10/nahuatl_asr/splits.json
-WORK=/work/hdd/bbjs/clin10/pl                # intermediates off /work/nvme
+WORK="${WORK:-/work/hdd/bbjs/clin10/pl}"      # intermediates off /work/nvme
+PSEUDO_DIR="${PSEUDO_DIR:-data/pseudo}"       # combined pseudo Kaldi dir output
 S2T_EXP=$(ls -d exp/s2t_train_owsm_v4_nahuatl_raw_bpe50000_init_param* | head -1)
 MODEL="$S2T_EXP/valid.acc.ave.pth"
 MAX_HOURS="${MAX_HOURS:-30}"                  # subset cap (per region)
@@ -126,6 +127,6 @@ for R in "${!REG[@]}"; do
      --threshold "$THR" --output_dir "$WORK/pseudo_${slug}"
   pdirs+=("$WORK/pseudo_${slug}")
 done
-utils/combine_data.sh data/pseudo "${pdirs[@]}"
-utils/validate_data_dir.sh --no-feats data/pseudo
-echo "pseudo utterances: $(wc -l < data/pseudo/text)"
+utils/combine_data.sh "$PSEUDO_DIR" "${pdirs[@]}"
+utils/validate_data_dir.sh --no-feats "$PSEUDO_DIR"
+echo "pseudo utterances: $(wc -l < "$PSEUDO_DIR/text")"
