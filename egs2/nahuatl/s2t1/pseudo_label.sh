@@ -50,7 +50,7 @@ decode_dir() {  # $1=wav.scp  $2=out  $3=decode_cfg
   # the SLURM cgroup, which exposes only our 1 allocated GPU) and does NOT pin a
   # distinct CUDA_VISIBLE_DEVICES per job. With nj>1 that piled several 1B-model
   # decodes onto the single visible GPU -> OOM/thrash, ~2 of 8 jobs progressing.
-  # One job per allocated GPU + a real batch avoids the contention.
+  # One job per allocated GPU avoids the contention.
   local scp="$1" out="$2" cfg="$3" nj=1
   mkdir -p "$out/logdir"
   utils/split_scp.pl "$scp" $(for j in $(seq $nj); do echo "$out/logdir/wav.$j.scp"; done)
