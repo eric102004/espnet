@@ -102,3 +102,14 @@ def test_is_degenerate():
     assert fp.is_degenerate("") is True
     assert fp.is_degenerate("a a a a a a a a") is True
     assert fp.is_degenerate("nika chiwa se tapowalistli") is False
+
+
+def test_parse_score_tensor_format():
+    # s2t_inference writes str(hyp.score) = "tensor(-14.1931)", not a bare float
+    tt = _load("tune_threshold")
+    fp = _load("filter_pseudo")
+    assert abs(tt.parse_score("tensor(-14.1931)") - (-14.1931)) < 1e-6
+    assert abs(tt.parse_score("-3.5") - (-3.5)) < 1e-9          # bare float too
+    assert abs(fp.parse_score("tensor(-3.2029)") - (-3.2029)) < 1e-6
+    # norm_score divides parsed score by token count
+    assert abs(tt.norm_score("tensor(-8.0)", 4) - (-2.0)) < 1e-9

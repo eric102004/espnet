@@ -16,6 +16,15 @@ def read_kv(path):
     return d
 
 
+def parse_score(s):
+    # s2t_inference writes str(hyp.score); hyp.score is a 0-dim torch tensor, so
+    # the file value is like "tensor(-14.1931)" rather than a bare float.
+    s = s.strip()
+    if s.startswith("tensor(") and s.endswith(")"):
+        s = s[len("tensor(") : -1]
+    return float(s)
+
+
 def is_degenerate(text):
     toks = text.split()
     if not toks:
@@ -46,7 +55,7 @@ def main():
         h = re.sub(r"<[^>]*>", "", h).strip()
         if u not in score or u not in wav:
             continue
-        ns = float(score[u]) / max(1, len(tok.get(u, "").split()))
+        ns = parse_score(score[u]) / max(1, len(tok.get(u, "").split()))
         if ns < args.threshold:
             continue
         if not (args.min_chars <= len(h) <= args.max_chars):

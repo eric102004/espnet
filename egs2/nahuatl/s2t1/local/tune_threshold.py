@@ -34,8 +34,17 @@ def char_cer(ref, hyp):
     return prev[len(h)] / max(1, len(r))
 
 
+def parse_score(s):
+    # s2t_inference writes str(hyp.score); hyp.score is a 0-dim torch tensor, so
+    # the file value is like "tensor(-14.1931)" rather than a bare float.
+    s = s.strip()
+    if s.startswith("tensor(") and s.endswith(")"):
+        s = s[len("tensor(") : -1]
+    return float(s)
+
+
 def norm_score(score, ntok):
-    return float(score) / max(1, ntok)
+    return parse_score(score) / max(1, ntok)
 
 
 def pick_threshold(rows, target_cer):
