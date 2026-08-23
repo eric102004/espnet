@@ -90,6 +90,12 @@ decode_dir() {  # $1=wav.scp  $2=out  $3=decode_cfg
 for R in "${!REG[@]}"; do
   IFS=: read slug tok cfg <<< "${REG[$R]}"
   udir="$WORK/unlabeled_${slug}"
+  # Idempotent: skip the (expensive) prep+format+decode if this region's decode
+  # output already exists, so a re-run only redoes the cheap downstream steps.
+  if [ -s "$WORK/decode_${slug}/text" ]; then
+    echo "skip $slug: decode present ($(wc -l < "$WORK/decode_${slug}/text") segments)"
+    continue
+  fi
   python local/prep_unlabeled.py --raw_region_dir "$RAW/$R" --splits_file "$SPLITS" \
       --output_dir "$udir" --max_hours "$MAX_HOURS"
   utils/validate_data_dir.sh --no-feats --no-text "$udir"
@@ -103,12 +109,29 @@ for R in "${!REG[@]}"; do
   echo "decoded $slug: $(wc -l < "$WORK/decode_${slug}/text") segments"
 done
 
-# --- tune threshold on val (decode val once) ---
-# dump/raw/nahuatl_valid/wav.scp already has real paths (materialized by the
-# baseline training's stage 3), so decode_dir can read it directly - no
-# format_wav_scp.sh needed here.
-decode_dir dump/raw/nahuatl_valid/wav.scp "$WORK/decode_valid" \
-    conf/decode_owsm_hid.yaml
+# --- tune threshold on val: decode each region's val subset with its OWN tag ---
+# The confidence->CER calibration must use the same lang_sym each region is
+# decoded with downstream. Decoding the mixed val with one tag mis-scores 2/3 of
+# it and biases the threshold. Split val by the region token in its reference
+# text, decode each subset with that region's config, and merge. val wav.scp
+# already has real paths (baseline stage 3), so no format_wav_scp.sh needed.
+rm -rf "$WORK/decode_valid"; mkdir -p "$WORK/decode_valid"
+: > "$WORK/decode_valid/text"; : > "$WORK/decode_valid/score"
+: > "$WORK/decode_valid/token_int"
+for R in "${!REG[@]}"; do
+  IFS=: read slug tok cfg <<< "${REG[$R]}"
+  vsub="$WORK/val_${slug}"; mkdir -p "$vsub"
+  grep -F "$tok" dump/raw/nahuatl_valid/text | awk '{print $1}' > "$vsub/uttids"
+  utils/filter_scp.pl "$vsub/uttids" dump/raw/nahuatl_valid/wav.scp > "$vsub/wav.scp"
+  decode_dir "$vsub/wav.scp" "$WORK/decode_valid_${slug}" \
+      "conf/decode_owsm_${cfg}.yaml"
+  for f in text score token_int; do
+    cat "$WORK/decode_valid_${slug}/$f" >> "$WORK/decode_valid/$f"
+  done
+done
+for f in text score token_int; do
+  LC_ALL=C sort -o "$WORK/decode_valid/$f" "$WORK/decode_valid/$f"
+done
 THR=$(python local/tune_threshold.py --decode_dir "$WORK/decode_valid" \
       --ref_text dump/raw/nahuatl_valid/text --target_cer "${TARGET_CER:-0.15}" \
       | awk '/^THRESHOLD/{print $2}')
