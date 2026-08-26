@@ -82,7 +82,21 @@ utils/validate_data_dir.sh --no-feats "data/${COMBINED_SET}"
 # there -> clean start from the patched OWSM --init_param).
 export train_set="${COMBINED_SET}"
 PSEUDO_TAG="${PSEUDO_TAG:-train_owsm_v4_nahuatl_pseudo}"
-bash run.sh --stage 3 --stop_stage 11 --s2t_tag "$PSEUDO_TAG" \
+# collect_stats (stage 10) writes shape files into the stats dir, which is keyed
+# on feats/token/nbpe but NOT on train_set — so two concurrent pseudo runs would
+# clobber each other's shapes in the shared default dir. Set S2T_STATS_DIR to
+# isolate them; pre-create the global-MVN feats_stats.npz symlink there (run.sh
+# only makes it in the default dir; stage 10 writes only shape files, not the
+# npz, so the symlink survives).
+stats_opt=""
+if [ -n "${S2T_STATS_DIR:-}" ]; then
+    UP_FS=$(realpath \
+        ../../../../model_cache/owsm_v4_medium_1B/exp/s2t_stats_raw_bpe50000/train/feats_stats.npz)
+    mkdir -p "${S2T_STATS_DIR}/train"
+    ln -sf "$UP_FS" "${S2T_STATS_DIR}/train/feats_stats.npz"
+    stats_opt="--s2t_stats_dir ${S2T_STATS_DIR}"
+fi
+bash run.sh --stage 3 --stop_stage 11 --s2t_tag "$PSEUDO_TAG" ${stats_opt} \
     2>&1 | tee "pseudo_train_live_${PSEUDO_TAG}.log"
 
 # ── 3) Evaluate on the 3 region test sets + combined aggregate ─────────────
