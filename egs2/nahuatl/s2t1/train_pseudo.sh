@@ -47,10 +47,15 @@ export PATH="/work/hdd/bbjs/clin10/kaldi/tools/sctk/bin:$PATH"
 # PSEUDO_DIR selects which pseudo set to fold in (default data/pseudo); set it to
 # e.g. data/pseudo_big to use a specific run's output.
 PSEUDO_DIR="${PSEUDO_DIR:-data/pseudo}"
-utils/combine_data.sh data/nahuatl_train_plus_pseudo data/nahuatl_train "$PSEUDO_DIR"
-python3 - <<'PY'
+# COMBINED_SET / PSEUDO_TAG are overridable so multiple pseudo runs (e.g. a
+# conservative and an aggressive filter) can train concurrently without sharing
+# the combined data dir, its dump/, or the exp dir. Keep them consistent.
+COMBINED_SET="${COMBINED_SET:-nahuatl_train_plus_pseudo}"
+utils/combine_data.sh "data/${COMBINED_SET}" data/nahuatl_train "$PSEUDO_DIR"
+COMB_DIR="data/${COMBINED_SET}" python3 - <<'PY'
+import os
 import re
-d = "data/nahuatl_train_plus_pseudo"
+d = os.environ["COMB_DIR"]
 tok = re.compile(r'<(nah_hid|nah_ozg|nah_ztp|asr|notimestamps)>\s*')
 with open(f"{d}/text") as f, open(f"{d}/text.prev", "w") as fp, \
      open(f"{d}/text.ctc", "w") as fc:
@@ -60,7 +65,7 @@ with open(f"{d}/text") as f, open(f"{d}/text.prev", "w") as fp, \
         fp.write(f"{uid} <na>\n")
         fc.write(f"{uid} {clean}\n")
 PY
-utils/validate_data_dir.sh --no-feats data/nahuatl_train_plus_pseudo
+utils/validate_data_dir.sh --no-feats "data/${COMBINED_SET}"
 
 # ── 2) Retrain from patched OWSM on the combined set ────────────────────────
 # run.sh's --init_param already points at the patched OWSM checkpoint (not the
@@ -75,9 +80,10 @@ utils/validate_data_dir.sh --no-feats data/nahuatl_train_plus_pseudo
 # exporting the untouched baseline model and never touching the pseudo data.
 # Pass a distinct tag so a fresh exp dir is created (no baseline checkpoint
 # there -> clean start from the patched OWSM --init_param).
-export train_set=nahuatl_train_plus_pseudo
-PSEUDO_TAG=train_owsm_v4_nahuatl_pseudo
-bash run.sh --stage 3 --stop_stage 11 --s2t_tag "$PSEUDO_TAG" 2>&1 | tee pseudo_train_live.log
+export train_set="${COMBINED_SET}"
+PSEUDO_TAG="${PSEUDO_TAG:-train_owsm_v4_nahuatl_pseudo}"
+bash run.sh --stage 3 --stop_stage 11 --s2t_tag "$PSEUDO_TAG" \
+    2>&1 | tee "pseudo_train_live_${PSEUDO_TAG}.log"
 
 # ── 3) Evaluate on the 3 region test sets + combined aggregate ─────────────
 # Point decode.sh at the pseudo exp dir, not the baseline, via the S2T_TAG
