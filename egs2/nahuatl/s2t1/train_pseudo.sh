@@ -44,7 +44,10 @@ cd "$RECIPE_DIR"; source path.sh
 export PATH="/work/hdd/bbjs/clin10/kaldi/tools/sctk/bin:$PATH"
 
 # ── 1) Combined train = labeled + pseudo; regenerate text.prev/text.ctc ────
-utils/combine_data.sh data/nahuatl_train_plus_pseudo data/nahuatl_train data/pseudo
+# PSEUDO_DIR selects which pseudo set to fold in (default data/pseudo); set it to
+# e.g. data/pseudo_big to use a specific run's output.
+PSEUDO_DIR="${PSEUDO_DIR:-data/pseudo}"
+utils/combine_data.sh data/nahuatl_train_plus_pseudo data/nahuatl_train "$PSEUDO_DIR"
 python3 - <<'PY'
 import re
 d = "data/nahuatl_train_plus_pseudo"
